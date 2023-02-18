@@ -1,0 +1,18 @@
+[submodule "dwmblocks"]
+	path = dwmblocks
+	url = https://github.com/torrinfail/dwmblocks.git
+[submodule "vendor/dwm"]
+	path = vendor/dwm
+	url = git://git.suckless.org/dwm
+[submodule "vendor/dmenu"]
+	path = vendor/dmenu
+	url = git://git.suckless.org/dmenu
+[submodule "vendor/st"]
+	path = vendor/st
+	url = git://git.suckless.org/st
+[submodule "vendor/slock"]
+	path = vendor/slock
+	url = git://git.suckless.org/slock
+[submodule "vendor/scroll"]
+	path = vendor/scroll
+	url = git://git.suckless.org/scroll
