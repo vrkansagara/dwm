@@ -84,7 +84,7 @@ static const Rule rules[] = {
 //	{ "Gimp",     NULL,       NULL,       0,            1,           -1 },
 //	{ "Firefox",  NULL,       NULL,       1 << 8,       0,           -1 },
 
-	/** class           instance,               title,              tags,               isfloating, isterminal */
+	/** class           instance,               title,              tags mas,               isfloating, isterminal */
     // Tag - 1 (General usse case)
     {   "Thunar",      "thunar",      NULL,       1<<0,       0, 0},
     {   "Org.gnome.Nautilus",      "org.gnome.Nautilus",      NULL,       1<<0,       0, 0},
