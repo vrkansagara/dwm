@@ -255,7 +255,13 @@ static const Key keys[] = {
 	/* Vallabh @START */
 
     // Patche(s) custom key(s)
-//    { MODKEY,                       XK_s,      togglesticky,   {0} }, // Stiky window
+
+    // Actually toggle fullscreen for a window, instead of toggling the status bar and the monocle layout.
+    { MODKEY,                       XK_s,      togglesticky,   {0} }, // Stiky window
+
+    //Press MODKEY+s (default) to make a client 'sticky'. A sticky client is visible on all tags.
+    // This is similar to setting the client's tags to all 1's, but with the ability to easily return
+    // it to its original tag by toggling it off by pressing MODKEY+s again.
     { MODKEY,                       XK_f,      togglefullscr,  {0} }, // Fullscreen window
 
     { MODKEY|AltMask,              XK_s,       spawn,          SHCMD("screenkey &") },
