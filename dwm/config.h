@@ -4,6 +4,7 @@
 #include <X11/XF86keysym.h> // /usr/include/X11/keysymdef.h
 #include <X11/Xresource.h> // /usr/include/X11/Xresource.h
 #include "grid.c"
+//#include "layouts.c"
 
 /* Constants */
 #define TERMINAL "st"
@@ -38,6 +39,8 @@ static unsigned int gappiv          = 10;       /* vert inner gap between window
 static unsigned int gappoh          = 10;       /* horiz outer gap between windows and screen edge */
 static unsigned int gappov          = 30;       /* vert outer gap between windows and screen edge */
 static int smartgaps                = 0;        /* 1 means no outer gap when there is only one window */
+
+static int swallowfloating          = 1;        /* 1 means swallow floating windows by default */
 
 //static char *fonts[]          = { "monospace:size=10", "NotoColorEmoji:pixelsize=10:antialias=true:autohint=true"  };
 static const char *fonts[]          = {
@@ -204,6 +207,31 @@ static char dmenumon[2] = "0"; /* component of dmenucmd, manipulated in spawn() 
 static const char *dmenucmd[] = { "dmenu_run", "-m", dmenumon, "-fn", dmenufont, "-nb", normbgcolor, "-nf", normfgcolor, "-sb", selbordercolor, "-sf", selfgcolor, NULL };
 
 static const char *termcmd[]  = { TERMINAL, NULL };
+
+/*
+ * Xresources preferences to load at startup
+ */
+ResourcePref resources[] = {
+    { "color0",     STRING, &normbordercolor },
+    { "color8",     STRING, &selbordercolor },
+    { "color0",     STRING, &normbgcolor },
+    { "color4",     STRING, &normfgcolor },
+    { "color0",     STRING, &selfgcolor },
+    { "color4",     STRING, &selbgcolor },
+    { "borderpx",       INTEGER, &borderpx },
+    { "snap",       INTEGER, &snap },
+    { "showbar",        INTEGER, &showbar },
+    { "topbar",     INTEGER, &topbar },
+    { "nmaster",        INTEGER, &nmaster },
+    { "resizehints",    INTEGER, &resizehints },
+    { "mfact",      FLOAT,  &mfact },
+    { "gappih",     INTEGER, &gappih },
+    { "gappiv",     INTEGER, &gappiv },
+    { "gappoh",     INTEGER, &gappoh },
+    { "gappov",     INTEGER, &gappov },
+    { "swallowfloating",    INTEGER, &swallowfloating },
+    { "smartgaps",      INTEGER, &smartgaps },
+};
 
 static const Key keys[] = {
 	/* modifier                     key        function        argument */
