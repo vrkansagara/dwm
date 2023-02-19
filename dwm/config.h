@@ -94,47 +94,47 @@ static const Rule rules[] = {
 //	{ "Gimp",     NULL,       NULL,       0,            1,           -1 },
 //	{ "Firefox",  NULL,       NULL,       1 << 8,       0,           -1 },
 
-	/** class           instance,         ,      title,              tags mas,               isfloating, isterminal */
+    /** class           instance,               title,              tags,               isfloating, isterminal ,noswallow              monitor */
     // Tag - 1 (General usse case)
-    {   "Thunar",      "thunar",      NULL,       1<<0,       0, 0},
-    {   "Org.gnome.Nautilus",      "org.gnome.Nautilus",      NULL,       1<<0,       0, 0},
-    {   "thunderbird",      "Mail",      NULL,       1<<0,       0, 0},
+    {   "Thunar",      "thunar",      NULL,       1<<0,       0, 0,0,    0},
+    {   "Org.gnome.Nautilus",      "org.gnome.Nautilus",      NULL,       1<<0,       0, 0,0,    0},
+    {   "thunderbird",      "Mail",      NULL,       1<<0,       0, 0,0,    0},
 
     // Tag - 2 (Terminal way on demand )
-    {   "st",      "st",      NULL,       1<<1,       0, 0},
+    {   "St",      "st",      NULL,       1<<1,       0, 1,0,     0},
 
     // Tag - 3 (Socializing / Office on the way)
-    {   "Skype",      "skype",      NULL,       1<<2,       0, 0},
-    {   "Microsoft Teams - Preview","microsoft teams - preview",      NULL, 1<<2,       0, 0},
-    {   "ringcentral",      "ringcentral",      NULL,       1<<2,       0,  0},
-    {   "Slack",      "slack",      NULL,       1<<2,       0,  0},
+    {   "Skype",      "skype",      NULL,       1<<2,       0, 0,0,     0},
+    {   "Microsoft Teams - Preview","microsoft teams - preview",      NULL, 1<<2,       0, 0,0,     0},
+    {   "ringcentral",      "ringcentral",      NULL,       1<<2,       0,  0,0,    0},
+    {   "Slack",      "slack",      NULL,       1<<2,       0,  0,0,    0},
 
     // Tag - 4 ( Remote things)
-    {   "org.remmina.Remmina" ,"org.remmina.Remmina",       NULL,       1<<3, 0,0},
-    {   "Anydesk",      "anydesk",      NULL,       1<<3,       0,     0},
+    {   "org.remmina.Remmina" ,"org.remmina.Remmina",       NULL,       1 << 3, 0,  0,0,         0},
+    {   "Anydesk",      "anydesk",      NULL,       1<<3,       0,     0,0, 0},
 
     // Tag - 5 (Utilities)
-    { "WorkComposer"    ,"workcomposer",       NULL,       1<<4,0,0},
-    { "Hubstaff"    ,"Hubstaff",       NULL,       1<<4,       0,          0},
-    { "openfortiGUI"    ,"openfortigui",       NULL,       1<<4,       0, 0},
-    { "KeePassXC"    ,"keepassxc",       NULL,       1<<4,       0,        0},
-    { "obs"    ,"obs",       NULL,       1<<4,       0,           0},
+    { "WorkComposer"    ,"workcomposer",       NULL,       1 << 4,       0, 0,0, 0},
+    { "Hubstaff"    ,"Hubstaff",       NULL,       1 << 4,       0,          0,0,  0},
+    { "openfortiGUI"    ,"openfortigui",       NULL,       1 << 4,       0, 0,0,0},
+    { "KeePassXC"    ,"keepassxc",       NULL,       1 << 4,       0,        0,0,   0},
+    { "obs"    ,"obs",       NULL,       1 << 4,       0,           0},
 
     // Tag - 6 (Development : Light weight on memory)
-    {   "vrkansagara-ide",               "vrkansagara-ide",     NULL,       1<<5,   0,  0},
-    {   "Geany",                    "geany",               NULL,       1<<5,       0,           0},
+    {   "vrkansagara-ide",               "vrkansagara-ide",     NULL,       1<<5,   0,  1,  0,  1},
+    {   "Geany",                    "geany",               NULL,       1<<5,       0,           0,0,1},
 
     // Tag - 7 (Development : Medium/Heavy weight on memory)
-    {   "jetbrains-clion",               "jetbrains-clion",     NULL,       1<<6,   0,  0},
+    {   "jetbrains-clion",               "jetbrains-clion",     NULL,       1<<6,   0,  0,  0,  1},
 
     // Tag - 8 ( Heavy on memory )
-    {   "jetbrains-phpstorm",       "jetbrains-phpstorm",    NULL,       1<<7,       0,      0},
-    {   "Postman",                  "postman",                NULL,       1<<7,       0,      0},
-    {   "code",                     "code",                   NULL,       1 <<7,       0,    0},
+    {   "jetbrains-phpstorm",       "jetbrains-phpstorm",    NULL,       1<<7,       0,      0,0,1},
+    {   "Postman",                  "postman",                NULL,       1<<7,       0,      0,0,1},
+    {   "code",                     "code",                   NULL,       1 <<7,       0,    0,0,1},
 
     // Tag - 9 ( Things on WWW )
-    { "firefox"                 ,"Navigator",               NULL,       1<<8,       0,           0},
-    { "Google-chrome"           ,"google-chrome",          NULL,       1<<8,       0,      0},
+    { "firefox"                 ,"Navigator",               NULL,       1<<8,       0,           0,0,0},
+    { "Google-chrome"           ,"google-chrome",          NULL,       1<<8,       0,      0,0,0},
 };
 
 /* layout(s) */
