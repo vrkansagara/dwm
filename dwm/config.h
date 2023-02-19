@@ -18,7 +18,7 @@
 
 // Brightness controll using (xdotool also useful)
 static const char *brightup[]       = { "/home/vallabh/.vim/bin/brightness", "up", "10000", NULL };
-static const char *brightdown[]     = { "brightness", "down", "10000", NULL };
+static const char *brightdown[]     = { "/home/vallabh/.vim/bin/brightness", "down", "1000", NULL };
 
 // Volume specific settings (xdotool also useful)
 static const char *upvol[]   = { "/usr/bin/pactl", "set-sink-volume", "@DEFAULT_SINK@", "+1%",     NULL };
