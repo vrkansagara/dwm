@@ -3,6 +3,7 @@
 #include <X11/X.h>
 #include <X11/XF86keysym.h> // /usr/include/X11/keysymdef.h
 #include <X11/Xresource.h> // /usr/include/X11/Xresource.h
+#include "grid.c"
 
 /* Constants */
 #define TERMINAL "st"
@@ -147,7 +148,7 @@ static const Layout layouts[] = {
     { "|M|",        centeredmaster },           /* 3. Master in middle, slaves on sides */
     { ">M>",        centeredfloatingmaster },   /* 4. Same but master floats */
 
-//    { "HHH",        grid },                     /* 5. Grid layout */
+    { "HHH",        grid },                     /* 5. Grid layout */
     { "TTT",        bstack},                    /* 6. Master on top, slaves on bottom */
     { "===",        bstackhoriz},               /* 7. Bstack horiz layout */
 
