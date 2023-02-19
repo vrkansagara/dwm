@@ -283,6 +283,10 @@ static const Key keys[] = {
     { MODKEY|ShiftMask|ControlMask,                         XK_k,       incrgaps,       {.i = -3 } },
     { Mod4Mask|ShiftMask|ControlMask,                       XK_0,       togglegaps,     {0} },
 
+    // stacker ( focuse and change stack of slave
+    STACKKEYS(MODKEY,                          focus)
+    STACKKEYS(MODKEY|ShiftMask,                push)
+
     { MODKEY|AltMask,              XK_s,       spawn,          SHCMD("screenkey &") },
     { MODKEY|AltMask|ShiftMask,    XK_s,       spawn,          SHCMD("pkill -9 screenkey") },
     { MODKEY,                      XK_x,       spawn,          SHCMD("xkill") },
