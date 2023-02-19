@@ -1,0 +1,92 @@
+# Make sure this is before the 'exec' command or it won't be sourced.
+[ -f "$HOME/.xprofile" ] && . "$HOME/.xprofile"
+
+export _JAVA_AWT_WM_NONREPARENTING=1
+
+# set baground
+WALLPAPERS="$HOME/git/vrkansagara/dwm/images"
+while true; do
+  find ${WALLPAPERS} -type f -iname "*.jpg" | shuf -n 1 | xargs feh --bg-fill
+    sleep  5m
+done&
+
+# Laptop/Desktop specific start up
+$HOME/.vim/src/Sh/MacBookAir/FunctionKey.sh
+$HOME/.vim/src/Sh/System/battery.sh &
+
+### Start up program(s) ###
+
+# Some introduction for the cpulimit and then statup
+#The first variable is to set the number of cores in your processor. The reason
+#that the number of cores is important is that you need to take it into
+#consideration when setting cpulimit's -l option.  This is explained on the
+#cpulimit project page (see http://cpulimit.sourceforge.net/):  "If your machine
+#has one processor you can limit the percentage from 0% to 100%, which means
+#that if you set for example 50%, your process cannot use more than 500 ms of
+#cpu time for each second. But if your machine has four processors, percentage
+#may vary from 0% to 400%, so setting the limit to 200% means to use no more
+#than half of the available power."
+NUM_CPU_CORES=$(nproc --all) #Automatically detects your system's number of CPU cores.
+#
+# st , dwm transperent
+cpulimit -b -l $((10 * $NUM_CPU_CORES)) -- compton
+# ~/Hubstaff/HubstaffClient.bin.x86_64 &
+# ~/Applications/workcomposer-linux-installer.AppImage &
+# keepassxc &
+# ringcentral &
+# remmina &
+# anydesk &
+# /usr/local/bin/st -c vrkansagara-ide -n vrkansagara-ide -e vim $HOME/www &
+# /usr/local/bin/st -c firle-explorer -n firle-explorer -e ranger $HOME/www &
+# skype &
+# thunderbird &
+# clion &
+
+#Limit "teams" process to 20% CPU usage.
+# cpulimit -b -l $((20 * $NUM_CPU_CORES)) -- $HOME/Applications/postman/postman
+# cpulimit -b -l $((20 * $NUM_CPU_CORES)) -- phpstorm
+# cpulimit -b -l $((20 * $NUM_CPU_CORES)) -- firefox
+# cpulimit -b -l $((20 * $NUM_CPU_CORES)) -- teams
+
+# cpulimit -b -l $((10 * $NUM_CPU_CORES)) -- slack
+# cpulimit -b -l $((5 * $NUM_CPU_CORES)) -- guake
+# cpulimit -b -l $((5 * $NUM_CPU_CORES)) -- st
+
+# Lets priority with nice
+# nice -n 5 /snap/bin/phpstorm
+# nice -n 10 /usr/bin/firefox
+
+# DWM top bar using conky
+# while true; do
+#     (conky | while read LINE; do xsetroot -name "$LINE"; done)
+#     sleep 1
+# done&
+/usr/local/bin/dwmblocks&
+
+#evaluate the SSH agent
+export GPGKEY=8BA6E7ABD8112B3E
+killall gpg-agent ssh-agent
+
+# https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=747465
+/usr/lib/notification-daemon/notification-daemon &
+
+# X window lock start ( compile slock if not)
+# xautolock -time 2 -locker slock &
+
+# zsh/demnu clean cache
+mkdir -p $HOME/old
+mkdir -p $HOME/tmp
+mv .bash* $HOME/old
+mv $HOME/.cache/dmenu_run $HOME/old
+mv .zcompdump-* $HOME/old
+
+# Start Window Manager (Alwayse last line)
+# Log stderror to a file
+# Insted of quiting dwm , make it hot reload(Will not disturbe your stream while hot reload)
+while true; do
+    /usr/local/bin/dwm 2>&1 >> $HOME/tmp/dwm.log
+    # Log stderror to a file
+    # dwm 2> ~/.dwm.log
+    # No error logging
+    ##dwm >/dev/null 2>&1
+done
