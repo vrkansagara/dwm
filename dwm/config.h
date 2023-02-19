@@ -84,7 +84,7 @@ static const Rule rules[] = {
 //	{ "Gimp",     NULL,       NULL,       0,            1,           -1 },
 //	{ "Firefox",  NULL,       NULL,       1 << 8,       0,           -1 },
 
-	/** class           instance,               title,              tags mas,               isfloating, isterminal */
+	/** class           instance,         ,      title,              tags mas,               isfloating, isterminal */
     // Tag - 1 (General usse case)
     {   "Thunar",      "thunar",      NULL,       1<<0,       0, 0},
     {   "Org.gnome.Nautilus",      "org.gnome.Nautilus",      NULL,       1<<0,       0, 0},
@@ -253,6 +253,10 @@ static const Key keys[] = {
 	TAGKEYS(                        XK_9,                      8)
 
 	/* Vallabh @START */
+
+    // Patche(s) custom key(s)
+//    { MODKEY,                       XK_s,      togglesticky,   {0} }, // Stiky window
+    { MODKEY,                       XK_f,      togglefullscr,  {0} }, // Fullscreen window
 
     { MODKEY|AltMask,              XK_s,       spawn,          SHCMD("screenkey &") },
     { MODKEY|AltMask|ShiftMask,    XK_s,       spawn,          SHCMD("pkill -9 screenkey") },
