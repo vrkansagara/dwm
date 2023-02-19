@@ -141,11 +141,11 @@ static const Layout layouts[] = {
 
     /* symbol     arrange function */
     { "[]=",        tile },                     /* 0. Default: Master on left, slaves on right */
-//    { "[D]",        deck},                      /* 1. Master on left, slaves in monocle-like mode on right */
+    { "[D]",        deck},                      /* 1. Master on left, slaves in monocle-like mode on right */
 
     { "[M]",        monocle },                  /* 2. All windows on top of eachother ( Full window ) */
-//    { "|M|",        centeredmaster },           /* 3. Master in middle, slaves on sides */
-//    { ">M>",        centeredfloatingmaster },   /* 4. Same but master floats */
+    { "|M|",        centeredmaster },           /* 3. Master in middle, slaves on sides */
+    { ">M>",        centeredfloatingmaster },   /* 4. Same but master floats */
 
 //    { "HHH",        grid },                     /* 5. Grid layout */
 //    { "TTT",        bstack},                    /* 6. Master on top, slaves on bottom */
@@ -221,9 +221,16 @@ static const Key keys[] = {
 	{ MODKEY,                       XK_Tab,    view,           {0} },
 
     // Layout @START
-	{ MODKEY,                       XK_t,      setlayout,      {.v = &layouts[0]} },
-	{ MODKEY,                       XK_f,      setlayout,      {.v = &layouts[1]} },
-	{ MODKEY,                       XK_m,      setlayout,      {.v = &layouts[2]} },
+    { MODKEY,                       XK_t,      setlayout,      {.v = &layouts[0]} },        /* tile */
+    { MODKEY|ShiftMask,             XK_t,      setlayout,      {.v = &layouts[1]} },        /* deck */
+
+    { MODKEY,                       XK_m,      setlayout,      {.v = &layouts[2]} },        /* monocle */
+    { MODKEY|ShiftMask,             XK_m,      setlayout,      {.v = &layouts[3]} },        /* centeredmaster */
+    { MODKEY|ControlMask|ShiftMask, XK_m,      setlayout,      {.v = &layouts[4]} },        /* centeredfloatingmaster */
+
+    { MODKEY,                       XK_g,      setlayout,      {.v = &layouts[5]} },        /* grid */
+    { MODKEY|ShiftMask,             XK_g,      setlayout,      {.v = &layouts[6]} },        /* bstack (TTT) */
+    { MODKEY|ShiftMask|ControlMask, XK_g,      setlayout,      {.v = &layouts[7]} },        /* bstackhoriz(===)*/
 
 	{ MODKEY,                       XK_space,  setlayout,      {0} },
 	{ MODKEY|ShiftMask,             XK_space,  togglefloating, {0} },
