@@ -148,8 +148,8 @@ static const Layout layouts[] = {
     { ">M>",        centeredfloatingmaster },   /* 4. Same but master floats */
 
 //    { "HHH",        grid },                     /* 5. Grid layout */
-//    { "TTT",        bstack},                    /* 6. Master on top, slaves on bottom */
-//    { "===",        bstackhoriz},               /* 7. Bstack horiz layout */
+    { "TTT",        bstack},                    /* 6. Master on top, slaves on bottom */
+    { "===",        bstackhoriz},               /* 7. Bstack horiz layout */
 
     { "><>",        NULL },                     /* 8. no layout function means floating behavior */
     { NULL,         NULL },                     /* ~ Failback */
