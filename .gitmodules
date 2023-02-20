@@ -1,5 +1,5 @@
-[submodule "dwmblocks"]
-	path = 	path = vendor/dwmblocks
+[submodule "vendor/dwmblocks"]
+	path = vendor/dwmblocks
 	url = https://github.com/torrinfail/dwmblocks.git
 [submodule "vendor/dwm"]
 	path = vendor/dwm
