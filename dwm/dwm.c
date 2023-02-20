@@ -822,7 +822,23 @@ createmon(void)
 		m->pertag->ltidxs[i][1] = m->lt[1];
 		m->pertag->sellts[i] = m->sellt;
 
-		m->pertag->showbars[i] = m->showbar;
+		// m->pertag->showbars[i] = m->showbar;
+
+        // Patch :- Vallabh Kansagara ( initial layout )
+        if(i != 0 ){
+            /* initial layouts per tag,
+             * @ref:-  static const int initlayouts[] = { 1, 3, 0 };
+             * @file config.h
+             */
+            m->pertag->ltidxs[i][0] = &layouts[initlayouts[i-1]];
+            // setfullscreen(selmon->sel, !selmon->sel->isfullscreen);
+
+            /* initial dmenu per tag,
+             * @ref:-  static const int initdmenu[] = { 1, 0, 1 };
+             * @file config.h
+             */
+            m->pertag->showbars[i] = initdmenu[i-1];
+        }
 	}
 
 	return m;

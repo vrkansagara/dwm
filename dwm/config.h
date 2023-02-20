@@ -44,13 +44,13 @@ static int swallowfloating          = 1;        /* 1 means swallow floating wind
 
 //static char *fonts[]          = { "monospace:size=10", "NotoColorEmoji:pixelsize=10:antialias=true:autohint=true"  };
 static const char *fonts[]          = {
-"Fira Code Medium:size=9:antialias=true:autohint=true",
+"Fira Code Medium:size=10:antialias=true:autohint=true",
 "NotoColorEmoji:pixelsize=10:antialias=true:autohint=true",
 "monospace:size=10",
 };
 
 //static const char dmenufont[]       = "monospace:size=10";
-static const char dmenufont[]       =  "Fira Code Medium:size=9:antialias=true:autohint=true";
+static const char dmenufont[]       =  "Fira Code Medium:size=10:antialias=true:autohint=true";
 
 static const char col_gray1[]       = "#222222";
 static const char col_gray2[]       = "#444444";
@@ -239,9 +239,9 @@ static const Key keys[] = {
 	{ MODKEY|ShiftMask,             XK_Return, spawn,          {.v = termcmd } },
 	{ MODKEY,                       XK_b,      togglebar,      {0} },
 
-    // Jump to another window
-	{ MODKEY,                       XK_j,      focusstack,     {.i = +1 } },
-	{ MODKEY,                       XK_k,      focusstack,     {.i = -1 } },
+    // Jump to another window ( stacker is taking ahead with jump so disable )
+//	{ MODKEY,                       XK_j,      focusstack,     {.i = +1 } },
+//	{ MODKEY,                       XK_k,      focusstack,     {.i = -1 } },
 
 	{ MODKEY,                       XK_i,      incnmaster,     {.i = +1 } },
 	{ MODKEY,                       XK_d,      incnmaster,     {.i = -1 } },
