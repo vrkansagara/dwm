@@ -3,8 +3,7 @@
 #include <X11/X.h>
 #include <X11/XF86keysym.h> // /usr/include/X11/keysymdef.h
 #include <X11/Xresource.h> // /usr/include/X11/Xresource.h
-#include "grid.c"
-//#include "layouts.c"
+#include "layouts.c"
 
 /* Constants */
 #define TERMINAL "st"
@@ -15,8 +14,6 @@
 // grep zsh /etc/shells /** Is valid login shell *?
 // TERMINAL_PATH will not be in effect once user has pre-defined shell.
 #define TERMINAL_PATH "/bin/zsh"
-
-
 
 // Brightness controll using (xdotool also useful)
 static const char *brightup[]       = { "/home/vallabh/.vim/bin/brightness", "up", "10000", NULL };
@@ -50,7 +47,7 @@ static const char *fonts[]          = {
 };
 
 //static const char dmenufont[]       = "monospace:size=10";
-static const char dmenufont[]       =  "Fira Code Medium:size=10:antialias=true:autohint=true";
+static const char dmenufont[]       =  "Fira Code Medium:size=8:antialias=true:autohint=true";
 
 static const char col_gray1[]       = "#222222";
 static const char col_gray2[]       = "#444444";
@@ -318,6 +315,7 @@ static const Key keys[] = {
     { MODKEY|AltMask,              XK_s,       spawn,          SHCMD("screenkey &") },
     { MODKEY|AltMask|ShiftMask,    XK_s,       spawn,          SHCMD("pkill -9 screenkey") },
     { MODKEY,                      XK_x,       spawn,          SHCMD("xkill") },
+//    { MODKEY|AltMask,                      XK_x,       spawn,          SHCMD("sxcs -o --hex | cut -f 2 | xclip -in -selection clipboard") },
 
     { 0,        XF86XK_MonBrightnessUp,         spawn,          {.v = brightup } },
     { 0,        XF86XK_MonBrightnessDown,       spawn,          {.v = brightdown } },
