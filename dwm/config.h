@@ -324,6 +324,7 @@ static const Key keys[] = {
     { 0,        XF86XK_AudioMute,               spawn,          {.v = mutevol } },
     { 0,        XF86XK_AudioRaiseVolume,        spawn,          {.v = upvol   } },
     { 0,        XF86XK_Calculator,              spawn,          SHCMD(TERMINAL " -c calculator -n calculator -e bc -l") },
+    { 0,        XK_Print,                       spawn,          SHCMD(TERMINAL " -c flameshot -n flameshot -e flameshot gui --clipboard --delay 0") },
 
     /* start editor*/
     { MODKEY|ControlMask,           XK_Return, spawn,         SHCMD(TERMINAL " -c vrkansagara-ide -n vrkansagara-ide -e vim $HOME") },
