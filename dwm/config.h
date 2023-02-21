@@ -123,10 +123,11 @@ static const Rule rules[] = {
 
     // Tag - 7 (Development : Medium/Heavy weight on memory)
     {   "jetbrains-clion",               "jetbrains-clion",     NULL,       1<<6,   0,  0,  0,  1},
+    {   "Postman",                  "postman",                NULL,       1<<7,       0,      0,0,1},
+
 
     // Tag - 8 ( Heavy on memory )
     {   "jetbrains-phpstorm",       "jetbrains-phpstorm",    NULL,       1<<7,       0,      0,0,1},
-    {   "Postman",                  "postman",                NULL,       1<<7,       0,      0,0,1},
     {   "code",                     "code",                   NULL,       1 <<7,       0,    0,0,1},
 
     // Tag - 9 ( Things on WWW )

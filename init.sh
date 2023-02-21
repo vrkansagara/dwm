@@ -19,7 +19,7 @@ ps -ef | grep "dwmblocks" | grep -v grep | awk "{print \$2}" | xargs --no-run-if
 #green     #859900
 
 # Required sxcs
-sudo apt install libxcursor-dev xautolock screenkey
+sudo apt install libxcursor-dev xautolock screenkey libimlib2-dev
 
 #sudo apt install  fonts-noto-color-emoji
 #mkdir -p ~/.fonts/NotoEmoji
