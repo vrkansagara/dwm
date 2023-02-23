@@ -16,6 +16,10 @@ SLOCK_DIR="$SCRIPT_DIR/slock"
 ST_DIR="$SCRIPT_DIR/st"
 SCROLL_DIR="$SCRIPT_DIR/vendor/scroll"
 
+if [ "$(whoami)" != "root" ]; then
+  SUDO=sudo
+fi
+
 apply_permission() {
   echo "$RED Current directory is [$(pwd)]  $NC"
   # Give current user permission to work with source
@@ -44,33 +48,60 @@ echo "$RED Git clean apply to [$(pwd)]  $NC"
   apply_permission
 }
 
-if [ "$(whoami)" != "root" ]; then
-  SUDO=sudo
-fi
+ini_required(){
+  # Required sxcs
+  ${SUDO} apt install libxcursor-dev xautolock screenkey libimlib2-dev flameshot cpulimit
+  #Google noto font is not supporting so remove it so dwm,st or dwmblock should not crash
+  ${SUDO} apt remove --purge fonts-noto-color-emoji unifont
+
+  #${SUDO apt install  fonts-noto-color-emoji
+  #mkdir -p ~/.fonts/NotoEmoji
+  #curl -L 'https://raw.githubusercontent.com/googlefonts/noto-emoji/main/fonts/NotoColorEmoji.ttf' -o ~/.fonts/NotoEmoji/NotoColorEmoji.ttf
+  #fc-cache -fv
+#  sudo fc-cache -fv
+#  fc-list | grep -i emoji
+#  echo "🩷💀🫱"
+}
+
+GREEN=$'\e[0;32m'
+RED=$'\e[0;31m'
+NC=$'\e[0m'
 
 # """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 #  Maintainer :- Vallabh Kansagara<vrkansagara@gmail.com> — @vrkansagara
 #  Note       :- DWM Window manager initial script
 # """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
-
-GREEN=$'\e[0;32m'
-RED=$'\e[0;31m'
-NC=$'\e[0m'
 echo "$GREEN Script running in this directory [$SCRIPT_DIR]  $NC"
 
+apply_permission
+ini_required
 
 # DWM Specific
 cd $DWM_DIR
+apply_permission
 apply_patche
 ${SUDO} make clean
 ${SUDO} make
 ${SUDO} make uninstall
 ${SUDO} make install
 
-exit
+# DWMBlock Specific
+cd $DWMBLOCKS_DIR
+apply_permission
+apply_patche
+${SUDO} make clean
+${SUDO} make
+${SUDO} make uninstall
+${SUDO} make install
+#Lets kill all process which is executed for the dwmblocks
 ps -ef | grep "dwmblocks" | grep -v grep | awk "{print \$2}" | xargs --no-run-if-empty sudo kill -9
-/usr/local/bin/dwmblocks&
+# reset statusbar
+xsetroot -name ""
+/usr/local/bin/dwmblocks 2>&1 >> $HOME/tmp/dwmblocks.log &
+
+echo "$GREEN Your simple window manager is configured and ready to use.........[DONE]. $NC"
+exit 0
 
 # #base03    #002b36  background
 # #base02    #073642  background heightlight
@@ -89,16 +120,4 @@ ps -ef | grep "dwmblocks" | grep -v grep | awk "{print \$2}" | xargs --no-run-if
 #cyan      #2aa198
 #green     #859900
 
-# Required sxcs
-sudo apt install libxcursor-dev xautolock screenkey libimlib2-dev flameshot cpulimit
 
-#sudo apt install  fonts-noto-color-emoji
-#mkdir -p ~/.fonts/NotoEmoji
-#curl -L 'https://raw.githubusercontent.com/googlefonts/noto-emoji/main/fonts/NotoColorEmoji.ttf' -o ~/.fonts/NotoEmoji/NotoColorEmoji.ttf
-#fc-cache -fv
-
-sudo apt remove --purge fonts-noto-color-emoji unifont
-
-sudo fc-cache -fv
-fc-list | grep -i emoji
-echo "🩷💀🫱"
