@@ -71,10 +71,10 @@ static const char *colors[][3]      = {
 };
 
 /* initial layouts per tag ( Index of layouts[]  */
-static const int initlayouts[] = { 0, 6, 3, 0, 6, 0, 2 ,2, 2 };
+static const int initlayouts[] = { 0, 6, 2, 0, 6, 0, 2 ,2, 2 };
 
 /* show/hide dmenu per tag ( Index of layouts[]  */
-static const int initdmenu[] = { 1, 1, 1, 1, 1, 1, 0, 1, 0};
+static const int initdmenu[] = { 1, 1, 1, 1, 1, 1, 1, 1, 1};
 
 /* tagging */
 static const char *tags[] = { "1", "2", "3", "4", "5", "6", "7", "8", "9" };
@@ -98,41 +98,42 @@ static const Rule rules[] = {
     {   "thunderbird",      "Mail",      NULL,       1<<0,       0, 0,0,    0},
 
     // Tag - 2 (Terminal way on demand )
-    {   "St",      "st",      NULL,       1<<1,       0, 1,0,     0},
+    {   "St",      "st",                                        NULL,       1<<1,   0,  1,  0,  0},
 
     // Tag - 3 (Socializing / Office on the way)
-    {   "Skype",      "skype",      NULL,       1<<2,       0, 0,0,     0},
-    {   "Microsoft Teams - Preview","microsoft teams - preview",      NULL, 1<<2,       0, 0,0,     0},
-    {   "ringcentral",      "ringcentral",      NULL,       1<<2,       0,  0,0,    0},
-    {   "Slack",      "slack",      NULL,       1<<2,       0,  0,0,    0},
+    {   "Skype",      "skype",                                  NULL,       1<<2,       0,  0,  0,    0},
+    {   "Microsoft Teams - Preview","microsoft teams - preview",NULL,       1<<2,       0,  0,  0,    0},
+    {   "ringcentral",      "ringcentral",                      NULL,       1<<2,       0,  0,  0,    0},
+    {   "Slack",      "slack",                                  NULL,       1<<2,       0,  0,  0,    0},
 
     // Tag - 4 ( Remote things)
-    {   "org.remmina.Remmina" ,"org.remmina.Remmina",       NULL,       1 << 3, 0,  0,0,         0},
-    {   "Anydesk",      "anydesk",      NULL,       1<<3,       0,     0,0, 0},
+    {   "org.remmina.Remmina" ,"org.remmina.Remmina",       NULL,       1<<3,   0,  0,  0,  0},
+    {   "Anydesk",      "anydesk",                          NULL,       1<<3,   0,  0,  0,  0},
 
     // Tag - 5 (Utilities)
-    { "WorkComposer"    ,"workcomposer",       NULL,       1 << 4,       0, 0,0, 0},
-    { "Hubstaff"    ,"Hubstaff",       NULL,       1 << 4,       0,          0,0,  0},
-    { "openfortiGUI"    ,"openfortigui",       NULL,       1 << 4,       0, 0,0,0},
-    { "KeePassXC"    ,"keepassxc",       NULL,       1 << 4,       0,        0,0,   0},
-    { "obs"    ,"obs",       NULL,       1 << 4,       0,           0},
+    { "WorkComposer"    ,"workcomposer",        NULL,       1 << 4,       0,    0,  0,  0},
+    { "Hubstaff"    ,"Hubstaff",                NULL,       1 << 4,       0,    0,  0,  0},
+    { "openfortiGUI"    ,"openfortigui",        NULL,       1 << 4,       0,    0,  0,  0},
+    { "KeePassXC"    ,"keepassxc",              NULL,       1 << 4,       0,    0,  0,  0},
+    { "1Password"    ,"1password",              NULL,       1 << 4,       0,    0,  0,  0},
+    { "obs"    ,"obs",                          NULL,       1 << 4,       0,    0,  0,  0},
 
     // Tag - 6 (Development : Light weight on memory)
     {   "vrkansagara-ide",               "vrkansagara-ide",     NULL,       1<<5,   0,  1,  0,  1},
-    {   "Geany",                    "geany",               NULL,       1<<5,       0,           0,0,1},
+    {   "Geany",                    "geany",                    NULL,       1<<5,       0,           0,0,1},
 
     // Tag - 7 (Development : Medium/Heavy weight on memory)
-    {   "jetbrains-clion",               "jetbrains-clion",     NULL,       1<<6,   0,  0,  0,  1},
+    {   "jetbrains-clion",               "jetbrains-clion",   NULL,       1<<6,   0,  0,  0,  1},
     {   "Postman",                  "postman",                NULL,       1<<7,       0,      0,0,1},
 
 
     // Tag - 8 ( Heavy on memory )
-    {   "jetbrains-phpstorm",       "jetbrains-phpstorm",    NULL,       1<<7,       0,      0,0,1},
-    {   "code",                     "code",                   NULL,       1 <<7,       0,    0,0,1},
+    {   "jetbrains-phpstorm",       "jetbrains-phpstorm",    NULL,       1<<7,  0,      0,0,1},
+    {   "code",                     "code",                  NULL,       1<<7,  0,    0,0,1},
 
     // Tag - 9 ( Things on WWW )
-    { "firefox"                 ,"Navigator",               NULL,       1<<8,       0,           0,0,0},
-    { "Google-chrome"           ,"google-chrome",          NULL,       1<<8,       0,      0,0,0},
+    { "firefox"                 ,"Navigator",               NULL,       1<<8,   0,  0,  0,  0},
+    { "Google-chrome"           ,"google-chrome",           NULL,       1<<8,   0,  0,  0,  0},
 };
 
 /* layout(s) */
@@ -307,7 +308,9 @@ static const Key keys[] = {
     // vanitygaps
     { MODKEY|ShiftMask|ControlMask,                         XK_j,       incrgaps,       {.i = +3 } },
     { MODKEY|ShiftMask|ControlMask,                         XK_k,       incrgaps,       {.i = -3 } },
-    { Mod4Mask|ShiftMask|ControlMask,                       XK_0,       togglegaps,     {0} },
+    { MODKEY|ShiftMask|ControlMask,                         XK_k,       incrigaps,       {.i = -3 } },
+    { MODKEY|ShiftMask|ControlMask,                         XK_0,       defaultgaps,    {0}        },
+    { MODKEY|ShiftMask|ControlMask|AltMask,                 XK_0,       togglegaps,     {0} },
 
     // stacker ( focuse and change stack of slave
     STACKKEYS(MODKEY,                          focus)
@@ -316,7 +319,7 @@ static const Key keys[] = {
     { MODKEY|AltMask,              XK_s,       spawn,          SHCMD("screenkey &") },
     { MODKEY|AltMask|ShiftMask,    XK_s,       spawn,          SHCMD("pkill -9 screenkey") },
     { MODKEY,                      XK_x,       spawn,          SHCMD("xkill") },
-//    { MODKEY|AltMask,                      XK_x,       spawn,          SHCMD("sxcs -o --hex | cut -f 2 | xclip -in -selection clipboard") },
+    { MODKEY,                      XK_Print,   spawn,          SHCMD("sxcs -o --hex | cut -f 2 | xclip -in -selection clipboard") },
 
     { 0,        XF86XK_MonBrightnessUp,         spawn,          {.v = brightup } },
     { 0,        XF86XK_MonBrightnessDown,       spawn,          {.v = brightdown } },
@@ -324,7 +327,7 @@ static const Key keys[] = {
     { 0,        XF86XK_AudioMute,               spawn,          {.v = mutevol } },
     { 0,        XF86XK_AudioRaiseVolume,        spawn,          {.v = upvol   } },
     { 0,        XF86XK_Calculator,              spawn,          SHCMD(TERMINAL " -c calculator -n calculator -e bc -l") },
-    { 0,        XK_Print,                       spawn,          SHCMD(TERMINAL " -c flameshot -n flameshot -e flameshot gui --clipboard --delay 0") },
+    { 0,        XK_Print,                       spawn,          SHCMD("flameshot gui --clipboard --delay 0") },
     { 0,        XK_Home,                        spawn,          SHCMD("nautilus $HOME") },
 
     /* start editor*/
