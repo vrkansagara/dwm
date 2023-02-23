@@ -45,12 +45,12 @@ cpulimit -b -l $((10 * $NUM_CPU_CORES)) -- compton
 #Limit "teams" process to 20% CPU usage.
 # cpulimit -b -l $((20 * $NUM_CPU_CORES)) -- $HOME/Applications/postman/postman
 # cpulimit -b -l $((20 * $NUM_CPU_CORES)) -- phpstorm
-# cpulimit -b -l $((20 * $NUM_CPU_CORES)) -- firefox
-# cpulimit -b -l $((20 * $NUM_CPU_CORES)) -- teams
+cpulimit -b -l $((20 * $NUM_CPU_CORES)) -- firefox
+cpulimit -b -l $((20 * $NUM_CPU_CORES)) -- teams
 
-# cpulimit -b -l $((10 * $NUM_CPU_CORES)) -- slack
+cpulimit -b -l $((10 * $NUM_CPU_CORES)) -- slack
 # cpulimit -b -l $((5 * $NUM_CPU_CORES)) -- guake
-# cpulimit -b -l $((5 * $NUM_CPU_CORES)) -- st
+cpulimit -b -l $((5 * $NUM_CPU_CORES)) -- st
 
 # Lets priority with nice
 # nice -n 5 /snap/bin/phpstorm
@@ -61,7 +61,7 @@ cpulimit -b -l $((10 * $NUM_CPU_CORES)) -- compton
 #     (conky | while read LINE; do xsetroot -name "$LINE"; done)
 #     sleep 1
 # done&
-/usr/local/bin/dwmblocks&
+cpulimit -b -l $((5 * $NUM_CPU_CORES)) --  /usr/local/bin/dwmblocks&
 
 #evaluate the SSH agent
 export GPGKEY=8BA6E7ABD8112B3E
@@ -71,7 +71,7 @@ killall gpg-agent ssh-agent
 /usr/lib/notification-daemon/notification-daemon &
 
 # X window lock start ( compile slock if not)
-xautolock -time 2 -locker slock &
+cpulimit -b -l $((5 * $NUM_CPU_CORES)) --  xautolock -time 2 -locker slock &
 
 # zsh/demnu clean cache
 mkdir -p $HOME/old

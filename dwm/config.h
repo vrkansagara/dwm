@@ -47,7 +47,7 @@ static const char *fonts[]          = {
 };
 
 //static const char dmenufont[]       = "monospace:size=10";
-static const char dmenufont[]       =  "Fira Code Medium:size=8:antialias=true:autohint=true";
+static const char dmenufont[]       =  "Fira Code Medium:size=10:antialias=true:autohint=true";
 
 static const char col_gray1[]       = "#222222";
 static const char col_gray2[]       = "#444444";

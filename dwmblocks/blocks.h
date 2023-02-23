@@ -1,6 +1,8 @@
 //Modify this file to change what commands output to your statusbar, and recompile using the make command.
 //{"", "date '+%b %d (%a) %I:%M%p'",					5,		2},
 
+//xprop -root -notype -f WM_NAME "8u"  |  sed -n -r 's/WM_NAME = \"(.*)\"/\1/p'
+// if you see \001....\002 in output then understand that statuscmd is added to that block
 static const Block blocks[] = {
 /*Icon*/	/*Command*/		/*Update Interval(Secounds)*/	/*Update Signal*/
 {"P:", "acpi -b | grep -P -o '[0-9]+(?=%)'",                        60,		0},
