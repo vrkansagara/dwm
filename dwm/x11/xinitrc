@@ -4,10 +4,10 @@
 export _JAVA_AWT_WM_NONREPARENTING=1
 
 # set baground
-WALLPAPERS="$HOME/git/vrkansagara/dwm/images"
+WALLPAPERS="$HOME/git/vrkansagara/dwm/dwm/images"
 while true; do
   find ${WALLPAPERS} -type f -iname "*.jpg" | shuf -n 1 | xargs feh --bg-fill
-    sleep  5m
+  sleep  5m
 done&
 
 # Laptop/Desktop specific start up
@@ -44,12 +44,12 @@ cpulimit -b -l $((10 * $NUM_CPU_CORES)) -- compton
 
 #Limit "teams" process to 20% CPU usage.
 # cpulimit -b -l $((20 * $NUM_CPU_CORES)) -- $HOME/Applications/postman/postman
-# cpulimit -b -l $((20 * $NUM_CPU_CORES)) -- phpstorm
+cpulimit -b -l $((20 * $NUM_CPU_CORES)) -- phpstorm
 cpulimit -b -l $((20 * $NUM_CPU_CORES)) -- firefox
-cpulimit -b -l $((20 * $NUM_CPU_CORES)) -- teams
+# cpulimit -b -l $((20 * $NUM_CPU_CORES)) -- teams
 
-cpulimit -b -l $((10 * $NUM_CPU_CORES)) -- slack
-# cpulimit -b -l $((5 * $NUM_CPU_CORES)) -- guake
+# cpulimit -b -l $((10 * $NUM_CPU_CORES)) -- slack
+cpulimit -b -l $((5 * $NUM_CPU_CORES)) -- guake
 cpulimit -b -l $((5 * $NUM_CPU_CORES)) -- st
 
 # Lets priority with nice
@@ -71,7 +71,7 @@ killall gpg-agent ssh-agent
 /usr/lib/notification-daemon/notification-daemon &
 
 # X window lock start ( compile slock if not)
-cpulimit -b -l $((5 * $NUM_CPU_CORES)) --  xautolock -time 2 -locker slock &
+# cpulimit -b -l $((5 * $NUM_CPU_CORES)) --  xautolock -time 2 -locker slock &
 
 # zsh/demnu clean cache
 mkdir -p $HOME/old
@@ -80,12 +80,12 @@ mv .bash* $HOME/old
 mv $HOME/.cache/dmenu_run $HOME/old
 mv .zcompdump-* $HOME/old
 
-# Start Window Manager (Alwayse last line)
-# Log stderror to a file
-# Insted of quiting dwm , make it hot reload(Will not disturbe your stream while hot reload)
+# Start Window Manager (Always last line)
+# Log stderr to a file
+# Instead of quiting dwm , make it hot reload(Will not disturb your stream while hot reload)
 while true; do
     /usr/local/bin/dwm 2>&1 >> $HOME/tmp/dwm.log
-    # Log stderror to a file
+    # Log stderr to a file
     # dwm 2> ~/.dwm.log
     # No error logging
     ##dwm >/dev/null 2>&1

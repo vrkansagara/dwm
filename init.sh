@@ -50,7 +50,8 @@ echo "$RED Git clean apply to [$(pwd)]  $NC"
 
 ini_required(){
   # Required sxcs
-  ${SUDO} apt install libxcursor-dev xautolock screenkey libimlib2-dev flameshot cpulimit
+  ${SUDO} apt install libxcursor-dev xautolock screenkey libimlib2-dev flameshot cpulimit screenkey
+
   #Google noto font is not supporting so remove it so dwm,st or dwmblock should not crash
   ${SUDO} apt remove --purge fonts-noto-color-emoji unifont
 

@@ -71,7 +71,7 @@ static const char *colors[][3]      = {
 };
 
 /* initial layouts per tag ( Index of layouts[]  */
-static const int initlayouts[] = { 0, 6, 2, 0, 6, 0, 2 ,2, 2 };
+static const int initlayouts[] = { 0, 6, 0, 0, 6, 0, 2 ,2, 2 };
 
 /* show/hide dmenu per tag ( Index of layouts[]  */
 static const int initdmenu[] = { 1, 1, 1, 1, 1, 1, 1, 1, 1};
@@ -94,17 +94,17 @@ static const Rule rules[] = {
     /** class           instance,               title,              tags,               isfloating, isterminal ,noswallow              monitor */
     // Tag - 1 (General usse case)
     {   "Thunar",      "thunar",      NULL,       1<<0,       0, 0,0,    0},
-    {   "Org.gnome.Nautilus",      "org.gnome.Nautilus",      NULL,       1<<0,       0, 0,0,    0},
+    {   "Org.gnome.Nautilus",      "org.gnome.Nautilus",      NULL,       1<<0,       0, 0,0,    1},
     {   "thunderbird",      "Mail",      NULL,       1<<0,       0, 0,0,    0},
 
     // Tag - 2 (Terminal way on demand )
     {   "St",      "st",                                        NULL,       1<<1,   0,  1,  0,  0},
 
     // Tag - 3 (Socializing / Office on the way)
-    {   "Skype",      "skype",                                  NULL,       1<<2,       0,  0,  0,    0},
-    {   "Microsoft Teams - Preview","microsoft teams - preview",NULL,       1<<2,       0,  0,  0,    0},
-    {   "ringcentral",      "ringcentral",                      NULL,       1<<2,       0,  0,  0,    0},
-    {   "Slack",      "slack",                                  NULL,       1<<2,       0,  0,  0,    0},
+    {   "Skype",      "skype",                                  NULL,       1<<2,       0,  0,  0,    1},
+    {   "Microsoft Teams - Preview","microsoft teams - preview",NULL,       1<<2,       0,  0,  0,    1},
+    {   "ringcentral",      "ringcentral",                      NULL,       1<<2,       0,  0,  0,    1},
+    {   "Slack",      "slack",                                  NULL,       1<<2,       0,  0,  0,    1},
 
     // Tag - 4 ( Remote things)
     {   "org.remmina.Remmina" ,"org.remmina.Remmina",       NULL,       1<<3,   0,  0,  0,  0},
@@ -123,13 +123,16 @@ static const Rule rules[] = {
     {   "Geany",                    "geany",                    NULL,       1<<5,       0,           0,0,1},
 
     // Tag - 7 (Development : Medium/Heavy weight on memory)
-    {   "jetbrains-clion",               "jetbrains-clion",   NULL,       1<<6,   0,  0,  0,  1},
-    {   "Postman",                  "postman",                NULL,       1<<7,       0,      0,0,1},
+    {   "jetbrains-clion",          "jetbrains-clion",          NULL,       1<<6,   0,  0,  0,  1},
+    {   "DBeaver",                  "DBeaver",                  NULL,       1<<6,       0,      0,0,1},
+
 
 
     // Tag - 8 ( Heavy on memory )
     {   "jetbrains-phpstorm",       "jetbrains-phpstorm",    NULL,       1<<7,  0,      0,0,1},
     {   "code",                     "code",                  NULL,       1<<7,  0,    0,0,1},
+    {   "Postman",                  "postman",                NULL,       1<<7,       0,      0,0,1},
+
 
     // Tag - 9 ( Things on WWW )
     { "firefox"                 ,"Navigator",               NULL,       1<<8,   0,  0,  0,  0},
@@ -318,7 +321,8 @@ static const Key keys[] = {
 
     { MODKEY|AltMask,              XK_s,       spawn,          SHCMD("screenkey &") },
     { MODKEY|AltMask|ShiftMask,    XK_s,       spawn,          SHCMD("pkill -9 screenkey") },
-    { MODKEY,                      XK_x,       spawn,          SHCMD("xkill") },
+    // dbeaver is also using alter+x which is sharp near by MODEKEY to make sure it not clicked.
+//    { MODKEY,                      XK_x,       spawn,          SHCMD("xkill") },
     { MODKEY,                      XK_Print,   spawn,          SHCMD("sxcs -o --hex | cut -f 2 | xclip -in -selection clipboard") },
 
     { 0,        XF86XK_MonBrightnessUp,         spawn,          {.v = brightup } },
@@ -328,7 +332,8 @@ static const Key keys[] = {
     { 0,        XF86XK_AudioRaiseVolume,        spawn,          {.v = upvol   } },
     { 0,        XF86XK_Calculator,              spawn,          SHCMD(TERMINAL " -c calculator -n calculator -e bc -l") },
     { 0,        XK_Print,                       spawn,          SHCMD("flameshot gui --clipboard --delay 0") },
-    { 0,        XK_Home,                        spawn,          SHCMD("nautilus $HOME") },
+    // Conflicts with selection of raw home and entire page up side.
+//    { 0,        XK_Home,                        spawn,          SHCMD("nautilus $HOME") },
 
     /* start editor*/
     { MODKEY|ControlMask,           XK_Return, spawn,         SHCMD(TERMINAL " -c vrkansagara-ide -n vrkansagara-ide -e vim $HOME") },
