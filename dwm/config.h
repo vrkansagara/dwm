@@ -3,8 +3,7 @@
 #include <X11/X.h>
 #include <X11/XF86keysym.h> // /usr/include/X11/keysymdef.h
 #include <X11/Xresource.h> // /usr/include/X11/Xresource.h
-#include "grid.c"
-//#include "layouts.c"
+#include "layouts.c"
 
 /* Constants */
 #define TERMINAL "st"
@@ -15,8 +14,6 @@
 // grep zsh /etc/shells /** Is valid login shell *?
 // TERMINAL_PATH will not be in effect once user has pre-defined shell.
 #define TERMINAL_PATH "/bin/zsh"
-
-
 
 // Brightness controll using (xdotool also useful)
 static const char *brightup[]       = { "/home/vallabh/.vim/bin/brightness", "up", "10000", NULL };
@@ -66,18 +63,18 @@ static char selbordercolor[]        = "#770000"; // #005577
 static char selbgcolor[]            = "#005577";
 
 static const char *colors[][3]      = {
-	/*               fg         bg         border   */
-//	[SchemeNorm] = { col_gray3, col_gray1, col_gray2 },
-//	[SchemeSel]  = { col_gray4, col_cyan,  col_cyan  },
+    /*               fg         bg         border   */
+//  [SchemeNorm] = { col_gray3, col_gray1, col_gray2 },
+//  [SchemeSel]  = { col_gray4, col_cyan,  col_cyan  },
     [SchemeNorm] = { normfgcolor, normbgcolor, normbordercolor },
     [SchemeSel]  = { selfgcolor,  selbgcolor,  selbordercolor  },
 };
 
 /* initial layouts per tag ( Index of layouts[]  */
-static const int initlayouts[] = { 0, 6, 3, 0, 6, 0, 2 ,2, 2 };
+static const int initlayouts[] = { 0, 6, 0, 0, 6, 0, 2 ,2, 2 };
 
 /* show/hide dmenu per tag ( Index of layouts[]  */
-static const int initdmenu[] = { 1, 1, 1, 1, 1, 1, 0, 1, 0};
+static const int initdmenu[] = { 1, 1, 1, 1, 1, 1, 1, 1, 1};
 
 /* tagging */
 static const char *tags[] = { "1", "2", "3", "4", "5", "6", "7", "8", "9" };
@@ -90,51 +87,56 @@ static const Rule rules[] = {
      *  xprop -root -notype -f WM_NAME "8u"  |  sed -n -r 's/WM_NAME = \"(.*)\"/\1/p'
      */
 
-//	/* class      instance    title       tags mask     isfloating   monitor */
-//	{ "Gimp",     NULL,       NULL,       0,            1,           -1 },
-//	{ "Firefox",  NULL,       NULL,       1 << 8,       0,           -1 },
+//  /* class      instance    title       tags mask     isfloating   monitor */
+//  { "Gimp",     NULL,       NULL,       0,            1,           -1 },
+//  { "Firefox",  NULL,       NULL,       1 << 8,       0,           -1 },
 
     /** class           instance,               title,              tags,               isfloating, isterminal ,noswallow              monitor */
     // Tag - 1 (General usse case)
     {   "Thunar",      "thunar",      NULL,       1<<0,       0, 0,0,    0},
-    {   "Org.gnome.Nautilus",      "org.gnome.Nautilus",      NULL,       1<<0,       0, 0,0,    0},
+    {   "Org.gnome.Nautilus",      "org.gnome.Nautilus",      NULL,       1<<0,       0, 0,0,    1},
     {   "thunderbird",      "Mail",      NULL,       1<<0,       0, 0,0,    0},
 
     // Tag - 2 (Terminal way on demand )
-    {   "St",      "st",      NULL,       1<<1,       0, 1,0,     0},
+    {   "St",      "st",                                        NULL,       1<<1,   0,  1,  0,  0},
 
     // Tag - 3 (Socializing / Office on the way)
-    {   "Skype",      "skype",      NULL,       1<<2,       0, 0,0,     0},
-    {   "Microsoft Teams - Preview","microsoft teams - preview",      NULL, 1<<2,       0, 0,0,     0},
-    {   "ringcentral",      "ringcentral",      NULL,       1<<2,       0,  0,0,    0},
-    {   "Slack",      "slack",      NULL,       1<<2,       0,  0,0,    0},
+    {   "Skype",      "skype",                                  NULL,       1<<2,       0,  0,  0,    1},
+    {   "Microsoft Teams - Preview","microsoft teams - preview",NULL,       1<<2,       0,  0,  0,    1},
+    {   "ringcentral",      "ringcentral",                      NULL,       1<<2,       0,  0,  0,    1},
+    {   "Slack",      "slack",                                  NULL,       1<<2,       0,  0,  0,    1},
 
     // Tag - 4 ( Remote things)
-    {   "org.remmina.Remmina" ,"org.remmina.Remmina",       NULL,       1 << 3, 0,  0,0,         0},
-    {   "Anydesk",      "anydesk",      NULL,       1<<3,       0,     0,0, 0},
+    {   "org.remmina.Remmina" ,"org.remmina.Remmina",       NULL,       1<<3,   0,  0,  0,  0},
+    {   "Anydesk",      "anydesk",                          NULL,       1<<3,   0,  0,  0,  0},
 
     // Tag - 5 (Utilities)
-    { "WorkComposer"    ,"workcomposer",       NULL,       1 << 4,       0, 0,0, 0},
-    { "Hubstaff"    ,"Hubstaff",       NULL,       1 << 4,       0,          0,0,  0},
-    { "openfortiGUI"    ,"openfortigui",       NULL,       1 << 4,       0, 0,0,0},
-    { "KeePassXC"    ,"keepassxc",       NULL,       1 << 4,       0,        0,0,   0},
-    { "obs"    ,"obs",       NULL,       1 << 4,       0,           0},
+    { "WorkComposer"    ,"workcomposer",        NULL,       1 << 4,       0,    0,  0,  0},
+    { "Hubstaff"    ,"Hubstaff",                NULL,       1 << 4,       0,    0,  0,  0},
+    { "openfortiGUI"    ,"openfortigui",        NULL,       1 << 4,       0,    0,  0,  0},
+    { "KeePassXC"    ,"keepassxc",              NULL,       1 << 4,       0,    0,  0,  0},
+    { "1Password"    ,"1password",              NULL,       1 << 4,       0,    0,  0,  0},
+    { "obs"    ,"obs",                          NULL,       1 << 4,       0,    0,  0,  0},
 
     // Tag - 6 (Development : Light weight on memory)
     {   "vrkansagara-ide",               "vrkansagara-ide",     NULL,       1<<5,   0,  1,  0,  1},
-    {   "Geany",                    "geany",               NULL,       1<<5,       0,           0,0,1},
+    {   "Geany",                    "geany",                    NULL,       1<<5,       0,           0,0,1},
 
     // Tag - 7 (Development : Medium/Heavy weight on memory)
-    {   "jetbrains-clion",               "jetbrains-clion",     NULL,       1<<6,   0,  0,  0,  1},
+    {   "jetbrains-clion",          "jetbrains-clion",          NULL,       1<<6,   0,  0,  0,  1},
+    {   "DBeaver",                  "DBeaver",                  NULL,       1<<6,       0,      0,0,1},
+
+
 
     // Tag - 8 ( Heavy on memory )
-    {   "jetbrains-phpstorm",       "jetbrains-phpstorm",    NULL,       1<<7,       0,      0,0,1},
+    {   "jetbrains-phpstorm",       "jetbrains-phpstorm",    NULL,       1<<7,  0,      0,0,1},
+    {   "code",                     "code",                  NULL,       1<<7,  0,    0,0,1},
     {   "Postman",                  "postman",                NULL,       1<<7,       0,      0,0,1},
-    {   "code",                     "code",                   NULL,       1 <<7,       0,    0,0,1},
+
 
     // Tag - 9 ( Things on WWW )
-    { "firefox"                 ,"Navigator",               NULL,       1<<8,       0,           0,0,0},
-    { "Google-chrome"           ,"google-chrome",          NULL,       1<<8,       0,      0,0,0},
+    { "firefox"                 ,"Navigator",               NULL,       1<<8,   0,  0,  0,  0},
+    { "Google-chrome"           ,"google-chrome",           NULL,       1<<8,   0,  0,  0,  0},
 };
 
 /* layout(s) */
@@ -144,10 +146,10 @@ static const int resizehints = 0;    /* 1 means respect size hints in tiled resi
 static const int lockfullscreen = 1; /* 1 will force focus on the fullscreen window */
 
 static const Layout layouts[] = {
-//	/* symbol     arrange function */
-//	{ "[]=",      tile },    /* first entry is default */
-//	{ "><>",      NULL },    /* no layout function means floating behavior */
-//	{ "[M]",      monocle },
+//  /* symbol     arrange function */
+//  { "[]=",      tile },    /* first entry is default */
+//  { "><>",      NULL },    /* no layout function means floating behavior */
+//  { "[M]",      monocle },
 
     /* symbol     arrange function */
     { "[]=",        tile },                     /* 0. Default: Master on left, slaves on right */
@@ -181,10 +183,10 @@ static const Layout layouts[] = {
 #define AltMask Mod1Mask  // Alt key for meta
 #define MODKEY Mod4Mask // Window key for meta
 #define TAGKEYS(KEY,TAG) \
-	{ MODKEY,                       KEY,      view,           {.ui = 1 << TAG} }, \
-	{ MODKEY|ControlMask,           KEY,      toggleview,     {.ui = 1 << TAG} }, \
-	{ MODKEY|ShiftMask,             KEY,      tag,            {.ui = 1 << TAG} }, \
-	{ MODKEY|ControlMask|ShiftMask, KEY,      toggletag,      {.ui = 1 << TAG} },
+    { MODKEY,                       KEY,      view,           {.ui = 1 << TAG} }, \
+    { MODKEY|ControlMask,           KEY,      toggleview,     {.ui = 1 << TAG} }, \
+    { MODKEY|ShiftMask,             KEY,      tag,            {.ui = 1 << TAG} }, \
+    { MODKEY|ControlMask|ShiftMask, KEY,      toggletag,      {.ui = 1 << TAG} },
 /**
 // Grave button = button immediately above the TAB on most keyboards.
 { MOD, XK_q,     ACTION##stack, {.i = 0 } }, \
@@ -234,26 +236,26 @@ ResourcePref resources[] = {
 };
 
 static const Key keys[] = {
-	/* modifier                     key        function        argument */
-	{ MODKEY,                       XK_p,      spawn,          {.v = dmenucmd } },
-	{ MODKEY|ShiftMask,             XK_Return, spawn,          {.v = termcmd } },
-	{ MODKEY,                       XK_b,      togglebar,      {0} },
+    /* modifier                     key        function        argument */
+    { MODKEY,                       XK_p,      spawn,          {.v = dmenucmd } },
+    { MODKEY|ShiftMask,             XK_Return, spawn,          {.v = termcmd } },
+    { MODKEY,                       XK_b,      togglebar,      {0} },
 
     // Jump to another window ( stacker is taking ahead with jump so disable )
-//	{ MODKEY,                       XK_j,      focusstack,     {.i = +1 } },
-//	{ MODKEY,                       XK_k,      focusstack,     {.i = -1 } },
+//  { MODKEY,                       XK_j,      focusstack,     {.i = +1 } },
+//  { MODKEY,                       XK_k,      focusstack,     {.i = -1 } },
 
-	{ MODKEY,                       XK_i,      incnmaster,     {.i = +1 } },
-	{ MODKEY,                       XK_d,      incnmaster,     {.i = -1 } },
+    { MODKEY,                       XK_i,      incnmaster,     {.i = +1 } },
+    { MODKEY,                       XK_d,      incnmaster,     {.i = -1 } },
 
-	// Increse/Decrese master area
-	{ MODKEY,                       XK_h,      setmfact,       {.f = -0.05} },
-	{ MODKEY,                       XK_l,      setmfact,       {.f = +0.05} },
+    // Increse/Decrese master area
+    { MODKEY,                       XK_h,      setmfact,       {.f = -0.05} },
+    { MODKEY,                       XK_l,      setmfact,       {.f = +0.05} },
 
     // Push window to master are
-	{ MODKEY,                       XK_Return, zoom,           {0} },
-	// Jump to preview window, irrespective to tag number
-	{ MODKEY,                       XK_Tab,    view,           {0} },
+    { MODKEY,                       XK_Return, zoom,           {0} },
+    // Jump to preview window, irrespective to tag number
+    { MODKEY,                       XK_Tab,    view,           {0} },
 
     // Layout @START
     { MODKEY,                       XK_t,      setlayout,      {.v = &layouts[0]} },        /* tile */
@@ -267,8 +269,8 @@ static const Key keys[] = {
     { MODKEY|ShiftMask,             XK_g,      setlayout,      {.v = &layouts[6]} },        /* bstack (TTT) */
     { MODKEY|ShiftMask|ControlMask, XK_g,      setlayout,      {.v = &layouts[7]} },        /* bstackhoriz(===)*/
 
-	{ MODKEY,                       XK_space,  setlayout,      {0} },
-	{ MODKEY|ShiftMask,             XK_space,  togglefloating, {0} },
+    { MODKEY,                       XK_space,  setlayout,      {0} },
+    { MODKEY|ShiftMask,             XK_space,  togglefloating, {0} },
 
     // Layout @END
 
@@ -279,22 +281,22 @@ static const Key keys[] = {
     { MODKEY|ShiftMask,             XK_0,      tag,            {.ui = ~0 } },
 
 
-	{ MODKEY,                       XK_comma,  focusmon,       {.i = -1 } },
-	{ MODKEY,                       XK_period, focusmon,       {.i = +1 } },
-	{ MODKEY|ShiftMask,             XK_comma,  tagmon,         {.i = -1 } },
-	{ MODKEY|ShiftMask,             XK_period, tagmon,         {.i = +1 } },
+    { MODKEY,                       XK_comma,  focusmon,       {.i = -1 } },
+    { MODKEY,                       XK_period, focusmon,       {.i = +1 } },
+    { MODKEY|ShiftMask,             XK_comma,  tagmon,         {.i = -1 } },
+    { MODKEY|ShiftMask,             XK_period, tagmon,         {.i = +1 } },
 
-	TAGKEYS(                        XK_1,                      0)
-	TAGKEYS(                        XK_2,                      1)
-	TAGKEYS(                        XK_3,                      2)
-	TAGKEYS(                        XK_4,                      3)
-	TAGKEYS(                        XK_5,                      4)
-	TAGKEYS(                        XK_6,                      5)
-	TAGKEYS(                        XK_7,                      6)
-	TAGKEYS(                        XK_8,                      7)
-	TAGKEYS(                        XK_9,                      8)
+    TAGKEYS(                        XK_1,                      0)
+    TAGKEYS(                        XK_2,                      1)
+    TAGKEYS(                        XK_3,                      2)
+    TAGKEYS(                        XK_4,                      3)
+    TAGKEYS(                        XK_5,                      4)
+    TAGKEYS(                        XK_6,                      5)
+    TAGKEYS(                        XK_7,                      6)
+    TAGKEYS(                        XK_8,                      7)
+    TAGKEYS(                        XK_9,                      8)
 
-	/* Vallabh @START */
+    /* Vallabh @START */
 
     // Patche(s) custom key(s)
 
@@ -309,7 +311,9 @@ static const Key keys[] = {
     // vanitygaps
     { MODKEY|ShiftMask|ControlMask,                         XK_j,       incrgaps,       {.i = +3 } },
     { MODKEY|ShiftMask|ControlMask,                         XK_k,       incrgaps,       {.i = -3 } },
-    { Mod4Mask|ShiftMask|ControlMask,                       XK_0,       togglegaps,     {0} },
+    { MODKEY|ShiftMask|ControlMask,                         XK_k,       incrigaps,       {.i = -3 } },
+    { MODKEY|ShiftMask|ControlMask,                         XK_0,       defaultgaps,    {0}        },
+    { MODKEY|ShiftMask|ControlMask|AltMask,                 XK_0,       togglegaps,     {0} },
 
     // stacker ( focuse and change stack of slave
     STACKKEYS(MODKEY,                          focus)
@@ -317,7 +321,9 @@ static const Key keys[] = {
 
     { MODKEY|AltMask,              XK_s,       spawn,          SHCMD("screenkey &") },
     { MODKEY|AltMask|ShiftMask,    XK_s,       spawn,          SHCMD("pkill -9 screenkey") },
+    // dbeaver is also using alter+x which is sharp near by MODEKEY to make sure it not clicked.
     { MODKEY,                      XK_x,       spawn,          SHCMD("xkill") },
+    { MODKEY,                      XK_Print,   spawn,          SHCMD("sxcs -o --hex | cut -f 2 | xclip -in -selection clipboard") },
 
     { 0,        XF86XK_MonBrightnessUp,         spawn,          {.v = brightup } },
     { 0,        XF86XK_MonBrightnessDown,       spawn,          {.v = brightdown } },
@@ -325,6 +331,9 @@ static const Key keys[] = {
     { 0,        XF86XK_AudioMute,               spawn,          {.v = mutevol } },
     { 0,        XF86XK_AudioRaiseVolume,        spawn,          {.v = upvol   } },
     { 0,        XF86XK_Calculator,              spawn,          SHCMD(TERMINAL " -c calculator -n calculator -e bc -l") },
+    { 0,        XK_Print,                       spawn,          SHCMD("flameshot gui --clipboard --delay 0") },
+    // Conflicts with selection of raw home and entire page up side.
+//    { 0,        XK_Home,                        spawn,          SHCMD("nautilus $HOME") },
 
     /* start editor*/
     { MODKEY|ControlMask,           XK_Return, spawn,         SHCMD(TERMINAL " -c vrkansagara-ide -n vrkansagara-ide -e vim $HOME") },
@@ -333,32 +342,32 @@ static const Key keys[] = {
     { MODKEY|ShiftMask,             XK_w,      spawn,         SHCMD(TERMINAL " -c nmtui -n nmtui -e sudo nmtui") },
 
     // To quit current window safely ( i.e. click on close window)
-	{ MODKEY|ShiftMask,             XK_c,      killclient,     {0} },
-	/* To quit dwm cleanly (It will hot reload all dwm config, see xinitrc for this) */
-	{ MODKEY|ShiftMask,             XK_q,      quit,           {0} },
+    { MODKEY|ShiftMask,             XK_c,      killclient,     {0} },
+    /* To quit dwm cleanly (It will hot reload all dwm config, see xinitrc for this) */
+    { MODKEY|ShiftMask,             XK_q,      quit,           {0} },
     /* close all session of current $USER , use startx */
     { MODKEY|ShiftMask|ControlMask, XK_q,      spawn,          SHCMD(TERMINAL " pkill -u $USER -9")},
 
-	/* Vallabh @END */
+    /* Vallabh @END */
 };
 
 /* button definitions */
 /* click can be ClkTagBar, ClkLtSymbol, ClkStatusText, ClkWinTitle, ClkClientWin, or ClkRootWin */
 static const Button buttons[] = {
-	/* click                event mask      button          function        argument */
-	{ ClkLtSymbol,          0,              Button1,        setlayout,      {0} },
-	{ ClkLtSymbol,          0,              Button3,        setlayout,      {.v = &layouts[2]} },
-	{ ClkWinTitle,          0,              Button2,        zoom,           {0} },
+    /* click                event mask      button          function        argument */
+    { ClkLtSymbol,          0,              Button1,        setlayout,      {0} },
+    { ClkLtSymbol,          0,              Button3,        setlayout,      {.v = &layouts[2]} },
+    { ClkWinTitle,          0,              Button2,        zoom,           {0} },
 { ClkStatusText,        MODKEY,         Button2,        spawn,          {.v = termcmd } },
 { ClkStatusText,        0,              Button1,        sigstatusbar,   {.i = 1} },
 { ClkStatusText,        0,              Button2,        sigstatusbar,   {.i = 2} },
 { ClkStatusText,        0,              Button3,        sigstatusbar,   {.i = 3} },
-	{ ClkClientWin,         MODKEY,         Button1,        movemouse,      {0} },
-	{ ClkClientWin,         MODKEY,         Button2,        togglefloating, {0} },
-	{ ClkClientWin,         MODKEY,         Button3,        resizemouse,    {0} },
-	{ ClkTagBar,            0,              Button1,        view,           {0} },
-	{ ClkTagBar,            0,              Button3,        toggleview,     {0} },
-	{ ClkTagBar,            MODKEY,         Button1,        tag,            {0} },
-	{ ClkTagBar,            MODKEY,         Button3,        toggletag,      {0} },
+    { ClkClientWin,         MODKEY,         Button1,        movemouse,      {0} },
+    { ClkClientWin,         MODKEY,         Button2,        togglefloating, {0} },
+    { ClkClientWin,         MODKEY,         Button3,        resizemouse,    {0} },
+    { ClkTagBar,            0,              Button1,        view,           {0} },
+    { ClkTagBar,            0,              Button3,        toggleview,     {0} },
+    { ClkTagBar,            MODKEY,         Button1,        tag,            {0} },
+    { ClkTagBar,            MODKEY,         Button3,        toggletag,      {0} },
 };
 

@@ -1,5 +1,5 @@
-[submodule "dwmblocks"]
-	path = dwmblocks
+[submodule "vendor/dwmblocks"]
+	path = vendor/dwmblocks
 	url = https://github.com/torrinfail/dwmblocks.git
 [submodule "vendor/dwm"]
 	path = vendor/dwm
@@ -16,6 +16,3 @@
 [submodule "vendor/scroll"]
 	path = vendor/scroll
 	url = git://git.suckless.org/scroll
-[submodule "vendor/sxcs"]
-	path = vendor/sxcs
-	url = https://github.com/N-R-K/sxcs
