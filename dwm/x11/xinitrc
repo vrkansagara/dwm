@@ -27,7 +27,7 @@ $HOME/.vim/src/Sh/System/battery.sh &
 #may vary from 0% to 400%, so setting the limit to 200% means to use no more
 #than half of the available power."
 NUM_CPU_CORES=$(nproc --all) #Automatically detects your system's number of CPU cores.
-#
+
 # st , dwm transperent
 cpulimit -b -l $((10 * $NUM_CPU_CORES)) -- compton
 # ~/Hubstaff/HubstaffClient.bin.x86_64 &
@@ -46,11 +46,12 @@ cpulimit -b -l $((10 * $NUM_CPU_CORES)) -- compton
 # cpulimit -b -l $((20 * $NUM_CPU_CORES)) -- $HOME/Applications/postman/postman
 cpulimit -b -l $((20 * $NUM_CPU_CORES)) -- phpstorm
 cpulimit -b -l $((20 * $NUM_CPU_CORES)) -- firefox
-# cpulimit -b -l $((20 * $NUM_CPU_CORES)) -- teams
+cpulimit -b -l $((20 * $NUM_CPU_CORES)) -- teams
 
-# cpulimit -b -l $((10 * $NUM_CPU_CORES)) -- slack
+cpulimit -b -l $((10 * $NUM_CPU_CORES)) -- slack
 cpulimit -b -l $((5 * $NUM_CPU_CORES)) -- guake
 cpulimit -b -l $((5 * $NUM_CPU_CORES)) -- st
+cpulimit -b -l $((5 * $NUM_CPU_CORES)) --  /usr/local/bin/dwmblocks
 
 # Lets priority with nice
 # nice -n 5 /snap/bin/phpstorm
@@ -61,7 +62,6 @@ cpulimit -b -l $((5 * $NUM_CPU_CORES)) -- st
 #     (conky | while read LINE; do xsetroot -name "$LINE"; done)
 #     sleep 1
 # done&
-cpulimit -b -l $((5 * $NUM_CPU_CORES)) --  /usr/local/bin/dwmblocks&
 
 #evaluate the SSH agent
 export GPGKEY=8BA6E7ABD8112B3E
@@ -71,7 +71,7 @@ killall gpg-agent ssh-agent
 /usr/lib/notification-daemon/notification-daemon &
 
 # X window lock start ( compile slock if not)
-# cpulimit -b -l $((5 * $NUM_CPU_CORES)) --  xautolock -time 2 -locker slock &
+cpulimit -b -l $((5 * $NUM_CPU_CORES)) --  xautolock -time 2 -locker slock &
 
 # zsh/demnu clean cache
 mkdir -p $HOME/old

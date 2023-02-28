@@ -322,7 +322,7 @@ static const Key keys[] = {
     { MODKEY|AltMask,              XK_s,       spawn,          SHCMD("screenkey &") },
     { MODKEY|AltMask|ShiftMask,    XK_s,       spawn,          SHCMD("pkill -9 screenkey") },
     // dbeaver is also using alter+x which is sharp near by MODEKEY to make sure it not clicked.
-//    { MODKEY,                      XK_x,       spawn,          SHCMD("xkill") },
+    { MODKEY,                      XK_x,       spawn,          SHCMD("xkill") },
     { MODKEY,                      XK_Print,   spawn,          SHCMD("sxcs -o --hex | cut -f 2 | xclip -in -selection clipboard") },
 
     { 0,        XF86XK_MonBrightnessUp,         spawn,          {.v = brightup } },

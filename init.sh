@@ -50,7 +50,13 @@ echo "$RED Git clean apply to [$(pwd)]  $NC"
 
 ini_required(){
   # Required sxcs
-  ${SUDO} apt install libxcursor-dev xautolock screenkey libimlib2-dev flameshot cpulimit screenkey
+  ${SUDO} apt install libxft-dev libxinerama-dev xcb libxcb-xkb-dev libx11-xcb-dev libxcb-res0-dev libxrandr-dev
+sudo  apt-get install --yes --no-install-recommends \
+    xcb libxcb-xkb-dev \
+    x11-xkb-utils libx11-xcb-dev \
+    libxkbcommon-x11-dev libxcb-res0-dev suckless-tools
+    
+  ${SUDO} apt install make curl zsh feh libxcursor-dev xautolock screenkey libimlib2-dev flameshot cpulimit compton inxi
 
   #Google noto font is not supporting so remove it so dwm,st or dwmblock should not crash
   ${SUDO} apt remove --purge fonts-noto-color-emoji unifont
@@ -72,6 +78,41 @@ NC=$'\e[0m'
 #  Maintainer :- Vallabh Kansagara<vrkansagara@gmail.com> — @vrkansagara
 #  Note       :- DWM Window manager initial script
 # """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+${SUDO} sudo apt-get install --yes -q --no-install-recommends \
+  patch build-essential \
+  feh cpulimit cputool screenkey htop zsh tree vlc git nmap elinks vim gimp \
+  arandr suckless-tools xautolock ranger\
+  alsa-utils mesa-utils pulseaudio pavucontrol \
+  notification-daemon notify-osd  libnotify-dev libnotify-bin \
+  network-manager iputils-ping net-tools lsof whois \
+  hardinfo inxi lshw hddtemp net-tools ipmitool \
+  freeipmi-tools ipvsadm lvm2 mdadm lm-sensors smartmontools \
+
+# libpoppler-cpp-dev pkg-config python3-dev \
+#  libx11-dev x11proto-core-dev libxft-dev libharfbuzz-dev libxinerama-dev libxinerama1 libio-socket-ssl-perl libcpanel-json-xs-perl libjson-xs-perl libxml-dumper-perl xdotool \
+#  conky keepassxc \
+#  thunar  xhk wmctrl\
+#  linux-headers-$(uname -r) linux-image-$(uname -r) lsb-release \
+#  linux-image-$(uname -r | sed 's,[^-]*-[^-]*-,,') linux-headers-$(uname -r | sed 's,[^-]*-[^-]*-,,') at-spi2-core firmware-linux-nonfree \
+#  broadcom-sta-dkms at-spi2-core
+
+# pulseaudio --start --log-target=syslogk
+
+# scrot = screen capture tool
+# compton = dwm/st tranparency with x11
+# xdotool = programmetly call keybindings
+# inxi = forensic tool for hardware information
+# xautolock = monitor binary for x time
+
+# slock = suckless login manger
+# suckless-tools = suckless built in library
+
+# Check if compositor is running or not
+# inxi -Gxx | grep compositor
+
+# xautolock -time 1 -locker slock
+# ${SUDO} cp -R hooks .git/
 
 echo "$GREEN Script running in this directory [$SCRIPT_DIR]  $NC"
 
@@ -101,6 +142,44 @@ ps -ef | grep "dwmblocks" | grep -v grep | awk "{print \$2}" | xargs --no-run-if
 xsetroot -name ""
 /usr/local/bin/dwmblocks 2>&1 >> $HOME/tmp/dwmblocks.log &
 
+${SUDO} rm -rf /usr/share/xsessions/vallabh.desktop
+${SUDO} ln -P $DWM_DIR/dwm.desktop /usr/share/xsessions/vallabh.desktop
+${SUDO} rm -rf $HOME/.xinitrc $HOME/.xprofile
+${SUDO} ln -P $DWM_DIR/x11/xinitrc $HOME/.xinitrc
+${SUDO} ln -P $DWM_DIR/x11/xprofile $HOME/.xprofile
+${SUDO} chmod 744 $HOME/.xinitrc
+${SUDO} chmod u+s /usr/bin/xinit
+
+
+# Copy conky configuration to home folder
+${SUDO} rm -rf $HOME/.config/conky
+${SUDO} cp -R $(pwd)/conky $HOME/.config
+
+${SUDO} rm -rf $HOME/.config/ranger
+${SUDO} ln -s $HOME/git/vrkansagara/dwm/ranger $HOME/.config/
+
+${SUDO} chown $USER -Rf $HOME/.config
+${SUDO} chgrp $USER -Rf $HOME/.config
+
+{SUDO} chsh -s $(which zsh) $USER
+${SUDO} chmod u+s $HOME/.vim/bin/*  $SCRIPT_DIR/bin/*
+
+# https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=747465
+# echo '[D-BUS Service]
+# Name=org.freedesktop.Notifications
+# Exec=/usr/lib/notification-daemon/notification-daemon'| ${SUDO} tee /usr/share/dbus-1/services/org.gnome.Notifications.service > /dev/null
+
+# Command line fuzzy finder called fzf
+if [ ! -d "$HOME/.fzf" ]; then
+    cd $HOME
+    git clone https://github.com/junegunn/fzf.git --depth=1 -b master .fzf
+    cd .fzf
+    ${SUDO} git stash
+    git reset --hard HEAD
+    git clean -fd
+fi
+
+
 echo "$GREEN Your simple window manager is configured and ready to use.........[DONE]. $NC"
 exit 0
 
@@ -121,4 +200,8 @@ exit 0
 #cyan      #2aa198
 #green     #859900
 
-
+#sudo apt-get install libx11-dev ................. for X11/Xlib.h
+#sudo apt-get install mesa-common-dev........ for GL/glx.h
+#sudo apt-get install libglu1-mesa-dev ..... for GL/glu.h
+#sudo apt-get install libxrandr-dev ........... for X11/extensions/Xrandr.h
+#sudo apt-get install libxi-dev ................... for X11/extensions/XInput.h
