@@ -95,7 +95,8 @@ static const Rule rules[] = {
     // Tag - 1 (General usse case)
     {   "Thunar",      "thunar",      NULL,       1<<0,       0, 0,0,    0},
     {   "Org.gnome.Nautilus",      "org.gnome.Nautilus",      NULL,       1<<0,       0, 0,0,    1},
-    {   "thunderbird",      "Mail",      NULL,       1<<0,       0, 0,0,    0},
+    {   "thunderbird",      "Mail",             NULL,       1<<0,       0, 0,0,    0},
+    {   "1password",         "1Password",       NULL,       1<<0,       0, 0,0,    1},
 
     // Tag - 2 (Terminal way on demand )
     {   "St",      "st",                                        NULL,       1<<1,   0,  1,  0,  0},
@@ -121,7 +122,7 @@ static const Rule rules[] = {
     // Tag - 6 (Development : Light weight on memory)
     {   "vrkansagara-ide",               "vrkansagara-ide",     NULL,       1<<5,   0,  1,  0,  1},
     {   "Geany",                    "geany",                    NULL,       1<<5,       0,           0,0,1},
-    {   "Postman",                  "postman",                NULL,       1<<,       0,      0,0,1},
+    {   "Postman",                  "postman",                NULL,       1<<5,       0,      0,0,1},
 
 
     // Tag - 7 (Development : Medium/Heavy weight on memory)

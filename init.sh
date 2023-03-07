@@ -152,8 +152,8 @@ ${SUDO} chmod u+s /usr/bin/xinit
 
 
 # Copy conky configuration to home folder
-${SUDO} rm -rf $HOME/.config/conky
-${SUDO} cp -R $(pwd)/conky $HOME/.config
+# ${SUDO} rm -rf $HOME/.config/conky
+# ${SUDO} cp -R $(pwd)/conky $HOME/.config
 
 ${SUDO} rm -rf $HOME/.config/ranger
 ${SUDO} ln -s $HOME/git/vrkansagara/dwm/ranger $HOME/.config/
@@ -161,7 +161,7 @@ ${SUDO} ln -s $HOME/git/vrkansagara/dwm/ranger $HOME/.config/
 ${SUDO} chown $USER -Rf $HOME/.config
 ${SUDO} chgrp $USER -Rf $HOME/.config
 
-{SUDO} chsh -s $(which zsh) $USER
+${SUDO} chsh -s $(which zsh) $USER
 ${SUDO} chmod u+s $HOME/.vim/bin/*  $SCRIPT_DIR/bin/*
 
 # https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=747465
