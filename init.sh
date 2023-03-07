@@ -86,7 +86,7 @@ ${SUDO} sudo apt-get install --yes -q --no-install-recommends \
   alsa-utils mesa-utils pulseaudio pavucontrol \
   notification-daemon notify-osd  libnotify-dev libnotify-bin \
   network-manager iputils-ping net-tools lsof whois \
-  hardinfo inxi lshw hddtemp net-tools ipmitool \
+  hardinfo inxi lshw hddtemp net-tools ipmitool nvme-cli \
   freeipmi-tools ipvsadm lvm2 mdadm lm-sensors smartmontools \
 
 # libpoppler-cpp-dev pkg-config python3-dev \

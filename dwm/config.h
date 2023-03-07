@@ -121,6 +121,8 @@ static const Rule rules[] = {
     // Tag - 6 (Development : Light weight on memory)
     {   "vrkansagara-ide",               "vrkansagara-ide",     NULL,       1<<5,   0,  1,  0,  1},
     {   "Geany",                    "geany",                    NULL,       1<<5,       0,           0,0,1},
+    {   "Postman",                  "postman",                NULL,       1<<,       0,      0,0,1},
+
 
     // Tag - 7 (Development : Medium/Heavy weight on memory)
     {   "jetbrains-clion",          "jetbrains-clion",          NULL,       1<<6,   0,  0,  0,  1},
@@ -131,7 +133,6 @@ static const Rule rules[] = {
     // Tag - 8 ( Heavy on memory )
     {   "jetbrains-phpstorm",       "jetbrains-phpstorm",    NULL,       1<<7,  0,      0,0,1},
     {   "code",                     "code",                  NULL,       1<<7,  0,    0,0,1},
-    {   "Postman",                  "postman",                NULL,       1<<7,       0,      0,0,1},
 
 
     // Tag - 9 ( Things on WWW )
@@ -300,10 +301,10 @@ static const Key keys[] = {
 
     // Patche(s) custom key(s)
 
-    // Actually toggle fullscreen for a window, instead of toggling the status bar and the monocle layout.
+    //Press MODKEY+s (default) to make a client 'sticky'. A sticky client is visible on all tags.
     { MODKEY,                       XK_s,      togglesticky,   {0} }, // Stiky window
 
-    //Press MODKEY+s (default) to make a client 'sticky'. A sticky client is visible on all tags.
+    // Actually toggle fullscreen for a window, instead of toggling the status bar and the monocle layout.
     // This is similar to setting the client's tags to all 1's, but with the ability to easily return
     // it to its original tag by toggling it off by pressing MODKEY+s again.
     { MODKEY,                       XK_f,      togglefullscr,  {0} }, // Fullscreen window
@@ -322,7 +323,7 @@ static const Key keys[] = {
     { MODKEY|AltMask,              XK_s,       spawn,          SHCMD("screenkey &") },
     { MODKEY|AltMask|ShiftMask,    XK_s,       spawn,          SHCMD("pkill -9 screenkey") },
     // dbeaver is also using alter+x which is sharp near by MODEKEY to make sure it not clicked.
-    { MODKEY,                      XK_x,       spawn,          SHCMD("xkill") },
+    { MODKEY|ShiftMask,            XK_x,       spawn,          SHCMD("xkill") },
     { MODKEY,                      XK_Print,   spawn,          SHCMD("sxcs -o --hex | cut -f 2 | xclip -in -selection clipboard") },
 
     { 0,        XF86XK_MonBrightnessUp,         spawn,          {.v = brightup } },
@@ -331,7 +332,7 @@ static const Key keys[] = {
     { 0,        XF86XK_AudioMute,               spawn,          {.v = mutevol } },
     { 0,        XF86XK_AudioRaiseVolume,        spawn,          {.v = upvol   } },
     { 0,        XF86XK_Calculator,              spawn,          SHCMD(TERMINAL " -c calculator -n calculator -e bc -l") },
-    { 0,        XK_Print,                       spawn,          SHCMD("flameshot gui --clipboard --delay 0") },
+    { 0,        XK_Print,                       spawn,          SHCMD("flameshot gui --delay 0") },
     // Conflicts with selection of raw home and entire page up side.
 //    { 0,        XK_Home,                        spawn,          SHCMD("nautilus $HOME") },
 

@@ -71,7 +71,7 @@ killall gpg-agent ssh-agent
 /usr/lib/notification-daemon/notification-daemon &
 
 # X window lock start ( compile slock if not)
-cpulimit -b -l $((5 * $NUM_CPU_CORES)) --  xautolock -time 2 -locker slock &
+# cpulimit -b -l $((5 * $NUM_CPU_CORES)) --  xautolock -time 2 -locker slock &
 
 # zsh/demnu clean cache
 mkdir -p $HOME/old

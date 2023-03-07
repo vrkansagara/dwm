@@ -4,14 +4,14 @@
 //xprop -root -notype -f WM_NAME "8u"  |  sed -n -r 's/WM_NAME = \"(.*)\"/\1/p'
 // if you see \001....\002 in output then understand that statuscmd is added to that block
 static const Block blocks[] = {
-/*Icon*/	/*Command*/		/*Update Interval(Secounds)*/	/*Update Signal*/
-{"P:", "acpi -b | grep -P -o '[0-9]+(?=%)'",                        60,		0},
-{"W:", "awk 'NR==3 {print $1 $3 00}' /proc/net/wireless",           60,		0},
-{"Mem:", "free -h | awk '/^Mem/ { print $3\"/\"$2 }' | sed s/i//g",	30,		1},
-{"IST:", "TZ=':Asia/Kolkata' date +'%a %d %b[%r]'",                 1,      2},
-{"CET:", "TZ=':Europe/Amsterdam' date +'%a %d %b[%r]'",             1,      3},
+/*Icon*/	/*Command*/		/*Update Interval(Seconds)*/	/*Update Signal*/
+{"P:", "acpi -b | grep -P -o '[0-9]+(?=%)'",                            60,		1},
+{"W:", "awk 'NR==3 {print $1 \"/\" $3 00 \"%\"}' /proc/net/wireless",   60,		2},
+{"M:", "free -h | awk '/^Mem/ { print $3\"/\"$2 }' | sed s/i//g",	    30,		3},
+{"", "TZ=':Asia/Kolkata' date +'%a %d %b [%r]'",                        1,      4},
+{"", "TZ=':Europe/Amsterdam' date +'%a %d %b [%r]'",                    1,      5},
+{"V", "~/.vim/bin/vtest",                                               0,      6},
 // {"", "date '+%b %d (%a) %I:%M%p'",5,4},
-{"V", "~/.vim/bin/vtest",0,5},
 //{"", "sb-battery",0,6},
 };
 
@@ -19,3 +19,5 @@ static const Block blocks[] = {
 //static char delim[] = " | ";
 static char delim[] = " | ";
 static unsigned int delimLen = 5;
+
+//wifi=`iwconfig 2>/dev/null | awk '/ESSID/' | cut -f 7- -d " " | cut -f 2- -d ":" | xargs` # get network name in quotes
