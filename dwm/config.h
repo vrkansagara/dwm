@@ -4,6 +4,7 @@
 #include <X11/XF86keysym.h> // /usr/include/X11/keysymdef.h
 #include <X11/Xresource.h> // /usr/include/X11/Xresource.h
 #include "layouts.c"
+#include "debug.c"
 
 /* Constants */
 #define TERMINAL "st"
@@ -96,7 +97,6 @@ static const Rule rules[] = {
     {   "Thunar",      "thunar",      NULL,       1<<0,       0, 0,0,    0},
     {   "Org.gnome.Nautilus",      "org.gnome.Nautilus",      NULL,       1<<0,       0, 0,0,    1},
     {   "thunderbird",      "Mail",             NULL,       1<<0,       0, 0,0,    0},
-    {   "1password",         "1Password",       NULL,       1<<0,       0, 0,0,    1},
 
     // Tag - 2 (Terminal way on demand )
     {   "St",      "st",                                        NULL,       1<<1,   0,  1,  0,  0},
@@ -112,12 +112,12 @@ static const Rule rules[] = {
     {   "Anydesk",      "anydesk",                          NULL,       1<<3,   0,  0,  0,  0},
 
     // Tag - 5 (Utilities)
-    { "WorkComposer"    ,"workcomposer",        NULL,       1 << 4,       0,    0,  0,  0},
-    { "Hubstaff"    ,"Hubstaff",                NULL,       1 << 4,       0,    0,  0,  0},
-    { "openfortiGUI"    ,"openfortigui",        NULL,       1 << 4,       0,    0,  0,  0},
+    { "WorkComposer"    ,"workcomposer",        NULL,       1 << 4,       0,    0,  0,  1},
+    { "Hubstaff"    ,"Hubstaff",                NULL,       1 << 4,       0,    0,  0,  1},
+    { "openfortiGUI"    ,"openfortigui",        NULL,       1 << 4,       0,    0,  0,  1},
     { "KeePassXC"    ,"keepassxc",              NULL,       1 << 4,       0,    0,  0,  0},
-    { "1Password"    ,"1password",              NULL,       1 << 4,       0,    0,  0,  0},
-    { "obs"    ,"obs",                          NULL,       1 << 4,       0,    0,  0,  0},
+    { "1Password"    ,"1password",              NULL,       1 << 4,       0,    0,  0,  1},
+    { "obs"    ,"obs",                          NULL,       1 << 4,       0,    0,  0,  1},
 
     // Tag - 6 (Development : Light weight on memory)
     {   "vrkansagara-ide",               "vrkansagara-ide",     NULL,       1<<5,   0,  1,  0,  1},
