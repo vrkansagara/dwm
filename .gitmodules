@@ -16,3 +16,6 @@
 [submodule "vendor/scroll"]
 	path = vendor/scroll
 	url = git://git.suckless.org/scroll
+[submodule "vendor/sxcs"]
+	path = vendor/sxcs
+	url = https://github.com/N-R-K/sxcs

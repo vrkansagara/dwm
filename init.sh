@@ -15,6 +15,7 @@ DWMBLOCKS_DIR="$SCRIPT_DIR/dwmblocks"
 SLOCK_DIR="$SCRIPT_DIR/slock"
 ST_DIR="$SCRIPT_DIR/st"
 SCROLL_DIR="$SCRIPT_DIR/vendor/scroll"
+SXCS_DIR="$SCRIPT_DIR/vendor/sxcs"
 
 if [ "$(whoami)" != "root" ]; then
   SUDO=sudo
@@ -127,6 +128,15 @@ ${SUDO} make clean
 ${SUDO} make
 ${SUDO} make uninstall
 ${SUDO} make install
+
+# sxcs Specific
+cd $SXCS_DIR
+apply_permission
+${SUDO} make clean
+${SUDO} make
+${SUDO} make uninstall
+${SUDO} make install
+
 
 # DWMBlock Specific
 cd $DWMBLOCKS_DIR
