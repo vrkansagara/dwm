@@ -13,7 +13,7 @@
 
 void print_dbg(bool is_debug_on, const char * restrict format, ...) {
 
-    char date_time[20] = {0};
+    char date_time[40] = {0};
     time_t t = time(NULL);
     struct tm tm = *localtime(&t);
 
@@ -25,7 +25,8 @@ void print_dbg(bool is_debug_on, const char * restrict format, ...) {
 		va_list args;
 		printf("\r\nDWM_DBG [%s] : ",date_time);
 		va_start(args, format);
-		int ret = vprintf(format, args);
+//		int ret = vprintf(format, args);
+		vprintf(format, args);
 		va_end(args);
 	}
 	return;
