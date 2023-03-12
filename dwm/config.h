@@ -109,7 +109,7 @@ static const Rule rules[] = {
     {   "Slack",      "slack",                                  NULL,       1<<2,       0,  0,  0,    1},
 
     // Tag - 4 ( Remote things)
-    {   "org.remmina.Remmina" ,"org.remmina.Remmina",       NULL,       1<<3,   0,  0,  0,  0},
+    {   "org.remmina.Remmina" ,"org.remmina.Remmina",       NULL,       1<<3,   0,  0,  0,  1},
     {   "Anydesk",      "anydesk",                          NULL,       1<<3,   0,  0,  0,  0},
 
     // Tag - 5 (Utilities)
@@ -204,6 +204,8 @@ static const Layout layouts[] = {
 
 /* helper for spawning shell commands in the pre dwm-5.0 fashion */
 #define SHCMD(cmd) { .v = (const char*[]){ TERMINAL_PATH, "-c", cmd, NULL } }
+
+// statuscmd with signals
 #define STATUSBAR "dwmblocks"
 
 /* commands */

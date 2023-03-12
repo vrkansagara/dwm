@@ -1,11 +1,12 @@
 #include <stdio.h>
 #include <stdarg.h>
+#include <time.h>
 #include <stdbool.h>
 
 /**
  * Easy debug
  * @define bool is_debug_on = false;
- * @usageprint_dbg(is_debug_on,"\n DWM starting....\n");
+ * @usage print_dbg(is_debug_on,"\n DWM starting....\n");
  * @param is_debug_on
  * @param restrict
  * @param ...

@@ -186,7 +186,18 @@ void dummysighandler(int signum)
 
 void sighandler(int signum, siginfo_t *si, void *ucontext)
 {
-	if (si->si_value.sival_int) {
+    int signal = signum - SIGRTMIN;
+    const unsigned int button = si->si_value.sival_int; /* if button is zero, the signal is not from a button press */
+
+    print_dbg(true,"DWM_BLOCKS sighandler = [%d]",signum);
+    print_dbg(true,"DWM_BLOCKS signal = [%d]",signal);
+    print_dbg(true,"DWM_BLOCKS button = [%d]",button);
+    // @todo @ref:-https://dwm.suckless.org/patches/statuscmd/
+    //struct sigaction sa = { .sa_sigaction = sighandler, .sa_flags = SA_SIGINFO };
+    //sigaction(SIGRTMIN+signal, &sa, NULL);
+
+
+	if (button) {
 		pid_t parent = getpid();
 		if (fork() == 0) {
 #ifndef NO_X
@@ -200,6 +211,9 @@ void sighandler(int signum, siginfo_t *si, void *ucontext)
 			sprintf(shcmd, "%s; kill -%d %d", blocks[i].command, SIGRTMIN+blocks[i].signal, parent);
 			char *cmd[] = { "/bin/sh", "-c", shcmd, NULL };
 			char button[2] = { '0' + si->si_value.sival_int, '\0' };
+
+            print_dbg(true,"DWM_BLOCKS shcmd = [%s]",shcmd);
+
 			setenv("BUTTON", button, 1);
 			setsid();
 			execvp(cmd[0], cmd);
@@ -224,6 +238,9 @@ void chldhandler()
 
 int main(int argc, char** argv)
 {
+    bool is_debug_on = true;
+    print_dbg(is_debug_on,"DWM_BLOCKS starting....");
+
 	for (int i = 0; i < argc; i++) {//Handle command line arguments
 		if (!strcmp("-d",argv[i]))
 			strncpy(delim, argv[++i], delimLen);
@@ -243,5 +260,7 @@ int main(int argc, char** argv)
 #ifndef NO_X
 	XCloseDisplay(dpy);
 #endif
+
+    print_dbg(is_debug_on,"DWM_BLOCKS exiting....");
 	return 0;
 }
