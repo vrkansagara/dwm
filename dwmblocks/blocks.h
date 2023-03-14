@@ -8,11 +8,11 @@
 static const Block blocks[] = {
 /*Icon*/	/*Command*/		/*Update Interval(Seconds)*/	/*Update Signal*/
 {"P:", "acpi -b | grep -P -o '[0-9]+(?=%)'",                            60,		0},
-{"W:", "awk 'NR==3 {print $1 \"/\" $3 00 \"%\"}' /proc/net/wireless",   60,		0},
+//{"W:", "awk 'NR==3 {print $1 \"/\" $3 00 \"%\"}' /proc/net/wireless",   60,		0},
 {"M:", "free -h | awk '/^Mem/ { print $3\"/\"$2 }' | sed s/i//g",	    30,		0},
 {"", "TZ=':Asia/Kolkata' date +'%a %d %b [%r]'",                        1,      0},
 {"", "TZ=':Europe/Amsterdam' date +'%a %d %b [%r]'",                    1,      0},
-{"V", "~/.vim/bin/vtest",                                               0,      1},
+{"INFO", "~/.vim/bin/vtest",                                               0,      1},
 // {"", "date '+%b %d (%a) %I:%M%p'",5,4},
 //{"", "sb-battery",0,6},
 };

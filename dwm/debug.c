@@ -30,5 +30,4 @@ void print_dbg(bool is_debug_on, const char * restrict format, ...) {
 		vprintf(format, args);
 		va_end(args);
 	}
-	return;
 }

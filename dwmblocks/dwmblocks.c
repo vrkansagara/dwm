@@ -239,6 +239,7 @@ void chldhandler()
 int main(int argc, char** argv)
 {
     bool is_debug_on = true;
+    printf("DWM_BLOCKS starting....[][][][]");
     print_dbg(is_debug_on,"DWM_BLOCKS starting....");
 
 	for (int i = 0; i < argc; i++) {//Handle command line arguments
