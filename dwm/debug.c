@@ -31,3 +31,39 @@ void print_dbg(bool is_debug_on, const char * restrict format, ...) {
 		va_end(args);
 	}
 }
+
+
+void fprint_dbg(bool is_debug_on, const char * restrict format, ...) {
+
+    char date_time[40] = {0};
+    time_t t = time(NULL);
+    struct tm tm = *localtime(&t);
+
+    // Date time format like Y-m-d H:i:s relevant to mysql
+    // https://dev.mysql.com/doc/refman/5.7/en/date-and-time-functions.html
+    sprintf(date_time, "%d-%02d-%02d %02d:%02d:%02d", tm.tm_year + 1900, tm.tm_mon + 1, tm.tm_mday, tm.tm_hour, tm.tm_min, tm.tm_sec);
+
+	if(is_debug_on) {
+		va_list args;
+		va_start(args, format);
+
+		FILE *logFile = fopen("/tmp/dwm.log", "a+");
+        if (logFile == NULL)
+        {
+            printf("Error opening file!\n");
+            exit(1);
+        }
+
+        fprintf(logFile,"\r\n=====");
+        /* print timestamp first */
+        fprintf(logFile,"\r\nDWM_DBG [%s] : ",date_time);
+        /* print everything else */
+        vfprintf (logFile, format, args);
+        fprintf(logFile,"\r\n File [%s] Line [ %d ] Function [%s] : ",__FILE__, __LINE__, __func__);
+        fprintf(logFile,"\r\n=====\n\n");
+
+        fclose(logFile);
+		// +++++++++++++++++++++
+		va_end(args);
+	}
+}

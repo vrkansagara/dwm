@@ -80,9 +80,9 @@ NC=$'\e[0m'
 #  Note       :- DWM Window manager initial script
 # """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
-${SUDO} sudo apt-get install --yes -q --no-install-recommends \
-lightdm xorg openbox
-${SUDO} dpkg-reconfigure lightdm
+#${SUDO} sudo apt-get install --yes -q --no-install-recommends \
+#lightdm xorg openbox
+#${SUDO} dpkg-reconfigure lightdm
 
 ${SUDO} sudo apt-get install --yes -q --no-install-recommends \
   patch build-essential \
@@ -93,6 +93,13 @@ ${SUDO} sudo apt-get install --yes -q --no-install-recommends \
   network-manager iputils-ping net-tools lsof whois \
   hardinfo inxi lshw hddtemp net-tools ipmitool nvme-cli \
   freeipmi-tools ipvsadm lvm2 mdadm lm-sensors smartmontools \
+
+
+#sudo smartctl -a /dev/nvme0
+#sudo smartctl -a /dev/nvme0
+#sudo nvme smart-log /dev/nvme0
+#cat /var/log/syslog | grep -i smart | grep -i nvm
+#dmesg --ctime | grep -i nvm
 
 # libpoppler-cpp-dev pkg-config python3-dev \
 #  libx11-dev x11proto-core-dev libxft-dev libharfbuzz-dev libxinerama-dev libxinerama1 libio-socket-ssl-perl libcpanel-json-xs-perl libjson-xs-perl libxml-dumper-perl xdotool \
@@ -219,3 +226,6 @@ exit 0
 #sudo apt-get install libglu1-mesa-dev ..... for GL/glu.h
 #sudo apt-get install libxrandr-dev ........... for X11/extensions/Xrandr.h
 #sudo apt-get install libxi-dev ................... for X11/extensions/XInput.h
+
+# Stop power button accidently stoped working.
+#sed -i 's/HandlePowerKey/HandlePowerKey=ignore/g' /etc/systemd/logind.conf
