@@ -81,6 +81,10 @@ NC=$'\e[0m'
 # """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 ${SUDO} sudo apt-get install --yes -q --no-install-recommends \
+lightdm xorg openbox
+${SUDO} dpkg-reconfigure lightdm
+
+${SUDO} sudo apt-get install --yes -q --no-install-recommends \
   patch build-essential \
   feh cpulimit cputool screenkey htop zsh tree vlc git nmap elinks vim gimp \
   arandr suckless-tools xautolock ranger\

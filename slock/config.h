@@ -17,11 +17,11 @@ static const int failonclear = 1;
 
 /* number of failed password attempts until failcommand is executed.
    Set to 0 to disable */
-static const int failcount = 1;
+static const int failcount = 0;
 
 /* command to be executed after [failcount] failed password attempts */
-//static const char *failcommand = "echo \"Login failure att $(date '+%Y%m%d%H%M%S')\" >> /tmp/slock.log";
-static const char *failcommand = "sudo shutdown now";
+static const char *failcommand = "echo \"Login failure at $(date '+%Y%m%d%H%M%S')\" >> /tmp/slock.log";
+//static const char *failcommand = "sudo shutdown now";
 
 /* default message */
 static const char * message = "VRKANSAGARA: Time and Tide Wait For none !";
@@ -30,4 +30,4 @@ static const char * message = "VRKANSAGARA: Time and Tide Wait For none !";
 static const char * text_color = "#002B36";
 
 /* text size (must be a valid size) */
-static const char * text_size = "6x10";
+static const char * text_size = "10x20";
