@@ -4,6 +4,7 @@
 #include <limits.h>
 #include <locale.h>
 #include <signal.h>
+#include <stdlib.h>
 #include <sys/select.h>
 #include <time.h>
 #include <unistd.h>
@@ -1259,6 +1260,7 @@ xinit(int cols, int rows)
 
 	/* spare fonts */
 	xloadsparefonts();
+	xloadfonts(usedfont, defaultfontsize);
 
 	/* colors */
 	xw.cmap = XDefaultColormap(xw.dpy, xw.scr);
@@ -2196,6 +2198,8 @@ usage(void)
 int
 main(int argc, char *argv[])
 {
+    int i;
+    char *colval;
 	xw.l = xw.t = 0;
 	xw.isfixed = False;
 	xsetcursor(cursorshape);
@@ -2239,6 +2243,16 @@ main(int argc, char *argv[])
 		break;
 	case 'v':
 		die("%s " VERSION "\n", argv0);
+		break;
+    case 'C':
+        colval = strtok(EARGF(usage()), "@");
+        i = atoi(strtok(NULL, "@"));
+		colorname[i] = colval;
+		break;
+	case 'z':
+		defaultfontsize = strtod(EARGF(usage()), NULL);
+		if (!(defaultfontsize > 0))
+			usage();
 		break;
 	default:
 		usage();
