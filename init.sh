@@ -55,12 +55,13 @@ ini_required(){
 sudo  apt-get install --yes --no-install-recommends \
     xcb libxcb-xkb-dev \
     x11-xkb-utils libx11-xcb-dev \
-    libxkbcommon-x11-dev libxcb-res0-dev suckless-tools
-    
+    libxkbcommon-x11-dev libxcb-res0-dev suckless-tools unifont
+
   ${SUDO} apt install make curl zsh feh libxcursor-dev xautolock screenkey libimlib2-dev flameshot cpulimit compton inxi
 
   #Google noto font is not supporting so remove it so dwm,st or dwmblock should not crash
-  ${SUDO} apt remove --purge fonts-noto-color-emoji unifont
+  # ${SUDO} apt remove --purge fonts-noto-color-emoji
+  ${SUDO} apt install fonts-noto-color-emoji
 
   #${SUDO apt install  fonts-noto-color-emoji
   #mkdir -p ~/.fonts/NotoEmoji
@@ -133,6 +134,15 @@ ini_required
 
 # DWM Specific
 cd $DWM_DIR
+apply_permission
+apply_patche
+${SUDO} make clean
+${SUDO} make
+${SUDO} make uninstall
+${SUDO} make install
+
+# ST Specific
+cd $ST_DIR
 apply_permission
 apply_patche
 ${SUDO} make clean
