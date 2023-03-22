@@ -31,7 +31,6 @@ ${SUDO} chown $USER -Rf .
 ${SUDO} chgrp $USER -Rf .
 
 ${SUDO} rm -rf /usr/share/bin/st
-make clean
 make
 ${SUDO} make install
 ${SUDO} make clean

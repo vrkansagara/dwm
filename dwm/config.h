@@ -96,34 +96,34 @@ static const Rule rules[] = {
     /** class           instance,               title,              tags,               isfloating, isterminal ,noswallow              monitor */
     // Tag - 1 (General usse case)
     {   "Thunar",      "thunar",      NULL,       1<<0,       0, 0,0,    0},
-    {   "Org.gnome.Nautilus",      "org.gnome.Nautilus",      NULL,       1<<0,       0, 0,0,    1},
+    {   "Org.gnome.Nautilus",      "org.gnome.Nautilus",      NULL,       1<<0,       0, 0,0,    0},
     {   "thunderbird",      "Mail",             NULL,       1<<0,       0, 0,0,    0},
 
     // Tag - 2 (Terminal way on demand )
     {   "St",      "st",                                        NULL,       1<<1,   0,  1,  0,  0},
 
     // Tag - 3 (Socializing / Office on the way)
-    {   "Skype",      "skype",                                  NULL,       1<<2,       0,  0,  0,    1},
-    {   "Microsoft Teams - Preview","microsoft teams - preview",NULL,       1<<2,       0,  0,  0,    1},
-    {   "ringcentral",      "ringcentral",                      NULL,       1<<2,       0,  0,  0,    1},
-    {   "Slack",      "slack",                                  NULL,       1<<2,       0,  0,  0,    1},
+    {   "Skype",      "skype",                                  NULL,       1<<2,       0,  0,  0,    0},
+    {   "Microsoft Teams - Preview","microsoft teams - preview",NULL,       1<<2,       0,  0,  0,    0},
+    {   "ringcentral",      "ringcentral",                      NULL,       1<<2,       0,  0,  0,    0},
+    {   "Slack",      "slack",                                  NULL,       1<<2,       0,  0,  0,    0},
 
     // Tag - 4 ( Remote things)
-    {   "org.remmina.Remmina" ,"org.remmina.Remmina",       NULL,       1<<3,   0,  0,  0,  1},
+    {   "org.remmina.Remmina" ,"org.remmina.Remmina",       NULL,       1<<3,   0,  0,  0,  0},
     {   "Anydesk",      "anydesk",                          NULL,       1<<3,   0,  0,  0,  0},
 
     // Tag - 5 (Utilities)
-    { "WorkComposer"    ,"workcomposer",        NULL,       1 << 4,       0,    0,  0,  1},
-    { "Hubstaff"    ,"Hubstaff",                NULL,       1 << 4,       0,    0,  0,  1},
-    { "openfortiGUI"    ,"openfortigui",        NULL,       1 << 4,       0,    0,  0,  1},
+    { "WorkComposer"    ,"workcomposer",        NULL,       1 << 4,       0,    0,  0,  0},
+    { "Hubstaff"    ,"Hubstaff",                NULL,       1 << 4,       0,    0,  0,  0},
+    { "openfortiGUI"    ,"openfortigui",        NULL,       1 << 4,       0,    0,  0,  0},
     { "KeePassXC"    ,"keepassxc",              NULL,       1 << 4,       0,    0,  0,  0},
-    { "1Password"    ,"1password",              NULL,       1 << 4,       0,    0,  0,  1},
-    { "obs"    ,"obs",                          NULL,       1 << 4,       0,    0,  0,  1},
+    { "1Password"    ,"1password",              NULL,       1 << 4,       0,    0,  0,  0},
+    { "obs"    ,"obs",                          NULL,       1 << 4,       0,    0,  0,  0},
 
     // Tag - 6 (Development : Light weight on memory)
-    {   "vrkansagara-ide",               "vrkansagara-ide",     NULL,       1<<5,   0,  1,  0,  1},
-    {   "Geany",                    "geany",                    NULL,       1<<5,       0,           0,0,1},
-    {   "Postman",                  "postman",                NULL,       1<<5,       0,      0,0,1},
+    {   "vrkansagara-ide",               "vrkansagara-ide",     NULL,       1<<5,   0,  1,  0,  0},
+    {   "Geany",                    "geany",                    NULL,       1<<5,       0,           0,0,0},
+    {   "Postman",                  "postman",                NULL,       1<<5,       0,      0,0,0},
 
 
     // Tag - 7 (Development : Medium/Heavy weight on memory)

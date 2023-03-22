@@ -23,7 +23,7 @@ static int borderpx = 2;
  * 4: value of shell in /etc/passwd
  * 5: value of shell in config.h
  */
-static char *shell = "/bin/zsh";
+static char *shell = "/bin/sh";
 char *utmp = NULL;
 /* scroll program: to enable use a string like "scroll" */
 char *scroll = NULL;
@@ -142,8 +142,8 @@ static const char *colorname[] = {
  * Default colors (colorname index)
  * foreground, background, cursor, reverse cursor
  */
-unsigned int defaultfg = 258;
-unsigned int defaultbg = 259;
+unsigned int defaultfg = 259;
+unsigned int defaultbg = 258;
 unsigned int defaultcs = 256;
 unsigned int defaultrcs = 257;
 unsigned int background = 258;
@@ -188,7 +188,7 @@ static uint forcemousemod = ShiftMask;
  * Xresources preferences to load at startup
  */
 ResourcePref resources[] = {
-		{ "font",         STRING,  &font },
+		{ "font",         STRING,  &font2[0] },
 { "fontalt0",     STRING,  &font2[0] },
 		{ "color0",       STRING,  &colorname[0] },
 		{ "color1",       STRING,  &colorname[1] },

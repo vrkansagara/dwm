@@ -94,8 +94,9 @@ ${SUDO} sudo apt-get install --yes -q --no-install-recommends \
   network-manager iputils-ping net-tools lsof whois \
   hardinfo inxi lshw hddtemp net-tools ipmitool nvme-cli \
   freeipmi-tools ipvsadm lvm2 mdadm lm-sensors smartmontools \
+  systemd-coredump
 
-
+# systemd-coredump used for inspect core dump of process ( i.e.  coredumpctl info 10353 )
 #sudo smartctl -a /dev/nvme0
 #sudo smartctl -a /dev/nvme0
 #sudo nvme smart-log /dev/nvme0
@@ -237,5 +238,6 @@ exit 0
 #sudo apt-get install libxrandr-dev ........... for X11/extensions/Xrandr.h
 #sudo apt-get install libxi-dev ................... for X11/extensions/XInput.h
 
-# Stop power button accidently stoped working.
+# Stop power button accidently stoped working. ( shutdown prevent )
 #sed -i 's/HandlePowerKey/HandlePowerKey=ignore/g' /etc/systemd/logind.conf
+echo "HandlePowerKey=ignore" | sudo tee -a /etc/systemd/logind.conf

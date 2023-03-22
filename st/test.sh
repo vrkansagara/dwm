@@ -86,6 +86,3 @@ for i in {0..255} ; do
         printf "\n";
     fi
 done
-
-
-
