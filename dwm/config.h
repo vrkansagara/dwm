@@ -138,8 +138,8 @@ static const Rule rules[] = {
 
 
     // Tag - 9 ( Things on WWW )
-    { "firefox"                 ,"Navigator",               NULL,       1<<8,   0,  0,  0,  0},
-    { "Google-chrome"           ,"google-chrome",           NULL,       1<<8,   0,  0,  0,  0},
+    { "firefox"                 ,"Navigator",               NULL,       1<<8,   0,  0,  0,  1},
+    { "Google-chrome"           ,"google-chrome",           NULL,       1<<8,   0,  0,  0,  1},
 };
 
 /* layout(s) */
