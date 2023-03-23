@@ -43,13 +43,13 @@ static int swallowfloating          = 1;        /* 1 means swallow floating wind
 
 //static char *fonts[]          = { "monospace:size=10", "NotoColorEmoji:pixelsize=10:antialias=true:autohint=true"  };
 static const char *fonts[]          = {
-    "monospace:size=10",
+    "Fira Code Medium:size=10:antialias=true:autohint=true",
     "NotoColorEmoji:pixelsize=10:antialias=true:autohint=true:color=true",
-    "Fira Code Medium:size=10:antialias=true:autohint=true"
+    "monospace:size=10",
 };
 
 //static const char dmenufont[]       = "monospace:size=10";
-static char dmenufont[]       =  "Fira Code Medium:size=10:antialias=true:autohint=true";
+static char dmenufont[]       =  "Fira Code Medium:size=12:antialias=true:autohint=true";
 
 static const char col_gray1[]       = "#222222";
 static const char col_gray2[]       = "#444444";

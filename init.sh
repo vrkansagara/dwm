@@ -94,7 +94,7 @@ ${SUDO} sudo apt-get install --yes -q --no-install-recommends \
   network-manager iputils-ping net-tools lsof whois \
   hardinfo inxi lshw hddtemp net-tools ipmitool nvme-cli \
   freeipmi-tools ipvsadm lvm2 mdadm lm-sensors smartmontools \
-  systemd-coredump
+  systemd-coredump fonts-quicksand
 
 # systemd-coredump used for inspect core dump of process ( i.e.  coredumpctl info 10353 )
 #sudo smartctl -a /dev/nvme0
