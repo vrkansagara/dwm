@@ -304,9 +304,9 @@ static Client *termforwin(const Client *c);
 static pid_t winpid(Window w);
 
 static char stext[256];
-static int statusw;
-static int statussig;
-static pid_t statuspid = -1;
+static int dwmblocks;
+static int dwmblockssig;
+static pid_t dwmblockspid = -1;
 static int screen;
 static int sw, sh;           /* X display screen geometry width, height */
 static int bh;               /* bar height */
@@ -579,10 +579,10 @@ buttonpress(XEvent *e)
 			arg.ui = 1 << i;
 		} else if (ev->x < x + TEXTW(selmon->ltsymbol))
 			click = ClkLtSymbol;
-		else if (ev->x > selmon->ww - statusw) {
-			x = selmon->ww - statusw;
+		else if (ev->x > selmon->ww - dwmblocks) {
+			x = selmon->ww - dwmblocks;
 			click = ClkStatusText;
-			statussig = 0;
+			dwmblockssig = 0;
 			for (text = s = stext; *s && x <= ev->x; s++) {
 				if ((unsigned char)(*s) < ' ') {
 					ch = *s;
@@ -592,7 +592,7 @@ buttonpress(XEvent *e)
 					text = s + 1;
 					if (x >= ev->x)
 						break;
-					statussig = ch;
+					dwmblockssig = ch;
 				}
 			}
 		} else
@@ -937,15 +937,15 @@ drawbar(Monitor *m)
 				ch = *s;
 				*s = '\0';
 				tw = TEXTW(text) - lrpad;
-				drw_text(drw, m->ww - statusw + x, 0, tw, bh, 0, text, 0);
+				drw_text(drw, m->ww - dwmblocks + x, 0, tw, bh, 0, text, 0);
 				x += tw;
 				*s = ch;
 				text = s + 1;
 			}
 		}
 		tw = TEXTW(text) - lrpad + 2;
-		drw_text(drw, m->ww - statusw + x, 0, tw, bh, 0, text, 0);
-		tw = statusw;
+		drw_text(drw, m->ww - dwmblocks + x, 0, tw, bh, 0, text, 0);
+		tw = dwmblocks;
 	}
 
 	for (c = m->clients; c; c = c->next) {
@@ -1105,15 +1105,15 @@ getstatusbarpid()
 	char buf[32], *str = buf, *c;
 	FILE *fp;
 
-	if (statuspid > 0) {
-		snprintf(buf, sizeof(buf), "/proc/%u/cmdline", statuspid);
+	if (dwmblockspid > 0) {
+		snprintf(buf, sizeof(buf), "/proc/%u/cmdline", dwmblockspid);
 		if ((fp = fopen(buf, "r"))) {
 			fgets(buf, sizeof(buf), fp);
 			while ((c = strchr(str, '/')))
 				str = c + 1;
 			fclose(fp);
 			if (!strcmp(str, STATUSBAR))
-				return statuspid;
+				return dwmblockspid;
 		}
 	}
 	if (!(fp = popen("pidof -s "STATUSBAR, "r")))
@@ -2045,13 +2045,13 @@ sigstatusbar(const Arg *arg)
 {
 	union sigval sv;
 
-	if (!statussig)
+	if (!dwmblockssig)
 		return;
 	sv.sival_int = arg->i;
-	if ((statuspid = getstatusbarpid()) <= 0)
+	if ((dwmblockspid = getstatusbarpid()) <= 0)
 		return;
 
-	sigqueue(statuspid, SIGRTMIN+statussig, sv);
+	sigqueue(dwmblockspid, SIGRTMIN+dwmblockssig, sv);
 }
 
 void
@@ -2505,21 +2505,21 @@ updatestatus(void)
 {
 	if (!gettextprop(root, XA_WM_NAME, stext, sizeof(stext))) {
 		strcpy(stext, "dwm-"VERSION);
-		statusw = TEXTW(stext) - lrpad + 2;
+		dwmblocks = TEXTW(stext) - lrpad + 2;
 	} else {
 		char *text, *s, ch;
 
-		statusw  = 0;
+		dwmblocks  = 0;
 		for (text = s = stext; *s; s++) {
 			if ((unsigned char)(*s) < ' ') {
 				ch = *s;
 				*s = '\0';
-				statusw += TEXTW(text) - lrpad;
+				dwmblocks += TEXTW(text) - lrpad;
 				*s = ch;
 				text = s + 1;
 			}
 		}
-		statusw += TEXTW(text) - lrpad + 2;
+		dwmblocks += TEXTW(text) - lrpad + 2;
 
 	}
 	drawbar(selmon);
