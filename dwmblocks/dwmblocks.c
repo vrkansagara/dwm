@@ -192,6 +192,8 @@ void termhandler()
 
 int main(int argc, char** argv)
 {
+    fprint_dbg(true,"DWMBLOCKS start");
+
 	for (int i = 0; i < argc; i++) {//Handle command line arguments
 		if (!strcmp("-d",argv[i]))
 			strncpy(delim, argv[++i], delimLen);
@@ -212,5 +214,7 @@ int main(int argc, char** argv)
 #ifndef NO_X
 	XCloseDisplay(dpy);
 #endif
+    fprint_dbg(true,"DWMBLOCKS end");
+
 	return 0;
 }

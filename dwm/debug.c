@@ -59,7 +59,7 @@ void fprint_dbg(bool is_debug_on, const char * restrict format, ...) {
         fprintf(logFile,"\r\nDWM_DBG [%s] : ",date_time);
         /* print everything else */
         vfprintf (logFile, format, args);
-        fprintf(logFile,"\r\n File [%s] Line [ %d ] Function [%s] : ",__FILE__, __LINE__, __func__);
+        fprintf(logFile,"\r\nFile [%s] Line [ %d ] Function [%s] : ",__FILE__, __LINE__, __func__);
         fprintf(logFile,"\r\n=====\n\n");
 
         fclose(logFile);

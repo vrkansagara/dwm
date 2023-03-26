@@ -16,7 +16,7 @@ static const Block blocks[] = {
     // {"", "~/.vim/bin/statusbar/sb-disk",                                    5,      2},
     // {"", "~/.vim/bin/statusbar/sb-cpu",                                     5,      3},
     // {"", "~/.vim/bin/statusbar/sb-clock",                                   5,      4},
-     {"", "~/.vim/bin/statusbar/sb-battery",                                 5,      5},
+//     {"", "~/.vim/bin/statusbar/sb-battery",                                 5,      5},
     // {"", "date '+%b %d (%a) %I:%M%p'",5,4},
     //{"", "sb-battery",0,6},
 };
