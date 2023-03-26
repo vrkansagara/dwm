@@ -3,6 +3,7 @@
 #include<string.h>
 #include<unistd.h>
 #include<signal.h>
+#include <errno.h>
 #include<sys/wait.h>
 #ifndef NO_X
 #include<X11/Xlib.h>
@@ -28,12 +29,15 @@ typedef struct {
 #ifndef __OpenBSD__
 void dummysighandler(int num);
 #endif
+void replace(char *str, char old, char new);
+void remove_all(char *str, char to_remove);
 void getcmds(int time);
 void getsigcmds(unsigned int signal);
 void setupsignals();
 void sighandler(int signum, siginfo_t *si, void *ucontext);
 int getstatus(char *str, char *last);
 void statusloop();
+void statusloop_improved();
 void termhandler();
 void chldhandler();
 void pstdout();
@@ -55,6 +59,39 @@ static char statusbar[LENGTH(blocks)][CMDLENGTH] = {0};
 static char statusstr[2][STATUSLENGTH];
 static int statusContinue = 1;
 static int returnStatus = 0;
+
+void replace(char *str, char old, char new)
+{
+	for(char * c = str; *c; c++)
+		if(*c == old)
+			*c = new;
+}
+
+// the previous function looked nice but unfortunately it didnt work if to_remove was in any position other than the last character
+// theres probably still a better way of doing this
+void remove_all(char *str, char to_remove) {
+	char *read = str;
+	char *write = str;
+	while (*read) {
+		if (*read != to_remove) {
+			*write++ = *read;
+		}
+		++read;
+	}
+	*write = '\0';
+}
+
+int gcd(int a, int b)
+{
+	int temp;
+	while (b > 0){
+		temp = a % b;
+
+		a = b;
+		b = temp;
+	}
+	return a;
+}
 
 //opens process *cmd and stores output in *output
 void getcmd(const Block *block, char *output)
@@ -83,6 +120,46 @@ void getcmd(const Block *block, char *output)
 	pclose(cmdf);
 }
 
+void getcmd_improved(const Block *block, char *output)
+{
+	if (block->signal)
+	{
+		output[0] = block->signal;
+		output++;
+	}
+	char *cmd = block->command;
+	FILE *cmdf = popen(cmd,"r");
+	if (!cmdf){
+        //printf("failed to run: %s, %d\n", block->command, errno);
+		return;
+    }
+    char tmpstr[CMDLENGTH] = "";
+    // TODO decide whether its better to use the last value till next time or just keep trying while the error was the interrupt
+    // this keeps trying to read if it got nothing and the error was an interrupt
+    //  could also just read to a separate buffer and not move the data over if interrupted
+    //  this way will take longer trying to complete 1 thing but will get it done
+    //  the other way will move on to keep going with everything and the part that failed to read will be wrong till its updated again
+    // either way you have to save the data to a temp buffer because when it fails it writes nothing and then then it gets displayed before this finishes
+	char * s;
+    int e;
+    do {
+        errno = 0;
+        s = fgets(tmpstr, CMDLENGTH-(strlen(delim)+1), cmdf);
+        e = errno;
+    } while (!s && e == EINTR);
+	pclose(cmdf);
+	int i = strlen(block->icon);
+	strcpy(output, block->icon);
+    strcpy(output+i, tmpstr);
+	remove_all(output, '\n');
+	i = strlen(output);
+    if ((i > 0 && block != &blocks[LENGTH(blocks) - 1])){
+        strcat(output, delim);
+    }
+    i+=strlen(delim);
+	output[i++] = '\0';
+}
+
 void getcmds(int time)
 {
 // This function first creates a pointer to a Block structure and afterwards loops over all blocks. On each iteration a condition is to be met, IF the current blocks refresh/re-execute interval is not equal to 0 AND the time argument passed to the getcmds( int time) function can be divided by that blocks interval without any remainder [% mod operation] OR the time argument is just equal to -1, THEN run the getcmd function and pass it the current block and the i-th object/pointer in the statusbar array.
@@ -90,7 +167,8 @@ void getcmds(int time)
 	for (unsigned int i = 0; i < LENGTH(blocks); i++) {
 		current = blocks + i;
 		if ((current->interval != 0 && time % current->interval == 0) || time == -1)
-			getcmd(current,statusbar[i]);
+//			getcmd(current,statusbar[i]);
+			getcmd_improved(current,statusbar[i]);
 	}
 }
 
@@ -100,7 +178,8 @@ void getsigcmds(unsigned int signal)
 	for (unsigned int i = 0; i < LENGTH(blocks); i++) {
 		current = blocks + i;
 		if (current->signal == signal)
-			getcmd(current,statusbar[i]);
+//			getcmd(current,statusbar[i]);
+			getcmd_improved(current,statusbar[i]);
 	}
 }
 
@@ -177,6 +256,42 @@ void statusloop()
 	}
 }
 
+void statusloop_improved()
+{
+#ifndef __OpenBSD__
+	setupsignals();
+#endif
+    // first figure out the default wait interval by finding the
+    // greatest common denominator of the intervals
+    unsigned int interval = -1;
+    for(int i = 0; i < LENGTH(blocks); i++){
+        if(blocks[i].interval){
+            interval = gcd(blocks[i].interval, interval);
+        }
+    }
+	unsigned int i = 0;
+    int interrupted = 0;
+    const struct timespec sleeptime = {interval, 0};
+    struct timespec tosleep = sleeptime;
+	getcmds(-1);
+	while(statusContinue)
+	{
+        // sleep for tosleep (should be a sleeptime of interval seconds) and put what was left if interrupted back into tosleep
+        interrupted = nanosleep(&tosleep, &tosleep);
+        // if interrupted then just go sleep again for the remaining time
+        if(interrupted == -1){
+            continue;
+        }
+        // if not interrupted then do the calling and writing
+        getcmds(i);
+        writestatus();
+        // then increment since its actually been a second (plus the time it took the commands to run)
+        i += interval;
+        // set the time to sleep back to the sleeptime of 1s
+        tosleep = sleeptime;
+	}
+}
+
 #ifndef __OpenBSD__
 /* this signal handler should do nothing */
 void dummysighandler(int signum)
@@ -189,8 +304,11 @@ void dummysighandler(int signum)
 // The sighandler function first gets the signal commands for a specific signal and then writes the commands output to the status bar by using
 void sighandler(int signum, siginfo_t *si, void *ucontext)
 {
+    /* if button is zero, the signal is not from a button press */
+    int button = si->si_value.sival_int; /* if button is zero, the signal is not from a button press */
+    int signal = signum - SIGRTMIN;
 
-	if (si->si_value.sival_int) {
+	if (button) {
 		pid_t parent = getpid();
 		if (fork() == 0) {
 #ifndef NO_X
@@ -198,13 +316,13 @@ void sighandler(int signum, siginfo_t *si, void *ucontext)
 				close(ConnectionNumber(dpy));
 #endif
 			int i;
-			for (i = 0; i < LENGTH(blocks) && blocks[i].signal != signum-SIGRTMIN; i++);
+			for (i = 0; i < LENGTH(blocks) && blocks[i].signal != signal; i++);
 
 			char shcmd[1024];
 			sprintf(shcmd, "%s; kill -%d %d", blocks[i].command, SIGRTMIN+blocks[i].signal, parent);
 			char *cmd[] = { "/bin/sh", "-c", shcmd, NULL };
 			char button[2] = { '0' + si->si_value.sival_int, '\0' };
-			setenv("BUTTON", button, 1);
+			setenv("BLOCK_BUTTON", button, 1);
 			setsid();
 			execvp(cmd[0], cmd);
 			perror(cmd[0]);
@@ -221,6 +339,7 @@ void termhandler()
 {
 //Additional description for termhandler: termhandler() sets the continue execution flag for the status loop function. Once set to 0 the status loop function will exit and the program will terminate.
 	statusContinue = 0;
+	exit(0);
 }
 
 void chldhandler()
@@ -248,8 +367,10 @@ int main(int argc, char** argv)
 //	SIGKILL = (signal 9) is a directive to kill the process immediately. This signal cannot be caught or ignored.
 	signal(SIGTERM, termhandler);
 	signal(SIGINT, termhandler);
+//	Sends a SIGCHLD signal to the parent process to indicate that the child process has ended
 	signal(SIGCHLD, chldhandler);
-	statusloop();
+//	statusloop();
+	statusloop_improved();
 #ifndef NO_X
 	XCloseDisplay(dpy);
 #endif
