@@ -187,16 +187,15 @@ void dummysighandler(int signum)
 void sighandler(int signum, siginfo_t *si, void *ucontext)
 {
     int signal = signum - SIGRTMIN;
+    // si->si_value.sival_int
     const unsigned int button = si->si_value.sival_int; /* if button is zero, the signal is not from a button press */
+    pid_t parent = getpid();
 
-    fprint_dbg(true,"DWM_BLOCKS signal = [%d] button = [%d]",signal,button);
     // @todo @ref:-https://dwm.suckless.org/patches/statuscmd/
     //struct sigaction sa = { .sa_sigaction = sighandler, .sa_flags = SA_SIGINFO };
     //sigaction(SIGRTMIN+signal, &sa, NULL);
 
-
 	if (button) {
-		pid_t parent = getpid();
 		if (fork() == 0) {
 #ifndef NO_X
 			if (dpy)
@@ -210,7 +209,7 @@ void sighandler(int signum, siginfo_t *si, void *ucontext)
 			char *cmd[] = { "/bin/sh", "-c", shcmd, NULL };
 			char button[2] = { '0' + si->si_value.sival_int, '\0' };
 
-            fprint_dbg(true,"DWM_BLOCKS shcmd = [%s]",shcmd);
+            fprint_dbg(true,"DWM_BLOCKS signal=[%d] button=[%d] shcmd=[%s] ",signal,button,shcmd);
 
 			setenv("BUTTON", button, 1);
 			setsid();

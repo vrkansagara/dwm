@@ -5,6 +5,8 @@ if [[ "$1" == "-v" ]]; then
   set -x # You refer to a noisy script.(Used to debugging)
 fi
 
+
+
 export DEBIAN_FRONTEND=noninteractive
 CURRENT_DATE=$(date "+%Y%m%d%H%M%S")
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" &>/dev/null && pwd)"
@@ -55,13 +57,13 @@ ini_required(){
 sudo  apt-get install --yes --no-install-recommends \
     xcb libxcb-xkb-dev \
     x11-xkb-utils libx11-xcb-dev \
-    libxkbcommon-x11-dev libxcb-res0-dev suckless-tools unifont
+    libxkbcommon-x11-dev libxcb-res0-dev suckless-tools
 
   ${SUDO} apt install make curl zsh feh libxcursor-dev xautolock screenkey libimlib2-dev flameshot cpulimit compton inxi
 
   #Google noto font is not supporting so remove it so dwm,st or dwmblock should not crash
-  # ${SUDO} apt remove --purge fonts-noto-color-emoji
-  ${SUDO} apt install fonts-noto-color-emoji
+   ${SUDO} apt remove --purge fonts-noto-color-emoji unifont
+#  ${SUDO} apt install fonts-noto-color-emoji unifont
 
   #${SUDO apt install  fonts-noto-color-emoji
   #mkdir -p ~/.fonts/NotoEmoji
@@ -70,16 +72,6 @@ sudo  apt-get install --yes --no-install-recommends \
 #  sudo fc-cache -fv
 #  fc-list | grep -i emoji
 #  echo "🩷💀🫱"
-}
-
-GREEN=$'\e[0;32m'
-RED=$'\e[0;31m'
-NC=$'\e[0m'
-
-# """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-#  Maintainer :- Vallabh Kansagara<vrkansagara@gmail.com> — @vrkansagara
-#  Note       :- DWM Window manager initial script
-# """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 #${SUDO} sudo apt-get install --yes -q --no-install-recommends \
 #lightdm xorg openbox
@@ -94,7 +86,26 @@ ${SUDO} sudo apt-get install --yes -q --no-install-recommends \
   network-manager iputils-ping net-tools lsof whois \
   hardinfo inxi lshw hddtemp net-tools ipmitool nvme-cli \
   freeipmi-tools ipvsadm lvm2 mdadm lm-sensors smartmontools \
-  systemd-coredump fonts-quicksand
+  systemd-coredump fonts-quicksand apt-file
+${SUDO}  apt-file update
+
+# apt-file -x search '/hb.h$'
+#apt-file -x search '/hb.h$' | grep '^lib[^:]*-dev'
+#apt-file -x search '/hb.h$' | grep -o '^lib[^:]*-dev'
+# https://github.com/Ettercap/ettercap
+}
+if [[ "$1" == "--install" ]]; then
+  ini_required
+fi
+GREEN=$'\e[0;32m'
+RED=$'\e[0;31m'
+NC=$'\e[0m'
+
+# """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+#  Maintainer :- Vallabh Kansagara<vrkansagara@gmail.com> — @vrkansagara
+#  Note       :- DWM Window manager initial script
+# """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
 
 # systemd-coredump used for inspect core dump of process ( i.e.  coredumpctl info 10353 )
 #sudo smartctl -a /dev/nvme0
@@ -131,7 +142,8 @@ ${SUDO} sudo apt-get install --yes -q --no-install-recommends \
 echo "$GREEN Script running in this directory [$SCRIPT_DIR]  $NC"
 
 apply_permission
-ini_required
+
+
 
 # DWM Specific
 cd $DWM_DIR
