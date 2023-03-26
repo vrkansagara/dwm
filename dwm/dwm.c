@@ -255,7 +255,7 @@ static void setmfact(const Arg *arg);
 static void setup(void);
 static void seturgent(Client *c, int urg);
 static void showhide(Client *c);
-static void sigstatusbar(const Arg *arg);
+static void sigdwmblocks(const Arg *arg);
 static void spawn(const Arg *arg);
 static int stackpos(const Arg *arg);
 static void tag(const Arg *arg);
@@ -2041,15 +2041,18 @@ showhide(Client *c)
 }
 
 void
-sigstatusbar(const Arg *arg)
+sigdwmblocks(const Arg *arg)
 {
 	union sigval sv;
+//	sv.sival_int = arg->i;
+	sv.sival_int = 0 | (dwmblockssig << 8) | arg->i;
 
-	if (!dwmblockssig)
-		return;
-	sv.sival_int = arg->i;
 	if ((dwmblockspid = getstatusbarpid()) <= 0)
 		return;
+	if (!dwmblockssig)
+		return;
+
+    fprint_dbg(IS_DEBUG_ON,"dwmblockpid %d signal %d  ===== %d [arg->i %d]",dwmblockspid,dwmblockssig,sv.sival_int,arg->i );
 
 	sigqueue(dwmblockspid, SIGRTMIN+dwmblockssig, sv);
 }

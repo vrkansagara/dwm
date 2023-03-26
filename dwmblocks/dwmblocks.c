@@ -105,6 +105,7 @@ void getcmd(const Block *block, char *output)
 		return;
 	int i = strlen(block->icon);
 	fgets(output+i, CMDLENGTH-i-delimLen, cmdf);
+	remove_all(output, '\n');
 	i = strlen(output);
 	if (i == 0) {
 		//return if block and command output are both empty
@@ -164,13 +165,19 @@ void getcmd_improved(const Block *block, char *output)
 
 void getcmds(int time)
 {
-// This function first creates a pointer to a Block structure and afterwards loops over all blocks. On each iteration a condition is to be met, IF the current blocks refresh/re-execute interval is not equal to 0 AND the time argument passed to the getcmds( int time) function can be divided by that blocks interval without any remainder [% mod operation] OR the time argument is just equal to -1, THEN run the getcmd function and pass it the current block and the i-th object/pointer in the statusbar array.
+// This function first creates a pointer to a Block structure and afterwards loops over all blocks.
+// On each iteration a condition is to be met, IF the current blocks refresh/re-execute interval is not equal to 0
+// AND the time argument passed to the getcmds( int time) function can be divided by that blocks interval without
+// any remainder [% mod operation] OR the time argument is just equal to -1,
+// THEN run the getcmd function and pass it the current block and the i-th object/pointer in the statusbar array.
+
 	const Block* current;
 	for (unsigned int i = 0; i < LENGTH(blocks); i++) {
 		current = blocks + i;
-		if ((current->interval != 0 && time % current->interval == 0) || time == -1)
-//			getcmd(current,statusbar[i]);
-			getcmd_improved(current,statusbar[i]);
+		if ((current->interval != 0 && time % current->interval == 0) || time == -1){
+		    getcmd(current,statusbar[i]);
+//		    getcmd_improved(current,statusbar[i]);
+        }
 	}
 }
 
@@ -179,9 +186,10 @@ void getsigcmds(unsigned int signal)
 	const Block *current;
 	for (unsigned int i = 0; i < LENGTH(blocks); i++) {
 		current = blocks + i;
-		if (current->signal == signal)
-//			getcmd(current,statusbar[i]);
-			getcmd_improved(current,statusbar[i]);
+		if (current->signal == signal){
+		    getcmd(current,statusbar[i]);
+//		    getcmd_improved(current,statusbar[i]);
+        }
 	}
 }
 
@@ -197,8 +205,9 @@ void setupsignals()
 #endif
 
 	for (unsigned int i = 0; i < LENGTH(blocks); i++) {
-		if (blocks[i].signal > 0)
-			sigaction(SIGMINUS+blocks[i].signal, &sa, NULL);
+		if (blocks[i].signal > 0){
+		    sigaction(SIGMINUS+blocks[i].signal, &sa, NULL);
+		}
 	}
 
 }
@@ -322,6 +331,8 @@ void sighandler(int signum, siginfo_t *si, void *ucontext)
 
 			char shcmd[1024];
 			sprintf(shcmd, "%s; kill -%d %d", blocks[i].command, SIGRTMIN+blocks[i].signal, parent);
+//			sprintf(shcmd, "%s; kill -%d %d", blocks[i].command, SIGRTMIN+blocks[i].signal+34, parent);
+			fprint_dbg(IS_DEBUG_ON,"shcmd = [%s]",shcmd);
 			char *cmd[] = { "/bin/sh", "-c", shcmd, NULL };
 			char button[2] = { '0' + si->si_value.sival_int, '\0' };
 			setenv("BLOCK_BUTTON", button, 1);
@@ -331,6 +342,7 @@ void sighandler(int signum, siginfo_t *si, void *ucontext)
 			exit(EXIT_SUCCESS);
 		}
 	} else {
+	    fprint_dbg(IS_DEBUG_ON,"else.... = [%d]",signum-SIGPLUS);
         // getsigcmds() is analogous to getcmds() get commands function.
         getsigcmds(signum-SIGPLUS);
         writestatus();
@@ -374,10 +386,10 @@ int main(int argc, char** argv)
 	signal(SIGINT, termhandler);
 
 //	Sends a SIGCHLD signal to the parent process to indicate that the child process has ended
-	signal(SIGCHLD, chldhandler);
+//	signal(SIGCHLD, chldhandler);
 
-//	statusloop();
-	statusloop_improved();
+	statusloop();
+//	statusloop_improved();
 
 #ifndef NO_X
 	XCloseDisplay(dpy);
@@ -385,5 +397,5 @@ int main(int argc, char** argv)
 
 
     fprint_dbg(IS_DEBUG_ON,"DWMBLOCKS end");
-	return 0;
+	return returnStatus;
 }

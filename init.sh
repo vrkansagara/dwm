@@ -184,7 +184,8 @@ ${SUDO} make install
 ps -ef | grep "dwmblocks" | grep -v grep | awk "{print \$2}" | xargs --no-run-if-empty sudo kill -9
 # reset statusbar
 xsetroot -name ""
-/usr/local/bin/dwmblocks  2>&1 >> /tmp/dwmblocks.log &
+/usr/local/bin/dwmblocks  2>&1 >> /tmp/dwm.log &
+pkill -RTMIN+10 dwmblocks
 
 ${SUDO} rm -rf /usr/share/xsessions/vallabh.desktop
 ${SUDO} ln -P $DWM_DIR/dwm.desktop /usr/share/xsessions/vallabh.desktop
