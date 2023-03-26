@@ -3,6 +3,8 @@
 #include <time.h>
 #include <stdbool.h>
 
+#define IS_DEBUG_ON 1
+
 /**
  * Easy debug
  * @define bool is_debug_on = false;

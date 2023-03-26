@@ -2177,7 +2177,7 @@ void
 togglesticky(const Arg *arg)
 {
     // togglesticky
-    fprint_dbg(true,"togglesticky %d %d %f",arg->i,arg->ui,arg->f);
+    fprint_dbg(IS_DEBUG_ON,"togglesticky %d %d %f",arg->i,arg->ui,arg->f);
 
 	if (!selmon->sel)
 		return;
@@ -2873,7 +2873,7 @@ main(int argc, char *argv[])
 {
 	bool is_debug_on = true;
 
-    fprint_dbg(is_debug_on,"DWM starting....");
+    fprint_dbg(IS_DEBUG_ON,"DWM starting....");
 
 	if (argc == 2 && !strcmp("-v", argv[1]))
 		die("dwm-"VERSION);
@@ -2898,7 +2898,7 @@ main(int argc, char *argv[])
 	cleanup();
 	XCloseDisplay(dpy);
 
-	fprint_dbg(is_debug_on,"DWM exiting....");
+	fprint_dbg(IS_DEBUG_ON,"DWM exiting....");
 	return EXIT_SUCCESS;
 }
 void

@@ -38,6 +38,7 @@ void sighandler(int signum, siginfo_t *si, void *ucontext);
 int getstatus(char *str, char *last);
 void statusloop();
 void statusloop_improved();
+void getcmd_improved(const Block *block, char *output);
 void termhandler();
 void chldhandler();
 void pstdout();
@@ -67,7 +68,7 @@ void replace(char *str, char old, char new)
 			*c = new;
 }
 
-// the previous function looked nice but unfortunately it didnt work if to_remove was in any position other than the last character
+// the previous function looked nice but unfortunately it didn't work if to_remove was in any position other than the last character
 // theres probably still a better way of doing this
 void remove_all(char *str, char to_remove) {
 	char *read = str;
@@ -131,6 +132,7 @@ void getcmd_improved(const Block *block, char *output)
 	FILE *cmdf = popen(cmd,"r");
 	if (!cmdf){
         //printf("failed to run: %s, %d\n", block->command, errno);
+        fprint_dbg(IS_DEBUG_ON,"failed to run: %s, %d\n", block->command, errno);
 		return;
     }
     char tmpstr[CMDLENGTH] = "";
@@ -296,7 +298,7 @@ void statusloop_improved()
 /* this signal handler should do nothing */
 void dummysighandler(int signum)
 {
-    fprint_dbg(true,"DWMBLOCKS dummysighandler = [%d] ",signum);
+    fprint_dbg(IS_DEBUG_ON,"DWMBLOCKS dummysighandler = [%d] ",signum);
     return;
 }
 #endif
@@ -349,7 +351,7 @@ void chldhandler()
 
 int main(int argc, char** argv)
 {
-    fprint_dbg(true,"DWMBLOCKS start");
+    fprint_dbg(IS_DEBUG_ON,"DWMBLOCKS start");
 
 	for (int i = 0; i < argc; i++) {//Handle command line arguments
 		if (!strcmp("-d",argv[i]))
@@ -357,24 +359,31 @@ int main(int argc, char** argv)
 		else if (!strcmp("-p",argv[i]))
 			writestatus = pstdout;
 	}
+
 #ifndef NO_X
 	if (!setupX())
 		return 1;
 #endif
+
 	delimLen = MIN(delimLen, strlen(delim));
 	delim[delimLen++] = '\0';
+
 //	SIGTERM = (signal 15) is a request to the program to terminate.
 //	SIGKILL = (signal 9) is a directive to kill the process immediately. This signal cannot be caught or ignored.
 	signal(SIGTERM, termhandler);
 	signal(SIGINT, termhandler);
+
 //	Sends a SIGCHLD signal to the parent process to indicate that the child process has ended
 	signal(SIGCHLD, chldhandler);
+
 //	statusloop();
 	statusloop_improved();
+
 #ifndef NO_X
 	XCloseDisplay(dpy);
 #endif
-    fprint_dbg(true,"DWMBLOCKS end");
 
+
+    fprint_dbg(IS_DEBUG_ON,"DWMBLOCKS end");
 	return 0;
 }

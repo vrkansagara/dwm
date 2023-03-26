@@ -175,7 +175,7 @@ void statusloop()
 /* this signal handler should do nothing */
 void dummysighandler(int signum)
 {
-    fprint_dbg(true,"DWMBLOCKS dummysighandler = [%d] ",signum);
+    fprint_dbg(IS_DEBUG_ON,"DWMBLOCKS dummysighandler = [%d] ",signum);
     return;
 }
 #endif
@@ -196,7 +196,7 @@ void termhandler()
 
 int main(int argc, char** argv)
 {
-    fprint_dbg(true,"DWMBLOCKS start");
+    fprint_dbg(IS_DEBUG_ON,"DWMBLOCKS start");
 
 	for (int i = 0; i < argc; i++) {//Handle command line arguments
 		if (!strcmp("-d",argv[i]))
@@ -218,7 +218,7 @@ int main(int argc, char** argv)
 #ifndef NO_X
 	XCloseDisplay(dpy);
 #endif
-    fprint_dbg(true,"DWMBLOCKS end");
+    fprint_dbg(IS_DEBUG_ON,"DWMBLOCKS end");
 
 	return 0;
 }
