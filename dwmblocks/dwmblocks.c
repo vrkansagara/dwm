@@ -82,6 +82,7 @@ void getcmd(const Block *block, char *output)
 
 void getcmds(int time)
 {
+// This function first creates a pointer to a Block structure and afterwards loops over all blocks. On each iteration a condition is to be met, IF the current blocks refresh/re-execute interval is not equal to 0 AND the time argument passed to the getcmds( int time) function can be divided by that blocks interval without any remainder [% mod operation] OR the time argument is just equal to -1, THEN run the getcmd function and pass it the current block and the i-th object/pointer in the statusbar array.
 	const Block* current;
 	for (unsigned int i = 0; i < LENGTH(blocks); i++) {
 		current = blocks + i;
@@ -179,14 +180,17 @@ void dummysighandler(int signum)
 }
 #endif
 
+// The sighandler function first gets the signal commands for a specific signal and then writes the commands output to the status bar by using
 void sighandler(int signum)
 {
+// getsigcmds() is analogous to getcmds() get commands function.
 	getsigcmds(signum-SIGPLUS);
 	writestatus();
 }
 
 void termhandler()
 {
+//Additional description for termhandler: termhandler() sets the continue execution flag for the status loop function. Once set to 0 the status loop function will exit and the program will terminate.
 	statusContinue = 0;
 }
 
