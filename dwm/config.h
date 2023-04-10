@@ -13,8 +13,11 @@
 #define MONITOR_RIGHT 1
 #define MONITOR_LEFT 2
 
+#define TAG_GENERAL 1<<0
+#define TAG_MESSAGING 1<<2
+#define TAG_REMOTE 1<<3
+#define TAG_UTILITY 1<<4
 #define TAG_DEVELOPMENT 1<<7
-#define TAG_UTILITY 1 << 4
 
 
 // grep $USER /etc/passwd /** Is current user has default shell */
@@ -51,7 +54,7 @@ static int swallowfloating          = 1;        /* 1 means swallow floating wind
 //static char *fonts[]          = { "monospace:size=10", "NotoColorEmoji:pixelsize=10:antialias=true:autohint=true"  };
 static const char *fonts[]          = {
     "Fira Code Medium:size=10:antialias=true:autohint=true",
-    "NotoColorEmoji:pixelsize=10:antialias=true:autohint=true:color=true",
+//    "NotoColorEmoji:pixelsize=10:antialias=true:autohint=true:color=true",
     "monospace:size=10",
 };
 
@@ -102,30 +105,30 @@ static const Rule rules[] = {
 
     /** class           instance,               title,              tags,               isfloating, isterminal ,noswallow              monitor */
     // Tag - 1 (General usse case)
-    {   "Thunar",      "thunar",      NULL,       1<<0,       0, 0,0,    MONITOR_DEFAULT},
-    {   "Org.gnome.Nautilus",      "org.gnome.Nautilus",      NULL,       1<<0,       0, 0,0,    MONITOR_DEFAULT},
-    {   "thunderbird",      "Mail",             NULL,       1<<0,       0, 0,0,    MONITOR_DEFAULT},
+    {   "Thunar",      "thunar",      NULL,       TAG_GENERAL,       0, 0,0,    MONITOR_DEFAULT},
+    {   "Org.gnome.Nautilus",      "org.gnome.Nautilus",      NULL,       TAG_GENERAL,       0, 0,0,    MONITOR_DEFAULT},
+    {   "thunderbird",      "Mail",             NULL,       TAG_GENERAL,       0, 0,0,    MONITOR_DEFAULT},
 
     // Tag - 2 (Terminal way on demand )
     {   "St",      "st",                                        NULL,       1<<1,   0,  1,  0,  MONITOR_DEFAULT},
 
     // Tag - 3 (Socializing / Office on the way)
-    {   "Skype",      "skype",                                  NULL,       1<<2,       0,  0,  0,    MONITOR_DEFAULT},
-    {   "Microsoft Teams - Preview","microsoft teams - preview",NULL,       1<<2,       0,  0,  0,    MONITOR_DEFAULT},
-    {   "ringcentral",      "ringcentral",                      NULL,       1<<2,       0,  0,  0,    MONITOR_DEFAULT},
-    {   "Slack",      "slack",                                  NULL,       1<<2,       0,  0,  0,    MONITOR_DEFAULT},
+    {   "Skype",      "skype",                                  NULL,       TAG_MESSAGING,       0,  0,  0,    MONITOR_DEFAULT},
+    {   "Microsoft Teams - Preview","microsoft teams - preview",NULL,       TAG_MESSAGING,       0,  0,  0,    MONITOR_DEFAULT},
+    {   "ringcentral",      "ringcentral",                      NULL,       TAG_MESSAGING,       0,  0,  0,    MONITOR_DEFAULT},
+    {   "Slack",      "slack",                                  NULL,       TAG_MESSAGING,       0,  0,  0,    MONITOR_LEFT},
 
     // Tag - 4 ( Remote things)
-    {   "org.remmina.Remmina" ,"org.remmina.Remmina",       NULL,       1<<3,   0,  0,  0,  MONITOR_DEFAULT},
-    {   "Anydesk",      "anydesk",                          NULL,       1<<3,   0,  0,  0,  MONITOR_DEFAULT},
+    {   "org.remmina.Remmina" ,"org.remmina.Remmina",       NULL,       TAG_REMOTE,   0,  0,  0,  MONITOR_LEFT},
+    {   "Anydesk",      "anydesk",                          NULL,       TAG_REMOTE,   0,  0,  0,  MONITOR_LEFT},
 
     // Tag - 5 (Utilities)
-    { "WorkComposer"    ,"workcomposer",        NULL,       TAG_UTILITY,       0,    0,  0,  MONITOR_DEFAULT},
-    { "Hubstaff"    ,"Hubstaff",                NULL,       TAG_UTILITY,       0,    0,  0,  MONITOR_DEFAULT},
-    { "openfortiGUI"    ,"openfortigui",        NULL,       TAG_UTILITY,       0,    0,  0,  MONITOR_DEFAULT},
-    { "KeePassXC"    ,"keepassxc",              NULL,       TAG_UTILITY,       0,    0,  0,  MONITOR_DEFAULT},
-    { "1Password"    ,"1password",              NULL,       TAG_UTILITY,       0,    0,  0,  MONITOR_DEFAULT},
-    { "obs"    ,"obs",                          NULL,       TAG_UTILITY,       0,    0,  0,  MONITOR_DEFAULT},
+    { "WorkComposer"    ,"workcomposer",        NULL,       TAG_UTILITY,       0,    0,  0,  MONITOR_LEFT},
+    { "Hubstaff"    ,"Hubstaff",                NULL,       TAG_UTILITY,       0,    0,  0,  MONITOR_LEFT},
+    { "openfortiGUI"    ,"openfortigui",        NULL,       TAG_UTILITY,       0,    0,  0,  MONITOR_LEFT},
+    { "KeePassXC"    ,"keepassxc",              NULL,       TAG_UTILITY,       0,    0,  0,  MONITOR_LEFT},
+    { "1Password"    ,"1password",              NULL,       TAG_UTILITY,       0,    0,  0,  MONITOR_LEFT},
+    { "obs"    ,"obs",                          NULL,       TAG_UTILITY,       0,    0,  0,  MONITOR_LEFT},
 
     // Tag - 6 (Development : Light weight on memory)
     {   "vrkansagara-ide",               "vrkansagara-ide",     NULL,       1<<5,   0,  1,  0,  MONITOR_DEFAULT},

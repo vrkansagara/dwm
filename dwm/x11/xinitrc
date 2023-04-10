@@ -79,6 +79,7 @@ mkdir -p $HOME/tmp
 mv .bash* $HOME/old
 mv $HOME/.cache/dmenu_run $HOME/old
 mv .zcompdump-* $HOME/old
+bash ~/.screenlayout/home.sh
 
 # Start Window Manager (Always last line)
 # Log stderr to a file

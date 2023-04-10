@@ -51,7 +51,7 @@ echo "$RED Git clean apply to [$(pwd)]  $NC"
   apply_permission
 }
 
-ini_required(){
+init_required(){
   # Required sxcs
   ${SUDO} apt install libxft-dev libxinerama-dev xcb libxcb-xkb-dev libx11-xcb-dev libxcb-res0-dev libxrandr-dev
 sudo  apt-get install --yes --no-install-recommends \
@@ -63,7 +63,7 @@ sudo  apt-get install --yes --no-install-recommends \
 
   #Google noto font is not supporting so remove it so dwm,st or dwmblock should not crash
    ${SUDO} apt remove --purge fonts-noto-color-emoji unifont
-#  ${SUDO} apt install fonts-noto-color-emoji unifont
+  ${SUDO} apt install unifont
 
   #${SUDO apt install  fonts-noto-color-emoji
   #mkdir -p ~/.fonts/NotoEmoji
@@ -95,7 +95,7 @@ ${SUDO}  apt-file update
 # https://github.com/Ettercap/ettercap
 }
 if [[ "$1" == "--install" ]]; then
-  ini_required
+  init_required
 fi
 GREEN=$'\e[0;32m'
 RED=$'\e[0;31m'
@@ -142,8 +142,6 @@ NC=$'\e[0m'
 echo "$GREEN Script running in this directory [$SCRIPT_DIR]  $NC"
 
 apply_permission
-
-
 
 # DWM Specific
 cd $DWM_DIR

@@ -7,9 +7,9 @@
 // if you see \001....\002 in output then understand that statuscmd is added to that block
 static const Block blocks[] = {
     /*Icon*/    /*Command*/     /*Update Interval(Seconds)*/    /*Update Signal*/
-//    {"P:", "acpi -b | grep -P -o '[0-9]+(?=%)'",                            60,     1},
-    //{"W:", "awk 'NR==3 {print $1 \"/\" $3 00 \"%\"}' /proc/net/wireless",   60,       2},
-//    {"M:", "free -h | awk '/^Mem/ { print $3\"/\"$2 }' | sed s/i//g",       30,     3},
+   {"P:", "acpi -b | grep -P -o '[0-9]+(?=%)'",                            60,     1},
+    {"W:", "awk 'NR==3 {print $1 \"/\" $3 00 \"%\"}' /proc/net/wireless",   60,       2},
+   {"M:", "free -h | awk '/^Mem/ { print $3\"/\"$2 }' | sed s/i//g",       30,     3},
 //    {"", "TZ=':Asia/Kolkata' date +'%a %d %b [%r]'",                        1,      4},
 //    {"", "TZ=':Europe/Amsterdam' date +'%a %d %b [%r]'",                    1,      5},
     // {"", "~/.vim/bin/statusbar/sb-disk",                                    5,      2},
@@ -17,9 +17,9 @@ static const Block blocks[] = {
     // {"", "~/.vim/bin/statusbar/sb-clock",                                   5,      4},
 //     {"", "~/.vim/bin/statusbar/sb-battery",                                 5,      5},
     // {"", "date '+%b %d (%a) %I:%M%p'",5,4},
-    {"", "~/.vim/bin/statusbar/sb-internet",5,7},
-    {"", "~/.vim/bin/statusbar/sb-battery",5,8},
-    {"", "~/.vim/bin/statusbar/sb-memory",5,9},
+    // {"", "~/.vim/bin/statusbar/sb-internet",5,7},
+    // {"", "~/.vim/bin/statusbar/sb-battery",5,8},
+    // {"", "~/.vim/bin/statusbar/sb-memory",5,9},
     {"", "~/.vim/bin/vtest",                                            1,      10},
 };
 
