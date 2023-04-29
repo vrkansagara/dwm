@@ -5,8 +5,6 @@ if [[ "$1" == "-v" ]]; then
   set -x # You refer to a noisy script.(Used to debugging)
 fi
 
-
-
 export DEBIAN_FRONTEND=noninteractive
 CURRENT_DATE=$(date "+%Y%m%d%H%M%S")
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" &>/dev/null && pwd)"
@@ -30,31 +28,31 @@ apply_permission() {
   ${SUDO} chgrp $USER -Rf .
 }
 
-apply_patche(){
-  FILES="$(pwd)/patches/*.diff"
+apply_patche() {
+  FILES="$1/patches/*.diff"
   for f in $FILES; do
-      if [ -f "$f" ]; then
-          dos2unix $f
-          echo "$RED Applying path for the [ $f ] $NC"
-          patch --merge=diff3 -i $f
-          retCode=$$?; \
-          [[ $$retCode -gt 1 ]] && exit $$retCode; \
-          sleep 1
-      fi
+    if [ -f "$f" ]; then
+      dos2unix $f
+      echo "$RED Applying path for the [ $f ] $NC"
+      patch --merge=diff3 -i $f
+      retCode=$$?
+      [[ $$retCode -gt 1 ]] && exit $$retCode
+      sleep 1
+    fi
   done
 }
 
-apply_git_clean(){
-echo "$RED Git clean apply to [$(pwd)]  $NC"
+apply_git_clean() {
+  echo "$RED Git clean apply to [$(pwd)]  $NC"
   ${SUDO} git reset --hard HEAD
   ${SUDO} git clean -fd
   apply_permission
 }
 
-init_required(){
+init_required() {
   # Required sxcs
   ${SUDO} apt install libxft-dev libxinerama-dev xcb libxcb-xkb-dev libx11-xcb-dev libxcb-res0-dev libxrandr-dev
-sudo  apt-get install --yes --no-install-recommends \
+  sudo apt-get install --yes --no-install-recommends \
     xcb libxcb-xkb-dev \
     x11-xkb-utils libx11-xcb-dev \
     libxkbcommon-x11-dev libxcb-res0-dev suckless-tools
@@ -62,37 +60,37 @@ sudo  apt-get install --yes --no-install-recommends \
   ${SUDO} apt install make curl zsh feh libxcursor-dev xautolock screenkey libimlib2-dev flameshot cpulimit compton inxi
 
   #Google noto font is not supporting so remove it so dwm,st or dwmblock should not crash
-   ${SUDO} apt remove --purge fonts-noto-color-emoji unifont
+  ${SUDO} apt remove --purge fonts-noto-color-emoji unifont
   ${SUDO} apt install unifont
 
   #${SUDO apt install  fonts-noto-color-emoji
   #mkdir -p ~/.fonts/NotoEmoji
   #curl -L 'https://raw.githubusercontent.com/googlefonts/noto-emoji/main/fonts/NotoColorEmoji.ttf' -o ~/.fonts/NotoEmoji/NotoColorEmoji.ttf
   #fc-cache -fv
-#  sudo fc-cache -fv
-#  fc-list | grep -i emoji
-#  echo "🩷💀🫱"
+  #  sudo fc-cache -fv
+  #  fc-list | grep -i emoji
+  #  echo "🩷💀🫱"
 
-#${SUDO} sudo apt-get install --yes -q --no-install-recommends \
-#lightdm xorg openbox
-#${SUDO} dpkg-reconfigure lightdm
+  ${SUDO} sudo apt-get install --yes -q --no-install-recommends \
+  lightdm xorg openbox
+  ${SUDO} dpkg-reconfigure lightdm
 
-${SUDO} sudo apt-get install --yes -q --no-install-recommends \
-  patch build-essential \
-  feh cpulimit cputool screenkey htop zsh tree vlc git nmap elinks vim gimp \
-  arandr suckless-tools xautolock ranger\
-  alsa-utils mesa-utils pulseaudio pavucontrol \
-  notification-daemon notify-osd  libnotify-dev libnotify-bin \
-  network-manager iputils-ping net-tools lsof whois \
-  hardinfo inxi lshw hddtemp net-tools ipmitool nvme-cli \
-  freeipmi-tools ipvsadm lvm2 mdadm lm-sensors smartmontools \
-  systemd-coredump fonts-quicksand apt-file
-${SUDO}  apt-file update
+  ${SUDO} sudo apt-get install --yes -q --no-install-recommends \
+    patch build-essential \
+    feh cpulimit cputool screenkey htop zsh tree vlc git nmap elinks vim gimp \
+    arandr suckless-tools xautolock ranger \
+    alsa-utils mesa-utils pulseaudio pavucontrol \
+    notification-daemon notify-osd libnotify-dev libnotify-bin \
+    network-manager iputils-ping net-tools lsof whois \
+    hardinfo inxi lshw hddtemp net-tools ipmitool nvme-cli \
+    freeipmi-tools ipvsadm lvm2 mdadm lm-sensors smartmontools \
+    systemd-coredump fonts-quicksand apt-file
+  ${SUDO} apt-file update
 
-# apt-file -x search '/hb.h$'
-#apt-file -x search '/hb.h$' | grep '^lib[^:]*-dev'
-#apt-file -x search '/hb.h$' | grep -o '^lib[^:]*-dev'
-# https://github.com/Ettercap/ettercap
+  # apt-file -x search '/hb.h$'
+  #apt-file -x search '/hb.h$' | grep '^lib[^:]*-dev'
+  #apt-file -x search '/hb.h$' | grep -o '^lib[^:]*-dev'
+  # https://github.com/Ettercap/ettercap
 }
 if [[ "$1" == "--install" ]]; then
   init_required
@@ -105,7 +103,6 @@ NC=$'\e[0m'
 #  Maintainer :- Vallabh Kansagara<vrkansagara@gmail.com> — @vrkansagara
 #  Note       :- DWM Window manager initial script
 # """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-
 
 # systemd-coredump used for inspect core dump of process ( i.e.  coredumpctl info 10353 )
 #sudo smartctl -a /dev/nvme0
@@ -143,47 +140,71 @@ echo "$GREEN Script running in this directory [$SCRIPT_DIR]  $NC"
 
 apply_permission
 
-# DWM Specific
-cd $DWM_DIR
-apply_permission
-apply_patche
-${SUDO} make clean
-${SUDO} make
-${SUDO} make uninstall
-${SUDO} make install
+slock() {
+  # DWM Specific
+  cd $SLOCK_DIR
+  apply_permission
+  apply_patche $SLOCK_DIR
+  ${SUDO} make clean
+  ${SUDO} make
+  ${SUDO} make uninstall
+  ${SUDO} make install
+}
 
-# ST Specific
-cd $ST_DIR
-apply_permission
-apply_patche
-${SUDO} make clean
-${SUDO} make
-${SUDO} make uninstall
-${SUDO} make install
+dwm() {
+  # DWM Specific
+  cd $DWM_DIR
+  apply_permission
+  apply_patche $DWM_DIR
+  ${SUDO} make clean
+  ${SUDO} make
+  ${SUDO} make uninstall
+  ${SUDO} make install
+}
 
-# sxcs Specific
-cd $SXCS_DIR
-apply_permission
-${SUDO} make clean
-${SUDO} make
-${SUDO} make uninstall
-${SUDO} make install
+st() {
+  # ST Specific
+  cd $ST_DIR
+  apply_permission
+  apply_patche $ST_DIR
+  ${SUDO} make clean
+  ${SUDO} make
+  ${SUDO} make uninstall
+  ${SUDO} make install
+}
 
+sxcs() {
+  # sxcs Specific
+  cd $SXCS_DIR
+  apply_permission
+  ${SUDO} make clean
+  ${SUDO} make
+  ${SUDO} make uninstall
+  ${SUDO} make install
+}
 
-# DWMBlock Specific
-cd $DWMBLOCKS_DIR
-apply_permission
-apply_patche
-${SUDO} make clean
-${SUDO} make
-${SUDO} make uninstall
-${SUDO} make install
-#Lets kill all process which is executed for the dwmblocks
-ps -ef | grep "dwmblocks" | grep -v grep | awk "{print \$2}" | xargs --no-run-if-empty sudo kill -9
-# reset statusbar
-xsetroot -name ""
-/usr/local/bin/dwmblocks  2>&1 >> /tmp/dwm.log &
-pkill -RTMIN+10 dwmblocks
+dwmblocks() {
+
+  # DWMBlock Specific
+  cd $DWMBLOCKS_DIR
+  apply_permission
+  apply_patche $$DWMBLOCKS_DIR
+  ${SUDO} make clean
+  ${SUDO} make
+  ${SUDO} make uninstall
+  ${SUDO} make install
+
+  #Lets kill all process which is executed for the dwmblocks
+  ps -ef | grep "dwmblocks" | grep -v grep | awk "{print \$2}" | xargs --no-run-if-empty sudo kill -9
+
+  # reset statusbar
+  xsetroot -name ""
+
+  /usr/local/bin/dwmblocks 2>&1 >> /tmp/dwm.log &
+  pkill -RTMIN+10 dwmblocks
+
+}
+
 
 ${SUDO} rm -rf /usr/share/xsessions/vallabh.desktop
 ${SUDO} ln -P $DWM_DIR/dwm.desktop /usr/share/xsessions/vallabh.desktop
@@ -192,7 +213,6 @@ ${SUDO} ln -P $DWM_DIR/x11/xinitrc $HOME/.xinitrc
 ${SUDO} ln -P $DWM_DIR/x11/xprofile $HOME/.xprofile
 ${SUDO} chmod 744 $HOME/.xinitrc
 ${SUDO} chmod u+s /usr/bin/xinit
-
 
 # Copy conky configuration to home folder
 # ${SUDO} rm -rf $HOME/.config/conky
@@ -205,7 +225,7 @@ ${SUDO} chown $USER -Rf $HOME/.config
 ${SUDO} chgrp $USER -Rf $HOME/.config
 
 ${SUDO} chsh -s $(which zsh) $USER
-${SUDO} chmod u+s $HOME/.vim/bin/*  $SCRIPT_DIR/bin/*
+${SUDO} chmod u+s $HOME/.vim/bin/* $SCRIPT_DIR/bin/*
 
 # https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=747465
 # echo '[D-BUS Service]
@@ -214,16 +234,29 @@ ${SUDO} chmod u+s $HOME/.vim/bin/*  $SCRIPT_DIR/bin/*
 
 # Command line fuzzy finder called fzf
 if [ ! -d "$HOME/.fzf" ]; then
-    cd $HOME
-    git clone https://github.com/junegunn/fzf.git --depth=1 -b master .fzf
-    cd .fzf
-    ${SUDO} git stash
-    git reset --hard HEAD
-    git clean -fd
+  cd $HOME
+  git clone https://github.com/junegunn/fzf.git --depth=1 -b master .fzf
+  cd $HOME/.fzf
+  ${SUDO} git stash
+  git reset --hard HEAD
+  git clean -fd
 fi
 
+main(){
+  dwm $1 $2 $3
+  dwmblocks $1 $2 $3
+  st $1 $2 $3
+  sxcs $1 $2 $3
+  slock $1 $2 $3
+}
+main $1 $2 $3
+
+# Stop power button accidently stoped working. ( shutdown prevent )
+#sed -i 's/HandlePowerKey/HandlePowerKey=ignore/g' /etc/systemd/logind.conf
+echo "HandlePowerKey=ignore" | sudo tee -a /etc/systemd/logind.conf
 
 echo "$GREEN Your simple window manager is configured and ready to use.........[DONE]. $NC"
+
 exit 0
 
 # #base03    #002b36  background
@@ -249,6 +282,4 @@ exit 0
 #sudo apt-get install libxrandr-dev ........... for X11/extensions/Xrandr.h
 #sudo apt-get install libxi-dev ................... for X11/extensions/XInput.h
 
-# Stop power button accidently stoped working. ( shutdown prevent )
-#sed -i 's/HandlePowerKey/HandlePowerKey=ignore/g' /etc/systemd/logind.conf
-echo "HandlePowerKey=ignore" | sudo tee -a /etc/systemd/logind.conf
+
