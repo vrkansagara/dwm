@@ -59,9 +59,7 @@
 #define INTERSECT(x,y,w,h,m)    (MAX(0, MIN((x)+(w),(m)->wx+(m)->ww) - MAX((x),(m)->wx)) \
                                * MAX(0, MIN((y)+(h),(m)->wy+(m)->wh) - MAX((y),(m)->wy)))
 #define ISVISIBLE(C)            ((C->tags & C->mon->tagset[C->mon->seltags]) || C->issticky)
-//#define ISVISIBLE(C)            ((C->tags & C->mon->tagset[C->mon->seltags]))
 #define ISINC(X)                ((X) > 1000 && (X) < 3000)
-#define ISVISIBLE(C)            ((C->tags & C->mon->tagset[C->mon->seltags]))
 #define PREVSEL                 3000
 #define LENGTH(X)               (sizeof X / sizeof X[0])
 #define MOD(N,M)                ((N)%(M) < 0 ? (N)%(M) + (M) : (N)%(M))
@@ -257,7 +255,7 @@ static void setmfact(const Arg *arg);
 static void setup(void);
 static void seturgent(Client *c, int urg);
 static void showhide(Client *c);
-static void sigstatusbar(const Arg *arg);
+static void sigdwmblocks(const Arg *arg);
 static void spawn(const Arg *arg);
 static int stackpos(const Arg *arg);
 static void tag(const Arg *arg);
@@ -286,10 +284,6 @@ static void view(const Arg *arg);
 static Client *wintoclient(Window w);
 static Monitor *wintomon(Window w);
 static int xerror(Display *dpy, XErrorEvent *ee);
-static int xerrordummy(Display *dpy, XErrorEvent *ee);
-static int xerrorstart(Display *dpy, XErrorEvent *ee);
-static int xerrordummy(Display *dpy, XErrorEvent *ee);
-static int xerrorstart(Display *dpy, XErrorEvent *ee);
 
 /* variables */
 static const char broken[] = "broken";
@@ -310,9 +304,9 @@ static Client *termforwin(const Client *c);
 static pid_t winpid(Window w);
 
 static char stext[256];
-static int statusw;
-static int statussig;
-static pid_t statuspid = -1;
+static int dwmblocks;
+static int dwmblockssig;
+static pid_t dwmblockspid = -1;
 static int screen;
 static int sw, sh;           /* X display screen geometry width, height */
 static int bh;               /* bar height */
@@ -585,10 +579,10 @@ buttonpress(XEvent *e)
 			arg.ui = 1 << i;
 		} else if (ev->x < x + TEXTW(selmon->ltsymbol))
 			click = ClkLtSymbol;
-		else if (ev->x > selmon->ww - statusw) {
-			x = selmon->ww - statusw;
+		else if (ev->x > selmon->ww - dwmblocks) {
+			x = selmon->ww - dwmblocks;
 			click = ClkStatusText;
-			statussig = 0;
+			dwmblockssig = 0;
 			for (text = s = stext; *s && x <= ev->x; s++) {
 				if ((unsigned char)(*s) < ' ') {
 					ch = *s;
@@ -598,7 +592,7 @@ buttonpress(XEvent *e)
 					text = s + 1;
 					if (x >= ev->x)
 						break;
-					statussig = ch;
+					dwmblockssig = ch;
 				}
 			}
 		} else
@@ -943,15 +937,15 @@ drawbar(Monitor *m)
 				ch = *s;
 				*s = '\0';
 				tw = TEXTW(text) - lrpad;
-				drw_text(drw, m->ww - statusw + x, 0, tw, bh, 0, text, 0);
+				drw_text(drw, m->ww - dwmblocks + x, 0, tw, bh, 0, text, 0);
 				x += tw;
 				*s = ch;
 				text = s + 1;
 			}
 		}
 		tw = TEXTW(text) - lrpad + 2;
-		drw_text(drw, m->ww - statusw + x, 0, tw, bh, 0, text, 0);
-		tw = statusw;
+		drw_text(drw, m->ww - dwmblocks + x, 0, tw, bh, 0, text, 0);
+		tw = dwmblocks;
 	}
 
 	for (c = m->clients; c; c = c->next) {
@@ -1111,15 +1105,15 @@ getstatusbarpid()
 	char buf[32], *str = buf, *c;
 	FILE *fp;
 
-	if (statuspid > 0) {
-		snprintf(buf, sizeof(buf), "/proc/%u/cmdline", statuspid);
+	if (dwmblockspid > 0) {
+		snprintf(buf, sizeof(buf), "/proc/%u/cmdline", dwmblockspid);
 		if ((fp = fopen(buf, "r"))) {
 			fgets(buf, sizeof(buf), fp);
 			while ((c = strchr(str, '/')))
 				str = c + 1;
 			fclose(fp);
 			if (!strcmp(str, STATUSBAR))
-				return statuspid;
+				return dwmblockspid;
 		}
 	}
 	if (!(fp = popen("pidof -s "STATUSBAR, "r")))
@@ -2047,17 +2041,20 @@ showhide(Client *c)
 }
 
 void
-sigstatusbar(const Arg *arg)
+sigdwmblocks(const Arg *arg)
 {
 	union sigval sv;
+//	sv.sival_int = arg->i;
+	sv.sival_int = 0 | (dwmblockssig << 8) | arg->i;
 
-	if (!statussig)
+	if ((dwmblockspid = getstatusbarpid()) <= 0)
 		return;
-	sv.sival_int = arg->i;
-	if ((statuspid = getstatusbarpid()) <= 0)
+	if (!dwmblockssig)
 		return;
 
-	sigqueue(statuspid, SIGRTMIN+statussig, sv);
+    fprint_dbg(IS_DEBUG_ON,"dwmblockpid %d signal %d  ===== %d [arg->i %d]",dwmblockspid,dwmblockssig,sv.sival_int,arg->i );
+
+	sigqueue(dwmblockspid, SIGRTMIN+dwmblockssig, sv);
 }
 
 void
@@ -2182,6 +2179,9 @@ togglefloating(const Arg *arg)
 void
 togglesticky(const Arg *arg)
 {
+    // togglesticky
+    fprint_dbg(IS_DEBUG_ON,"togglesticky %d %d %f",arg->i,arg->ui,arg->f);
+
 	if (!selmon->sel)
 		return;
     setsticky(selmon->sel, !selmon->sel->issticky);
@@ -2508,21 +2508,21 @@ updatestatus(void)
 {
 	if (!gettextprop(root, XA_WM_NAME, stext, sizeof(stext))) {
 		strcpy(stext, "dwm-"VERSION);
-		statusw = TEXTW(stext) - lrpad + 2;
+		dwmblocks = TEXTW(stext) - lrpad + 2;
 	} else {
 		char *text, *s, ch;
 
-		statusw  = 0;
+		dwmblocks  = 0;
 		for (text = s = stext; *s; s++) {
 			if ((unsigned char)(*s) < ' ') {
 				ch = *s;
 				*s = '\0';
-				statusw += TEXTW(text) - lrpad;
+				dwmblocks += TEXTW(text) - lrpad;
 				*s = ch;
 				text = s + 1;
 			}
 		}
-		statusw += TEXTW(text) - lrpad + 2;
+		dwmblocks += TEXTW(text) - lrpad + 2;
 
 	}
 	drawbar(selmon);
@@ -2874,6 +2874,10 @@ load_xresources(void)
 int
 main(int argc, char *argv[])
 {
+	bool is_debug_on = true;
+
+    fprint_dbg(IS_DEBUG_ON,"DWM starting....");
+
 	if (argc == 2 && !strcmp("-v", argv[1]))
 		die("dwm-"VERSION);
 	else if (argc != 1)
@@ -2896,6 +2900,8 @@ main(int argc, char *argv[])
 	run();
 	cleanup();
 	XCloseDisplay(dpy);
+
+	fprint_dbg(IS_DEBUG_ON,"DWM exiting....");
 	return EXIT_SUCCESS;
 }
 void
