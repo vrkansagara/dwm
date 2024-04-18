@@ -7,7 +7,7 @@ export _JAVA_AWT_WM_NONREPARENTING=1
 WALLPAPERS="$HOME/git/vrkansagara/dwm/dwm/images"
 while true; do
   find ${WALLPAPERS} -type f -iname "*.jpg" | shuf -n 1 | xargs feh --bg-fill
-  sleep  5m
+  sleep  3m
 done&
 
 # Laptop/Desktop specific start up
@@ -50,8 +50,8 @@ cpulimit -b -l $((10 * $NUM_CPU_CORES)) -- compton
 
 # cpulimit -b -l $((10 * $NUM_CPU_CORES)) -- slack
 # cpulimit -b -l $((5 * $NUM_CPU_CORES)) -- guake
-# cpulimit -b -l $((5 * $NUM_CPU_CORES)) -- st
-# cpulimit -b -l $((5 * $NUM_CPU_CORES)) --  /usr/local/bin/dwmblocks  2>&1 >> /tmp/dwm.log
+cpulimit -b -l $((5 * $NUM_CPU_CORES)) -- st
+cpulimit -b -l $((5 * $NUM_CPU_CORES)) --  /usr/local/bin/dwmblocks  2>&1 >> /tmp/dwm.log
 
 # Lets priority with nice
 # nice -n 5 /snap/bin/phpstorm
@@ -68,7 +68,7 @@ export GPGKEY=8BA6E7ABD8112B3E
 killall gpg-agent ssh-agent
 
 # https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=747465
-/usr/lib/notification-daemon/notification-daemon &
+# /usr/lib/notification-daemon/notification-daemon &
 
 # X window lock start ( compile slock if not)
 # cpulimit -b -l $((5 * $NUM_CPU_CORES)) --  xautolock -time 2 -locker slock &

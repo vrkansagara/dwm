@@ -1,7 +1,7 @@
-#include <stdio.h>
 #include <stdarg.h>
-#include <time.h>
 #include <stdbool.h>
+#include <stdio.h>
+#include <time.h>
 
 #define IS_DEBUG_ON 1
 
@@ -24,14 +24,14 @@ void print_dbg(bool is_debug_on, const char * restrict format, ...) {
     // https://dev.mysql.com/doc/refman/5.7/en/date-and-time-functions.html
     sprintf(date_time, "%d-%02d-%02d %02d:%02d:%02d", tm.tm_year + 1900, tm.tm_mon + 1, tm.tm_mday, tm.tm_hour, tm.tm_min, tm.tm_sec);
 
-	if(is_debug_on != false) {
-		va_list args;
-		printf("\r\nDWM_DBG [%s] : ",date_time);
-		va_start(args, format);
-//		int ret = vprintf(format, args);
-		vprintf(format, args);
-		va_end(args);
-	}
+    if(is_debug_on != false) {
+        va_list args;
+        printf("\r\nDWM_DBG [%s] : ",date_time);
+        va_start(args, format);
+        //      int ret = vprintf(format, args);
+        vprintf(format, args);
+        va_end(args);
+    }
 }
 
 
@@ -45,27 +45,27 @@ void fprint_dbg(bool is_debug_on, const char * restrict format, ...) {
     // https://dev.mysql.com/doc/refman/5.7/en/date-and-time-functions.html
     sprintf(date_time, "%d-%02d-%02d %02d:%02d:%02d", tm.tm_year + 1900, tm.tm_mon + 1, tm.tm_mday, tm.tm_hour, tm.tm_min, tm.tm_sec);
 
-	if(is_debug_on) {
-		va_list args;
-		va_start(args, format);
+    if(is_debug_on) {
+        va_list args;
+        va_start(args, format);
 
-		FILE *logFile = fopen("/tmp/dwm.log", "a+");
+        FILE *logFile = fopen("/tmp/dwm.log", "a+");
         if (logFile == NULL)
         {
             printf("Error opening file!\n");
             exit(1);
         }
 
-//        fprintf(logFile,"\r\n=====");
+        //        fprintf(logFile,"\r\n=====");
         /* print timestamp first */
         fprintf(logFile,"\r\nDWM_DBG [%s] : ",date_time);
         /* print everything else */
         vfprintf (logFile, format, args);
-//        fprintf(logFile,"\r\nFile [%s] Line [ %d ] Function [%s] : ",__FILE__, __LINE__, __func__);
-//        fprintf(logFile,"\r\n=====\n\n");
+        //        fprintf(logFile,"\r\nFile [%s] Line [ %d ] Function [%s] : ",__FILE__, __LINE__, __func__);
+        //        fprintf(logFile,"\r\n=====\n\n");
 
         fclose(logFile);
-		// +++++++++++++++++++++
-		va_end(args);
-	}
+        // +++++++++++++++++++++
+        va_end(args);
+    }
 }

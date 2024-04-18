@@ -22,9 +22,6 @@ if [ "$(whoami)" != "root" ]; then
   SUDO=sudo
 fi
 
-
-
-
 GREEN=$'\e[0;32m'
 RED=$'\e[0;31m'
 NC=$'\e[0m'
@@ -185,15 +182,16 @@ function sxcs() {
   ${SUDO} make uninstall
   ${SUDO} make install
 }
+
 function dwmblocks() {
 
   # DWMBlock Specific
   cd $DWMBLOCKS_DIR
   apply_permission
   apply_patche $$DWMBLOCKS_DIR
+  ${SUDO} make uninstall
   ${SUDO} make clean
   ${SUDO} make
-  ${SUDO} make uninstall
   ${SUDO} make install
 
   #Lets kill all process which is executed for the dwmblocks
