@@ -137,7 +137,7 @@ function init_required() {
   # https://github.com/Ettercap/ettercap
 }
 function slock() {
-  # DWM Specific
+  # slock Specific
   cd $SLOCK_DIR
   apply_permission
   apply_patche $SLOCK_DIR
@@ -151,10 +151,20 @@ function dwm() {
   cd $DWM_DIR
   apply_permission
   apply_patche $DWM_DIR
+  ${SUDO} make uninstall
   ${SUDO} make clean
   ${SUDO} make
-  ${SUDO} make uninstall
   ${SUDO} make install
+
+  echo "$GREEN Start linking session file"
+  ${SUDO} rm -rf /usr/share/xsessions/vallabh.desktop
+  ${SUDO} ln -s $DWM_DIR/dwm.desktop /usr/share/xsessions/vallabh.desktop
+
+  ${SUDO} rm -rf $HOME/.xinitrc 
+  # $HOME/.xprofile
+  ${SUDO} ln -P $DWM_DIR/x11/xinitrc $HOME/.xinitrc
+  ${SUDO} chmod 744 $HOME/.xinitrc
+  ${SUDO} chmod u+s /usr/bin/xinit
 }
 function st() {
   # ST Specific
@@ -197,14 +207,7 @@ function dwmblocks() {
 
 }
 function stuff(){
-
-${SUDO} rm -rf /usr/share/xsessions/vallabh.desktop
-${SUDO} ln -P $DWM_DIR/dwm.desktop /usr/share/xsessions/vallabh.desktop
-${SUDO} rm -rf $HOME/.xinitrc $HOME/.xprofile
-${SUDO} ln -P $DWM_DIR/x11/xinitrc $HOME/.xinitrc
 ${SUDO} ln -P $DWM_DIR/x11/xprofile $HOME/.xprofile
-${SUDO} chmod 744 $HOME/.xinitrc
-${SUDO} chmod u+s /usr/bin/xinit
 
 # Copy conky configuration to home folder
 # ${SUDO} rm -rf $HOME/.config/conky
@@ -259,11 +262,20 @@ echo "HandlePowerKey=ignore" | sudo tee -a /etc/systemd/logind.conf
 #cyan      #2aa198
 #green     #859900
 
-#sudo apt-get install libx11-dev ................. for X11/Xlib.h
-#sudo apt-get install mesa-common-dev........ for GL/glx.h
-#sudo apt-get install libglu1-mesa-dev ..... for GL/glu.h
-#sudo apt-get install libxrandr-dev ........... for X11/extensions/Xrandr.h
-#sudo apt-get install libxi-dev ................... for X11/extensions/XInput.h
+# $ sudo apt-get install apt-file
+# $ sudo apt-file update
+# $ apt-file search "X11/extensions/Xinerama.h"
+# libxinerama-dev: /usr/include/X11/extensions/Xinerama.h
+
+# sudo apt-get install libx11-xcb-dev: ................. for X11/Xlib-xcb.h
+# sudo apt-get install libxinerama-dev ................. for X11/extensions/Xinerama.h
+# sudo apt-get install libx11-dev ................. for X11/Xlib.h
+# sudo apt install libxft-dev ................. for X11/Xft/Xft.h
+# sudo apt-get install mesa-common-dev........ for GL/glx.h
+# sudo apt-get install libglu1-mesa-dev ..... for GL/glu.h
+# sudo apt-get install libxrandr-dev ........... for X11/extensions/Xrandr.h
+# sudo apt-get install libxi-dev ................... for X11/extensions/XInput.h
+
 }
 
 function main(){

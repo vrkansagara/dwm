@@ -1,7 +1,7 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=Vallabh( DWM )
-Comment=Dynamic window manager by @VRKANSAGARA
+Comment=Dynamic window manager by @vrkansagara
 Exec=/bin/zsh -c "$HOME/.xinitrc"
 Icon=dwm
 Type=XSession

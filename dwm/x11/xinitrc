@@ -11,8 +11,8 @@ while true; do
 done&
 
 # Laptop/Desktop specific start up
-$HOME/.vim/src/Sh/MacBookAir/FunctionKey.sh
-$HOME/.vim/src/Sh/System/battery.sh &
+# $HOME/.vim/src/Sh/MacBookAir/FunctionKey.sh
+# $HOME/.vim/src/Sh/System/battery.sh &
 
 ### Start up program(s) ###
 
@@ -44,14 +44,14 @@ cpulimit -b -l $((10 * $NUM_CPU_CORES)) -- compton
 
 #Limit "teams" process to 20% CPU usage.
 # cpulimit -b -l $((20 * $NUM_CPU_CORES)) -- $HOME/Applications/postman/postman
-cpulimit -b -l $((20 * $NUM_CPU_CORES)) -- phpstorm
-cpulimit -b -l $((20 * $NUM_CPU_CORES)) -- firefox
-cpulimit -b -l $((20 * $NUM_CPU_CORES)) -- teams
+# cpulimit -b -l $((20 * $NUM_CPU_CORES)) -- phpstorm
+# cpulimit -b -l $((20 * $NUM_CPU_CORES)) -- firefox
+# cpulimit -b -l $((20 * $NUM_CPU_CORES)) -- teams
 
-cpulimit -b -l $((10 * $NUM_CPU_CORES)) -- slack
-cpulimit -b -l $((5 * $NUM_CPU_CORES)) -- guake
-cpulimit -b -l $((5 * $NUM_CPU_CORES)) -- st
-cpulimit -b -l $((5 * $NUM_CPU_CORES)) --  /usr/local/bin/dwmblocks  2>&1 >> /tmp/dwm.log
+# cpulimit -b -l $((10 * $NUM_CPU_CORES)) -- slack
+# cpulimit -b -l $((5 * $NUM_CPU_CORES)) -- guake
+# cpulimit -b -l $((5 * $NUM_CPU_CORES)) -- st
+# cpulimit -b -l $((5 * $NUM_CPU_CORES)) --  /usr/local/bin/dwmblocks  2>&1 >> /tmp/dwm.log
 
 # Lets priority with nice
 # nice -n 5 /snap/bin/phpstorm
