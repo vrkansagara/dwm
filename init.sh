@@ -23,9 +23,7 @@ if [ "$(whoami)" != "root" ]; then
 fi
 
 
-if [[ "$1" == "--install" ]]; then
-  init_required
-fi
+
 
 GREEN=$'\e[0;32m'
 RED=$'\e[0;31m'
@@ -267,21 +265,37 @@ echo "HandlePowerKey=ignore" | sudo tee -a /etc/systemd/logind.conf
 #sudo apt-get install libxrandr-dev ........... for X11/extensions/Xrandr.h
 #sudo apt-get install libxi-dev ................... for X11/extensions/XInput.h
 }
+
 function main(){
-  dwm $1 $2 $3
-  dwmblocks $1 $2 $3
-  st $1 $2 $3
-  sxcs $1 $2 $3
-  slock $1 $2 $3
+
+  if [[ "$1" == "--install" ]]; then
+    init_required
+  fi
+
+  if [[ "$1" == "--dwm" ]]; then
+   dwm $1 $2 $3
+  fi
+
+  if [[ "$1" == "--st" ]]; then
+   st $1 $2 $3
+  fi
+
+  if [[ "$1" == "--dwmblocks" ]]; then
+   dwmblocks $1 $2 $3
+  fi
+
+  if [[ "$1" == "--sxcs" ]]; then
+   sxcs $1 $2 $3
+  fi
+
+  if [[ "$1" == "--slock" ]]; then
+   slock $1 $2 $3
+  fi
 }
 
 # Call main function
-# main $1 $2 $3
+main $1 $2 $3
 
 echo "$GREEN Your simple window manager is configured and ready to use.........[DONE]. $NC"
 
 exit 0
-
-
-
-
