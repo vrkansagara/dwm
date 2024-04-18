@@ -1,12 +1,13 @@
 #!/usr/bin/env bash
 # set -eou pipefail
 #set -e # This setting is telling the script to exit on a command error.
+
 if [[ "$1" == "-v" ]]; then
   set -x # You refer to a noisy script.(Used to debugging)
 fi
 
 export DEBIAN_FRONTEND=noninteractive
-CURRENT_DATE=$(date "+%Y%m%d%H%M%S")
+export CURRENT_DATE=$(date "+%Y%m%d%H%M%S")
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" &>/dev/null && pwd)"
 
 DMENU_DIR="$SCRIPT_DIR/dmenu"
@@ -21,80 +22,11 @@ if [ "$(whoami)" != "root" ]; then
   SUDO=sudo
 fi
 
-apply_permission() {
-  echo "$RED Current directory is [$(pwd)]  $NC"
-  # Give current user permission to work with source
-  ${SUDO} chown $USER -Rf .
-  ${SUDO} chgrp $USER -Rf .
-}
 
-apply_patche() {
-  FILES="$1/patches/*.diff"
-  for f in $FILES; do
-    if [ -f "$f" ]; then
-      dos2unix $f
-      echo "$RED Applying path for the [ $f ] $NC"
-      patch --merge=diff3 -i $f
-      retCode=$$?
-      [[ $$retCode -gt 1 ]] && exit $$retCode
-      sleep 1
-    fi
-  done
-}
-
-apply_git_clean() {
-  echo "$RED Git clean apply to [$(pwd)]  $NC"
-  ${SUDO} git reset --hard HEAD
-  ${SUDO} git clean -fd
-  apply_permission
-}
-
-init_required() {
-  # Required sxcs
-  ${SUDO} apt install libxft-dev libxinerama-dev xcb libxcb-xkb-dev libx11-xcb-dev libxcb-res0-dev libxrandr-dev
-  sudo apt-get install --yes --no-install-recommends \
-    xcb libxcb-xkb-dev \
-    x11-xkb-utils libx11-xcb-dev \
-    libxkbcommon-x11-dev libxcb-res0-dev suckless-tools
-
-  ${SUDO} apt install make curl zsh feh libxcursor-dev xautolock screenkey libimlib2-dev flameshot cpulimit compton inxi
-
-  #Google noto font is not supporting so remove it so dwm,st or dwmblock should not crash
-  ${SUDO} apt remove --purge fonts-noto-color-emoji unifont
-  ${SUDO} apt install unifont
-
-  #${SUDO apt install  fonts-noto-color-emoji
-  #mkdir -p ~/.fonts/NotoEmoji
-  #curl -L 'https://raw.githubusercontent.com/googlefonts/noto-emoji/main/fonts/NotoColorEmoji.ttf' -o ~/.fonts/NotoEmoji/NotoColorEmoji.ttf
-  #fc-cache -fv
-  #  sudo fc-cache -fv
-  #  fc-list | grep -i emoji
-  #  echo "🩷💀🫱"
-
-  ${SUDO} sudo apt-get install --yes -q --no-install-recommends \
-  lightdm xorg openbox
-  ${SUDO} dpkg-reconfigure lightdm
-
-  ${SUDO} sudo apt-get install --yes -q --no-install-recommends \
-    patch build-essential \
-    feh cpulimit cputool screenkey htop zsh tree vlc git nmap elinks vim gimp \
-    arandr suckless-tools xautolock ranger \
-    alsa-utils mesa-utils pulseaudio pavucontrol \
-    notification-daemon notify-osd libnotify-dev libnotify-bin \
-    network-manager iputils-ping net-tools lsof whois \
-    hardinfo inxi lshw hddtemp net-tools ipmitool nvme-cli \
-    freeipmi-tools ipvsadm lvm2 mdadm lm-sensors smartmontools \
-    systemd-coredump fonts-quicksand apt-file
-  ${SUDO} apt-file update
-
-  # apt-file -x search '/hb.h$'
-  #apt-file -x search '/hb.h$' | grep '^lib[^:]*-dev'
-  #apt-file -x search '/hb.h$' | grep -o '^lib[^:]*-dev'
-  # https://github.com/Ettercap/ettercap
-}
 if [[ "$1" == "--install" ]]; then
   init_required
 fi
+
 GREEN=$'\e[0;32m'
 RED=$'\e[0;31m'
 NC=$'\e[0m'
@@ -138,9 +70,75 @@ NC=$'\e[0m'
 
 echo "$GREEN Script running in this directory [$SCRIPT_DIR]  $NC"
 
-apply_permission
+function apply_permission() {
+  echo "$RED Current directory is [$(pwd)]  $NC"
+  # Give current user permission to work with source
+  ${SUDO} chown $USER -Rf .
+  ${SUDO} chgrp $USER -Rf .
+}
+function apply_patche() {
+  FILES="$1/patches/*.diff"
+  for f in $FILES; do
+    if [ -f "$f" ]; then
+      dos2unix $f
+      echo "$RED Applying path for the [ $f ] $NC"
+      patch --merge=diff3 -i $f
+      retCode=$$?
+      [[ $$retCode -gt 1 ]] && exit $$retCode
+      sleep 1
+    fi
+  done
+}
+function apply_git_clean() {
+  echo "$RED Git clean apply to [$(pwd)]  $NC"
+  ${SUDO} git reset --hard HEAD
+  ${SUDO} git clean -fd
+  apply_permission
+}
+function init_required() {
+  # Required sxcs
+  ${SUDO} apt install libxft-dev libxinerama-dev xcb libxcb-xkb-dev libx11-xcb-dev libxcb-res0-dev libxrandr-dev apt-file
+  sudo apt-get install --yes --no-install-recommends \
+    xcb libxcb-xkb-dev \
+    x11-xkb-utils libx11-xcb-dev \
+    libxkbcommon-x11-dev libxcb-res0-dev suckless-tools
 
-slock() {
+  ${SUDO} apt install make curl zsh feh libxcursor-dev xautolock screenkey libimlib2-dev flameshot cpulimit compton inxi
+
+  #Google noto font is not supporting so remove it so dwm,st or dwmblock should not crash
+  ${SUDO} apt remove --purge fonts-noto-color-emoji unifont
+  ${SUDO} apt install unifont
+
+  #${SUDO apt install  fonts-noto-color-emoji
+  #mkdir -p ~/.fonts/NotoEmoji
+  #curl -L 'https://raw.githubusercontent.com/googlefonts/noto-emoji/main/fonts/NotoColorEmoji.ttf' -o ~/.fonts/NotoEmoji/NotoColorEmoji.ttf
+  #fc-cache -fv
+  #  sudo fc-cache -fv
+  #  fc-list | grep -i emoji
+  #  echo "🩷💀🫱"
+
+  ${SUDO} sudo apt-get install --yes -q --no-install-recommends \
+  lightdm xorg openbox
+  ${SUDO} dpkg-reconfigure lightdm
+
+  ${SUDO} sudo apt-get install --yes -q --no-install-recommends \
+    patch build-essential \
+    feh cpulimit cputool screenkey htop zsh tree vlc git nmap elinks vim gimp \
+    arandr suckless-tools xautolock ranger \
+    alsa-utils mesa-utils pulseaudio pavucontrol \
+    notification-daemon notify-osd libnotify-dev libnotify-bin \
+    network-manager iputils-ping net-tools lsof whois \
+    hardinfo inxi lshw hddtemp net-tools ipmitool nvme-cli \
+    freeipmi-tools ipvsadm lvm2 mdadm lm-sensors smartmontools \
+    systemd-coredump fonts-quicksand apt-file
+  ${SUDO} apt-file update
+
+  # apt-file -x search '/hb.h$'
+  #apt-file -x search '/hb.h$' | grep '^lib[^:]*-dev'
+  #apt-file -x search '/hb.h$' | grep -o '^lib[^:]*-dev'
+  # https://github.com/Ettercap/ettercap
+}
+function slock() {
   # DWM Specific
   cd $SLOCK_DIR
   apply_permission
@@ -150,8 +148,7 @@ slock() {
   ${SUDO} make uninstall
   ${SUDO} make install
 }
-
-dwm() {
+function dwm() {
   # DWM Specific
   cd $DWM_DIR
   apply_permission
@@ -161,8 +158,7 @@ dwm() {
   ${SUDO} make uninstall
   ${SUDO} make install
 }
-
-st() {
+function st() {
   # ST Specific
   cd $ST_DIR
   apply_permission
@@ -172,8 +168,7 @@ st() {
   ${SUDO} make uninstall
   ${SUDO} make install
 }
-
-sxcs() {
+function sxcs() {
   # sxcs Specific
   cd $SXCS_DIR
   apply_permission
@@ -182,8 +177,7 @@ sxcs() {
   ${SUDO} make uninstall
   ${SUDO} make install
 }
-
-dwmblocks() {
+function dwmblocks() {
 
   # DWMBlock Specific
   cd $DWMBLOCKS_DIR
@@ -204,7 +198,7 @@ dwmblocks() {
   pkill -RTMIN+10 dwmblocks
 
 }
-
+function stuff(){
 
 ${SUDO} rm -rf /usr/share/xsessions/vallabh.desktop
 ${SUDO} ln -P $DWM_DIR/dwm.desktop /usr/share/xsessions/vallabh.desktop
@@ -226,38 +220,29 @@ ${SUDO} chgrp $USER -Rf $HOME/.config
 
 ${SUDO} chsh -s $(which zsh) $USER
 ${SUDO} chmod u+s $HOME/.vim/bin/* $SCRIPT_DIR/bin/*
-
-# https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=747465
-# echo '[D-BUS Service]
-# Name=org.freedesktop.Notifications
-# Exec=/usr/lib/notification-daemon/notification-daemon'| ${SUDO} tee /usr/share/dbus-1/services/org.gnome.Notifications.service > /dev/null
-
-# Command line fuzzy finder called fzf
-if [ ! -d "$HOME/.fzf" ]; then
-  cd $HOME
-  git clone https://github.com/junegunn/fzf.git --depth=1 -b master .fzf
-  cd $HOME/.fzf
-  ${SUDO} git stash
-  git reset --hard HEAD
-  git clean -fd
-fi
-
-main(){
-  dwm $1 $2 $3
-  dwmblocks $1 $2 $3
-  st $1 $2 $3
-  sxcs $1 $2 $3
-  slock $1 $2 $3
 }
-main $1 $2 $3
+function cloneFzf(){
+  # https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=747465
+  # echo '[D-BUS Service]
+  # Name=org.freedesktop.Notifications
+  # Exec=/usr/lib/notification-daemon/notification-daemon'| ${SUDO} tee /usr/share/dbus-1/services/org.gnome.Notifications.service > /dev/null
+
+  # Command line fuzzy finder called fzf
+  if [ ! -d "$HOME/.fzf" ]; then
+    cd $HOME
+    git clone https://github.com/junegunn/fzf.git --depth=1 -b master .fzf
+    cd $HOME/.fzf
+    ${SUDO} git stash
+    git reset --hard HEAD
+    git clean -fd
+  fi
+
+}
+function otherStuff(){
 
 # Stop power button accidently stoped working. ( shutdown prevent )
 #sed -i 's/HandlePowerKey/HandlePowerKey=ignore/g' /etc/systemd/logind.conf
 echo "HandlePowerKey=ignore" | sudo tee -a /etc/systemd/logind.conf
-
-echo "$GREEN Your simple window manager is configured and ready to use.........[DONE]. $NC"
-
-exit 0
 
 # #base03    #002b36  background
 # #base02    #073642  background heightlight
@@ -281,5 +266,22 @@ exit 0
 #sudo apt-get install libglu1-mesa-dev ..... for GL/glu.h
 #sudo apt-get install libxrandr-dev ........... for X11/extensions/Xrandr.h
 #sudo apt-get install libxi-dev ................... for X11/extensions/XInput.h
+}
+function main(){
+  dwm $1 $2 $3
+  dwmblocks $1 $2 $3
+  st $1 $2 $3
+  sxcs $1 $2 $3
+  slock $1 $2 $3
+}
+
+# Call main function
+# main $1 $2 $3
+
+echo "$GREEN Your simple window manager is configured and ready to use.........[DONE]. $NC"
+
+exit 0
+
+
 
 
