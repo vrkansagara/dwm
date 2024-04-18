@@ -7,8 +7,9 @@ fi
 
 
 export DEBIAN_FRONTEND=noninteractive
-CURRENT_DATE=$(date "+%Y%m%d%H%M%S")
+export CURRENT_DATE=$(date "+%Y%m%d%H%M%S")
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" &>/dev/null && pwd)"
+
 GREEN=$'\e[0;32m'
 RED=$'\e[0;31m'
 NC=$'\e[0m'
