@@ -29,6 +29,7 @@ NC=$'\e[0m'
 # """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 #  Maintainer :- Vallabh Kansagara<vrkansagara@gmail.com> — @vrkansagara
 #  Note       :- DWM Window manager initial script
+# hard link using `ln -P` will not work in different partation ( try soft link )
 # """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 # systemd-coredump used for inspect core dump of process ( i.e.  coredumpctl info 10353 )
@@ -155,9 +156,10 @@ function dwm() {
 
   echo "$GREEN Start linking session file"
   ${SUDO} rm -rf /usr/share/xsessions/vallabh.desktop
-  ${SUDO} ln -s $DWM_DIR/dwm.desktop /usr/share/xsessions/vallabh.desktop
+  # ${SUDO} ln -s $DWM_DIR/dwm.desktop /usr/share/xsessions/vallabh.desktop
+  cat $DWM_DIR/dwm.desktop | ${SUDO} tee  /usr/share/xsessions/vallabh.desktop
 
-  ${SUDO} rm -rf $HOME/.xinitrc 
+  ${SUDO} rm -rf $HOME/.xinitrc
   # $HOME/.xprofile
   ${SUDO} ln -P $DWM_DIR/x11/xinitrc $HOME/.xinitrc
   ${SUDO} chmod 744 $HOME/.xinitrc
@@ -195,13 +197,14 @@ function dwmblocks() {
   ${SUDO} make install
 
   #Lets kill all process which is executed for the dwmblocks
-  ps -ef | grep "dwmblocks" | grep -v grep | awk "{print \$2}" | xargs --no-run-if-empty sudo kill -9
+  ps -ef | grep "dwmblocks" | grep -v grep | awk "{print \$2}" | xargs
+  --no-run-if-empty ${SUDO} kill -9
 
   # reset statusbar
   xsetroot -name ""
 
   /usr/local/bin/dwmblocks 2>&1 >> /tmp/dwm.log &
-  pkill -RTMIN+10 dwmblocks
+  ${SUDO} pkill -RTMIN+10 dwmblocks
 
 }
 function stuff(){

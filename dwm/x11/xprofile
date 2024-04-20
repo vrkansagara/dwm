@@ -1,3 +1,5 @@
 # export some local variables.
 export www="cd $HOME/www"
-export git="cd $HOME/git"
+export gitw="cd $HOME/git"
+export st="/usr/local/bin/st"
+export tt="i am from ~/.xprofile"

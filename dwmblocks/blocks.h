@@ -20,7 +20,7 @@ static const Block blocks[] = {
     // {"", "~/.vim/bin/statusbar/sb-internet",5,7},
     // {"", "~/.vim/bin/statusbar/sb-battery",5,8},
     // {"", "~/.vim/bin/statusbar/sb-memory",5,9},
-    {"", "~/.vim/bin/vtest",                                            1,      10},
+    {"", "~/.vim/bin/dwmblocks",                                            1,      10},
 };
 
 //sets delimeter between status commands. NULL character ('\0') means no delimeter.

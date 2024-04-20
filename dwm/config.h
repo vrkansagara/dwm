@@ -27,8 +27,9 @@
 #define TERMINAL_PATH "/bin/zsh"
 
 // Brightness controll using (xdotool also useful)
-static const char *brightup[]       = { "/home/vallabh/.vim/bin/brightness", "up", "10000", NULL };
-static const char *brightdown[]     = { "/home/vallabh/.vim/bin/brightness", "down", "1000", NULL };
+// @TODO @FIXME brightness up/down require full home directory path
+static const char *brightup[]       = { "/home/vrkansagara/.vim/bin/brightness", "up", "100", NULL };
+static const char *brightdown[]     = { "/home/vrkansagara/.vim/bin/brightness", "down", "100", NULL };
 
 // Volume specific settings (xdotool also useful)
 static const char *upvol[]   = { "/usr/bin/pactl", "set-sink-volume", "@DEFAULT_SINK@", "+1%",     NULL };
@@ -328,7 +329,7 @@ static const Key keys[] = {
     TAGKEYS(                        XK_8,                      7)
     TAGKEYS(                        XK_9,                      8)
 
-    /* Vallabh @START */
+    /* vrkansagara @START */
 
     // Patches(s) custom key(s)
 
@@ -393,7 +394,7 @@ static const Key keys[] = {
     /* close all session of current $USER , use startx */
     { MODKEY|ShiftMask|ControlMask, XK_q,      spawn,          SHCMD(TERMINAL " pkill -u $USER -9")},
 
-    /* Vallabh @END */
+    /* vrkansagara @END */
 };
 
 /* button definitions */
