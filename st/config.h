@@ -1,4 +1,6 @@
-/* See LICENSE file for copyright and license details. */
+/**
+* See LICENSE file for copyright and license details.
+*/
 
 /*
  * appearance
@@ -12,10 +14,10 @@
 static char *font = "Fira Code:size=10:antialias=true:autohint=true";
 /* Spare fonts */
 static char *font2[] = {
-"Fira Code:size=10:antialias=true:autohint=true"
-//"NotoColorEmoji:pixelsize=10:antialias=true:autohint=true"
-/*	"Inconsolata for Powerline:pixelsize=12:antialias=true:autohint=true", */
-/*	"Hack Nerd Font Mono:pixelsize=11:antialias=true:autohint=true", */
+	"Fira Code:size=10:antialias=true:autohint=true"
+	//"NotoColorEmoji:pixelsize=10:antialias=true:autohint=true"
+	/*	"Inconsolata for Powerline:pixelsize=12:antialias=true:autohint=true", */
+	/*	"Hack Nerd Font Mono:pixelsize=11:antialias=true:autohint=true", */
 };
 
 static int borderpx = 2;
@@ -160,7 +162,7 @@ unsigned int background = 258;
  * 6: Bar ("|")
  * 7: Snowman ("☃")
  */
-static unsigned int cursorshape = 2;
+static unsigned int cursorshape = 6;
 
 /*
  * Default columns and rows numbers
@@ -194,7 +196,7 @@ static uint forcemousemod = ShiftMask;
  */
 ResourcePref resources[] = {
 		{ "font",         STRING,  &font2[0] },
-{ "fontalt0",     STRING,  &font2[0] },
+		{ "fontalt0",     STRING,  &font2[0] },
 		{ "color0",       STRING,  &colorname[0] },
 		{ "color1",       STRING,  &colorname[1] },
 		{ "color2",       STRING,  &colorname[2] },
@@ -224,8 +226,8 @@ ResourcePref resources[] = {
 		{ "borderpx",     INTEGER, &borderpx },
 		{ "cwscale",      FLOAT,   &cwscale },
 		{ "chscale",      FLOAT,   &chscale },
-{ "alpha",        FLOAT,   &alpha },
-{ "alphaOffset",  FLOAT,   &alphaOffset },
+		{ "alpha",        FLOAT,   &alpha },
+		{ "alphaOffset",  FLOAT,   &alphaOffset },
 };
 
 
@@ -243,6 +245,16 @@ static MouseShortcut mshortcuts[] = {
 };
 
 /* Internal keyboard shortcuts. */
+/* Mask        | Value | Key */
+/* ------------+-------+------------ */
+/* LockMask    |     2 | Caps Lock */
+/* ShiftMask   |     1 | Shift */
+/* ControlMask |     4 | Ctrl */
+/* Mod4Mask    |    64 | Windows */
+/* Mod1Mask    |     8 | Alt */
+/* Mod2Mask    |    16 | Num Lock */
+/* Mod3Mask    |    32 | Scroll Lock */
+/* Mod5Mask    |   128 | ??? */
 #define MODKEY Mod1Mask
 #define TERMMOD (ControlMask|ShiftMask)
 
