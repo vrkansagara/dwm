@@ -47,7 +47,7 @@ NC=$'\e[0m'
 #  linux-image-$(uname -r | sed 's,[^-]*-[^-]*-,,') linux-headers-$(uname -r | sed 's,[^-]*-[^-]*-,,') at-spi2-core firmware-linux-nonfree \
 #  broadcom-sta-dkms at-spi2-core
 
-# pulseaudio --start --log-target=syslogk
+# pulseaudio --start --log-target=syslog
 
 # scrot = screen capture tool
 # compton = dwm/st tranparency with x11
@@ -139,9 +139,9 @@ function slock() {
   cd $SLOCK_DIR
   apply_permission
   apply_patche $SLOCK_DIR
+  ${SUDO} make uninstall
   ${SUDO} make clean
   ${SUDO} make
-  ${SUDO} make uninstall
   ${SUDO} make install
 }
 function dwm() {
@@ -170,18 +170,18 @@ function st() {
   cd $ST_DIR
   apply_permission
   apply_patche $ST_DIR
+  ${SUDO} make uninstall
   ${SUDO} make clean
   ${SUDO} make
-  ${SUDO} make uninstall
   ${SUDO} make install
 }
 function sxcs() {
   # sxcs Specific
   cd $SXCS_DIR
   apply_permission
+  ${SUDO} make uninstall
   ${SUDO} make clean
   ${SUDO} make
-  ${SUDO} make uninstall
   ${SUDO} make install
 }
 
@@ -208,7 +208,8 @@ function dwmblocks() {
 
 }
 function stuff(){
-${SUDO} ln -P $DWM_DIR/x11/xprofile $HOME/.xprofile
+unlink $HOME/.xprofile
+${SUDO} ln -s $DWM_DIR/x11/xprofile $HOME/.xprofile
 
 # Copy conky configuration to home folder
 # ${SUDO} rm -rf $HOME/.config/conky
@@ -279,6 +280,40 @@ echo "HandlePowerKey=ignore" | sudo tee -a /etc/systemd/logind.conf
 
 }
 
+
+function fixCommonIssues(){
+
+    if [[ "$2" == "wifi" ]]; then
+       # Quick solution for the wifi
+       # https://support.system76.com/articles/audio/
+       # @TODO @FIXME , List all the interface except lo and make for each to down,up and dhclient so all interface up and running
+       sudo apt install rfkill  network-manager
+       sudo rfkill unblock all
+       sudo nmcli radio
+
+       sudo ip link set wlp2s0 down
+       sudo ip link set wlp2s0 up
+       sudo dhclient wlp2s0
+
+      sudo ip link set enp0s31f6 down
+      sudo ip link set enp0s31f6 up
+      sudo dhclient enp0s31f6
+
+    fi
+
+    if [[ "$2" == "audio" ]]; then
+      # Quick solution for the sound card
+      #lspci -nnk | grep -A2 Audio
+      #pulseaudio --start --log-target=syslog
+      sudo apt install  pavucontrol pulseaudio
+      rm -rf ~/.config/pulse/*
+      rm -rf ~/.local/state/wireplumber/*
+      pulseaudio --kill
+      pulseaudio --start --log-target=syslog
+  fi
+
+}
+
 function main(){
 
   if [[ "$1" == "--install" ]]; then
@@ -303,6 +338,10 @@ function main(){
 
   if [[ "$1" == "--slock" ]]; then
    slock $1 $2 $3
+  fi
+
+  if [[ "$1" == "--issue-fix" ]]; then
+   fixCommonIssues $1 $2
   fi
 }
 
