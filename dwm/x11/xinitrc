@@ -1,14 +1,4 @@
-# Make sure this is before the 'exec' command or it won't be sourced.
-[ -f "$HOME/.xprofile" ] && . "$HOME/.xprofile"
-
 export _JAVA_AWT_WM_NONREPARENTING=1
-
-# set baground
-WALLPAPERS="$HOME/git/vrkansagara/dwm/dwm/images"
-while true; do
-  find ${WALLPAPERS} -type f -iname "*.jpg" | shuf -n 1 | xargs feh --bg-fill
-  sleep  3m
-done&
 
 # Laptop/Desktop specific start up
 # $HOME/.vim/src/Sh/MacBookAir/FunctionKey.sh
@@ -28,28 +18,39 @@ done&
 #than half of the available power."
 NUM_CPU_CORES=$(nproc --all) #Automatically detects your system's number of CPU cores.
 
-# st , dwm transperent
+
+#evaluate the SSH agent , make sure before xprofile
+export GPGKEY=8BA6E7ABD8112B3E
+killall gpg-agent ssh-agent
+
+# Make sure this is before the 'exec' command or it won't be sourced.
+# Let make sure .profile use above defined variables
+[ -f "$HOME/.xprofile" ] && . "$HOME/.xprofile"
+
+# st , dwm, guake transparent
 cpulimit -b -l $((10 * $NUM_CPU_CORES)) -- compton
+
 # ~/Hubstaff/HubstaffClient.bin.x86_64 &
 # ~/Applications/workcomposer-linux-installer.AppImage &
 # keepassxc &
 # ringcentral &
 # remmina &
 # anydesk &
-# /usr/local/bin/st -c vrkansagara-ide -n vrkansagara-ide -e vim $HOME/www &
+/usr/local/bin/st -c vrkansagara-ide -n vrkansagara-ide -e vim $HOME/www &
 # /usr/local/bin/st -c firle-explorer -n firle-explorer -e ranger $HOME/www &
 # skype &
 # thunderbird &
 # clion &
 
 #Limit "teams" process to 20% CPU usage.
-# cpulimit -b -l $((20 * $NUM_CPU_CORES)) -- $HOME/Applications/postman/postman
+cpulimit -b -l $((20 * $NUM_CPU_CORES)) -- $HOME/Applications/Postman/Postman
 # cpulimit -b -l $((20 * $NUM_CPU_CORES)) -- phpstorm
+cpulimit -b -l $((20 * $NUM_CPU_CORES)) -- google-chrome
 # cpulimit -b -l $((20 * $NUM_CPU_CORES)) -- firefox
 # cpulimit -b -l $((20 * $NUM_CPU_CORES)) -- teams
 
 # cpulimit -b -l $((10 * $NUM_CPU_CORES)) -- slack
-# cpulimit -b -l $((5 * $NUM_CPU_CORES)) -- guake
+cpulimit -b -l $((5 * $NUM_CPU_CORES)) -- guake
 cpulimit -b -l $((5 * $NUM_CPU_CORES)) -- st
 cpulimit -b -l $((5 * $NUM_CPU_CORES)) --  /usr/local/bin/dwmblocks  2>&1 >> /tmp/dwm.log
 
@@ -63,10 +64,6 @@ cpulimit -b -l $((5 * $NUM_CPU_CORES)) --  /usr/local/bin/dwmblocks  2>&1 >> /tm
 #     sleep 1
 # done&
 
-#evaluate the SSH agent
-export GPGKEY=8BA6E7ABD8112B3E
-killall gpg-agent ssh-agent
-
 # https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=747465
 # /usr/lib/notification-daemon/notification-daemon &
 
@@ -79,7 +76,19 @@ mkdir -p $HOME/tmp
 mv .bash* $HOME/old
 mv $HOME/.cache/dmenu_run $HOME/old
 mv .zcompdump-* $HOME/old
-bash ~/.screenlayout/home.sh
+
+# Lets load arander configuration for the multiple window ( extended monitor(s))
+[ -f "$HOME/.screenlayout/home.sh" ] && . "$HOME/.screenlayout/home.sh"
+#[ -f "$HOME/.screenlayout/single.sh" ] && . "$HOME/.screenlayout/single.sh"
+
+# set baground
+WALLPAPERS="$HOME/git/vrkansagara/dwm/dwm/images"
+while true; do
+    find ${WALLPAPERS} -type f -iname "*.jpg" | shuf -n 1 | xargs feh --bg-fill
+    # Lets wait for next image to load
+    sleep  3m
+done&
+
 
 # Start Window Manager (Always last line)
 # Log stderr to a file

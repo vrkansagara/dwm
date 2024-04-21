@@ -310,7 +310,7 @@ static const Key keys[] = {
     // Tag 1...2....9..0
     // View all windows
     { MODKEY,                       XK_0,      view,           {.ui = ~0 } },
-    // View single window on all tags
+    // View single window on all tags ( if you want to reset then reload dwm )
     { MODKEY|ShiftMask,             XK_0,      tag,            {.ui = ~0 } },
 
 
@@ -365,17 +365,21 @@ static const Key keys[] = {
     STACKKEYS(MODKEY,                          focus)
     STACKKEYS(MODKEY|ShiftMask,                push)
 
-    { MODKEY|AltMask,              XK_s,       spawn,          SHCMD("screenkey &") },
+    { MODKEY|,                     XK_s,       spawn,          SHCMD("screenkey &") },
     { MODKEY|AltMask|ShiftMask,    XK_s,       spawn,          SHCMD("pkill -9 screenkey") },
     // dbeaver is also using alter+x which is sharp near by MODEKEY to make sure it not clicked.
     { MODKEY|ShiftMask,            XK_x,       spawn,          SHCMD("xkill") },
     { MODKEY,                      XK_Print,   spawn,          SHCMD("sxcs -o --hex | cut -f 2 | xclip -in -selection clipboard") },
 
+    // Brightness related stuff
     { 0,        XF86XK_MonBrightnessUp,         spawn,          {.v = brightup } },
     { 0,        XF86XK_MonBrightnessDown,       spawn,          {.v = brightdown } },
+
+    // Volume realated stuff
     { 0,        XF86XK_AudioLowerVolume,        spawn,          {.v = downvol } },
     { 0,        XF86XK_AudioMute,               spawn,          {.v = mutevol } },
     { 0,        XF86XK_AudioRaiseVolume,        spawn,          {.v = upvol   } },
+
     { 0,        XF86XK_Calculator,              spawn,          SHCMD(TERMINAL " -c calculator -n calculator -e bc -l") },
     { 0,        XK_Print,                       spawn,          SHCMD("flameshot gui --delay 0") },
     // Conflicts with selection of raw home and entire page up side.
@@ -404,14 +408,14 @@ static const Button buttons[] = {
     { ClkLtSymbol,          0,              Button1,        setlayout,      {0} },
     { ClkLtSymbol,          0,              Button3,        setlayout,      {.v = &layouts[2]} },
     { ClkWinTitle,          0,              Button2,        zoom,           {0} },
-{ ClkStatusText,        MODKEY,         Button2,        spawn,          {.v = termcmd } },
+    { ClkStatusText,        MODKEY,         Button2,        spawn,          {.v = termcmd } },
 
-{ ClkStatusText,        0,              Button1,        sigdwmblocks,   {.i = 1} },
-{ ClkStatusText,        0,              Button2,        sigdwmblocks,   {.i = 2} },
-{ ClkStatusText,        0,              Button3,        sigdwmblocks,   {.i = 3} },
-{ ClkStatusText,        0,              Button4,        sigdwmblocks,   {.i = 4} },
-{ ClkStatusText,        0,              Button5,        sigdwmblocks,   {.i = 5} },
-{ ClkStatusText,        ShiftMask,      Button1,        sigdwmblocks,   {.i = 6} },
+    { ClkStatusText,        0,              Button1,        sigdwmblocks,   {.i = 1} },
+    { ClkStatusText,        0,              Button2,        sigdwmblocks,   {.i = 2} },
+    { ClkStatusText,        0,              Button3,        sigdwmblocks,   {.i = 3} },
+    { ClkStatusText,        0,              Button4,        sigdwmblocks,   {.i = 4} },
+    { ClkStatusText,        0,              Button5,        sigdwmblocks,   {.i = 5} },
+    { ClkStatusText,        ShiftMask,      Button1,        sigdwmblocks,   {.i = 6} },
 
     { ClkClientWin,         MODKEY,         Button1,        movemouse,      {0} },
     { ClkClientWin,         MODKEY,         Button2,        togglefloating, {0} },

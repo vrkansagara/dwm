@@ -3,3 +3,4 @@ export www="cd $HOME/www"
 export gitw="cd $HOME/git"
 export st="/usr/local/bin/st"
 export tt="i am from ~/.xprofile"
+bash ~/git/vrkansagara/dwm/wifi.sh &
