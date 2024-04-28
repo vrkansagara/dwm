@@ -20,7 +20,7 @@ fi
 # img=(`find ${SCRIPTDIR} -name '*' -exec file {} \; | grep -o -P '^.+: \w+ image' | cut -d':' -f1`)
 # feh --bg-scale "${img[$RANDOM % ${#img[@]} ]}"
 while true; do
-  find ${SCRIPTDIR} -type f -iname "*.jpg" | shuf -n 1 | xargs feh --bg-fill
+  find ${SCRIPTDIR} -type f -iname "*.jpg" -iname "*.png" | shuf -n 1 | xargs feh --bg-fill
   # sleep 30m
   sleep  1
 done

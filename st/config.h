@@ -11,10 +11,10 @@
  * fc-list --format="%{family[0]}\n" | sort | uniq  | grep -i 'quick\|Liberation\|Fira\|Hack'
  */
 //static char *font = "Liberation Mono:pixelsize=12:antialias=true:autohint=true";
-static char *font = "Fira Code:size=10:antialias=true:autohint=true";
+static char *font = "Fira Code:size=12:antialias=true:autohint=true";
 /* Spare fonts */
 static char *font2[] = {
-	"Fira Code:size=10:antialias=true:autohint=true"
+	"Fira Code:size=12:antialias=true:autohint=true"
 	//"NotoColorEmoji:pixelsize=10:antialias=true:autohint=true"
 	/*	"Inconsolata for Powerline:pixelsize=12:antialias=true:autohint=true", */
 	/*	"Hack Nerd Font Mono:pixelsize=11:antialias=true:autohint=true", */

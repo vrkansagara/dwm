@@ -8,6 +8,7 @@
 
 /* Constants */
 #define TERMINAL "st"
+#define TERMINAL_CLASS "St"
 #define EDITOR "vim"
 #define MONITOR_DEFAULT 0
 #define MONITOR_RIGHT 1
@@ -54,9 +55,9 @@ static int swallowfloating          = 1;        /* 1 means swallow floating wind
 
 //static char *fonts[]          = { "monospace:size=10", "NotoColorEmoji:pixelsize=10:antialias=true:autohint=true"  };
 static const char *fonts[]          = {
-    "Fira Code Medium:size=10:antialias=true:autohint=true",
+    "Fira Code Medium:size=12:antialias=true:autohint=true",
 //    "NotoColorEmoji:pixelsize=10:antialias=true:autohint=true:color=true",
-    "monospace:size=10",
+    "monospace:size=12",
 };
 
 //static const char dmenufont[]       = "monospace:size=10";
@@ -111,7 +112,7 @@ static const Rule rules[] = {
     {   "thunderbird",      "Mail",             NULL,       TAG_GENERAL,       0, 0,0,    MONITOR_DEFAULT},
 
     // Tag - 2 (Terminal way on demand )
-    {   "St",      "st",                                        NULL,       1<<1,   0,  1,  0,  MONITOR_DEFAULT},
+    {   TERMINAL_CLASS,     TERMINAL,                                        NULL,       1<<1,   0,  1,  0,  MONITOR_DEFAULT},
 
     // Tag - 3 (Socializing / Office on the way)
     {   "Skype",      "skype",                                  NULL,       TAG_MESSAGING,       0,  0,  0,    MONITOR_DEFAULT},
@@ -144,8 +145,8 @@ static const Rule rules[] = {
 
 
     // Tag - 8 ( Heavy on memory )
-    {   "jetbrains-phpstorm",       "jetbrains-phpstorm",    NULL,       TAG_DEVELOPMENT,  0,      0,0,MONITOR_RIGHT},
-    {   "code",                     "code",                  NULL,       TAG_DEVELOPMENT,  0,    0,0,MONITOR_RIGHT},
+    {   "jetbrains-phpstorm",       "jetbrains-phpstorm",    NULL,       TAG_DEVELOPMENT,  0,      0,0,MONITOR_DEFAULT},
+    {   "code",                     "code",                  NULL,       TAG_DEVELOPMENT,  0,    0,0,MONITOR_DEFAULT},
 
 
     // Tag - 9 ( Things on WWW )
@@ -345,10 +346,10 @@ static const Key keys[] = {
     { MODKEY|ShiftMask|ControlMask,                         XK_j,       incrgaps,       {.i = +3 } },
     { MODKEY|ShiftMask|ControlMask,                         XK_k,       incrgaps,       {.i = -3 } },
     { MODKEY|ShiftMask|ControlMask,                         XK_k,       incrigaps,       {.i = -3 } },
-//	{ MODKEY|Mod4Mask|ShiftMask,    XK_h,      incrogaps,      {.i = +1 } },
-//	{ MODKEY|Mod4Mask|ShiftMask,    XK_l,      incrogaps,      {.i = -1 } },
-//	{ MODKEY|Mod4Mask|ControlMask,  XK_h,      incrigaps,      {.i = +1 } },
-//	{ MODKEY|Mod4Mask|ControlMask,  XK_l,      incrigaps,      {.i = -1 } },
+//  { MODKEY|Mod4Mask|ShiftMask,    XK_h,      incrogaps,      {.i = +1 } },
+//  { MODKEY|Mod4Mask|ShiftMask,    XK_l,      incrogaps,      {.i = -1 } },
+//  { MODKEY|Mod4Mask|ControlMask,  XK_h,      incrigaps,      {.i = +1 } },
+//  { MODKEY|Mod4Mask|ControlMask,  XK_l,      incrigaps,      {.i = -1 } },
     { MODKEY|ShiftMask|ControlMask,                         XK_0,       defaultgaps,    {0}        },
     { MODKEY|ShiftMask|ControlMask|AltMask,                 XK_0,       togglegaps,     {0} },
 // { MODKEY,                       XK_y,      incrihgaps,     {.i = +1 } },
@@ -365,8 +366,13 @@ static const Key keys[] = {
     STACKKEYS(MODKEY,                          focus)
     STACKKEYS(MODKEY|ShiftMask,                push)
 
-    { MODKEY|,                     XK_s,       spawn,          SHCMD("screenkey &") },
+    // GTK Clipboard manager
+    { ControlMask|AltMask,                     XK_h,  spawn, SHCMD("diodon") },
+
+    // Screen key for the keyboard
+    { MODKEY|AltMask,                     XK_s,       spawn,          SHCMD("screenkey &") },
     { MODKEY|AltMask|ShiftMask,    XK_s,       spawn,          SHCMD("pkill -9 screenkey") },
+
     // dbeaver is also using alter+x which is sharp near by MODEKEY to make sure it not clicked.
     { MODKEY|ShiftMask,            XK_x,       spawn,          SHCMD("xkill") },
     { MODKEY,                      XK_Print,   spawn,          SHCMD("sxcs -o --hex | cut -f 2 | xclip -in -selection clipboard") },

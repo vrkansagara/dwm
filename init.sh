@@ -99,7 +99,7 @@ function init_required() {
     x11-xkb-utils libx11-xcb-dev \
     libxkbcommon-x11-dev libxcb-res0-dev suckless-tools
 
-  ${SUDO} apt install make curl zsh feh libxcursor-dev xautolock screenkey libimlib2-dev flameshot cpulimit compton inxi
+  ${SUDO} apt install make curl zsh feh libxcursor-dev xautolock screenkey diodon libimlib2-dev flameshot cpulimit compton inxi
 
   #Google noto font is not supporting so remove it so dwm,st or dwmblock should not crash
   ${SUDO} apt remove --purge fonts-noto-color-emoji unifont
@@ -197,8 +197,7 @@ function dwmblocks() {
   ${SUDO} make install
 
   #Lets kill all process which is executed for the dwmblocks
-  ps -ef | grep "dwmblocks" | grep -v grep | awk "{print \$2}" | xargs
-  --no-run-if-empty ${SUDO} kill -9
+  ps -ef | grep "dwmblocks" | grep -v grep | awk "{print \$2}" | xargs --no-run-if-empty ${SUDO} kill -9
 
   # reset statusbar
   xsetroot -name ""
@@ -225,11 +224,6 @@ ${SUDO} chsh -s $(which zsh) $USER
 ${SUDO} chmod u+s $HOME/.vim/bin/* $SCRIPT_DIR/bin/*
 }
 function cloneFzf(){
-  # https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=747465
-  # echo '[D-BUS Service]
-  # Name=org.freedesktop.Notifications
-  # Exec=/usr/lib/notification-daemon/notification-daemon'| ${SUDO} tee /usr/share/dbus-1/services/org.gnome.Notifications.service > /dev/null
-
   # Command line fuzzy finder called fzf
   if [ ! -d "$HOME/.fzf" ]; then
     cd $HOME
@@ -287,18 +281,48 @@ function fixCommonIssues(){
        # Quick solution for the wifi
        # https://support.system76.com/articles/audio/
        # @TODO @FIXME , List all the interface except lo and make for each to down,up and dhclient so all interface up and running
-       sudo apt install rfkill  network-manager
-       sudo rfkill unblock all
-       sudo nmcli radio
+       ${SUDO} apt install rfkill  network-manager
+       ${SUDO} rfkill unblock all
+       ${SUDO} nmcli radio
 
-       sudo ip link set wlp2s0 down
-       sudo ip link set wlp2s0 up
-       sudo dhclient wlp2s0
+       ${SUDO} ip link set wlp2s0 down
+       ${SUDO} ip link set wlp2s0 up
+       ${SUDO} ip link set enp0s31f6 down
+       ${SUDO} dhclient wlp2s0
+       ping google.com
+    fi
 
-      sudo ip link set enp0s31f6 down
-      sudo ip link set enp0s31f6 up
-      sudo dhclient enp0s31f6
+    if [[ "$2" == "lan" ]]; then
+       # Quick solution for the wifi
+       # https://support.system76.com/articles/audio/
+       # @TODO @FIXME , List all the interface except lo and make for each to down,up and dhclient so all interface up and running
+        ${SUDO} apt install rfkill  network-manager
+        ${SUDO} rfkill unblock all
 
+        ${SUDO} ip link set enp0s31f6 down
+        ${SUDO} ip link set enp0s31f6 up
+        ${SUDO} ip link set wlp2s0 down
+
+        ${SUDO} dhclient enp0s31f6
+        ping google.com
+    fi
+
+    if [[ "$2" == "bluetooth" ]]; then
+      ${SUDO} systemctl enable bluetooth
+      ${SUDO} systemctl start bluetooth
+      ${SUDO} systemctl restart bluetooth
+      ${SUDO} rfkill unblock all
+      ${SUDO} bluetoothctl list
+      ${SUDO} usermod -G bluetooth -a $USER
+#      bluetoothctl scan on
+#      bluetoothctl pair D0:49:7C:8C:1E:9E
+#      bluetoothctl connect D0:49:7C:8C:1E:9E
+#bluetoothctl trust D0:49:7C:8C:1E:9E
+#bluetoothctl untrust D0:49:7C:8C:1E:9E
+#bluetoothctl disconnect D0:49:7C:8C:1E:9E
+#bluetoothctl block D0:49:7C:8C:1E:9E
+#bluetoothctl remove D0:49:7C:8C:1E:9E
+      echo "$GREEN Bluetooth issue fixing.........[DONE]. $NC"
     fi
 
     if [[ "$2" == "audio" ]]; then
@@ -306,10 +330,20 @@ function fixCommonIssues(){
       #lspci -nnk | grep -A2 Audio
       #pulseaudio --start --log-target=syslog
       sudo apt install  pavucontrol pulseaudio
-      rm -rf ~/.config/pulse/*
-      rm -rf ~/.local/state/wireplumber/*
-      pulseaudio --kill
-      pulseaudio --start --log-target=syslog
+      sudo rm -rfv ~/.config/pulse/*
+      sudo rm -rfv ~/.local/state/wireplumber/*
+      pulseaudio --kill && pulseaudio --start --log-target=syslog
+      amixer set Master mute
+      amixer set Master unmute
+  fi
+
+   if [[ "$2" == "notification" ]]; then
+#   https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=747465
+     echo '[D-BUS Service]
+     Name=org.freedesktop.Notifications
+     Exec=/usr/lib/notification-daemon/notification-daemon'| ${SUDO} tee /usr/share/dbus-1/services/org.gnome.Notifications.service > /dev/null
+
+     /usr/lib/notification-daemon/notification-daemon &
   fi
 
 }

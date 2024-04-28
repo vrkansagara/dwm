@@ -1,8 +1,10 @@
+# This dwm does not require any session manager so you can remove from this
+# output (update-alternatives --config x-session-manager)
 export _JAVA_AWT_WM_NONREPARENTING=1
 
 # Laptop/Desktop specific start up
 # $HOME/.vim/src/Sh/MacBookAir/FunctionKey.sh
-# $HOME/.vim/src/Sh/System/battery.sh &
+$HOME/.vim/src/Sh/System/battery.sh &
 
 ### Start up program(s) ###
 
@@ -42,17 +44,23 @@ cpulimit -b -l $((10 * $NUM_CPU_CORES)) -- compton
 # thunderbird &
 # clion &
 
+# cpulimit -b -l $((5* $NUM_CPU_CORES)) -- slack
+cpulimit -b -l $((5 * $NUM_CPU_CORES)) -- guake 
+cpulimit -b -l $((5 * $NUM_CPU_CORES)) -- /usr/local/bin/st 2>&1 >> /tmp/dwm.log
+cpulimit -b -l $((5 * $NUM_CPU_CORES)) -- /usr/local/bin/dwmblocks  2>&1 >> /tmp/dwm.log
+cpulimit -b -l $((5 * $NUM_CPU_CORES)) -- thunar &
+cpulimit -b -l $((5 * $NUM_CPU_CORES)) -- 1password &
+# X window lock start ( compile slock if not)
+# cpulimit -b -l $((5 * $NUM_CPU_CORES)) --  xautolock -time 2 -locker slock 2>&1 >> /tmp/dwm.lob
+
 #Limit "teams" process to 20% CPU usage.
 cpulimit -b -l $((20 * $NUM_CPU_CORES)) -- $HOME/Applications/Postman/Postman
-# cpulimit -b -l $((20 * $NUM_CPU_CORES)) -- phpstorm
-cpulimit -b -l $((20 * $NUM_CPU_CORES)) -- google-chrome
 # cpulimit -b -l $((20 * $NUM_CPU_CORES)) -- firefox
 # cpulimit -b -l $((20 * $NUM_CPU_CORES)) -- teams
 
-# cpulimit -b -l $((10 * $NUM_CPU_CORES)) -- slack
-cpulimit -b -l $((5 * $NUM_CPU_CORES)) -- guake
-cpulimit -b -l $((5 * $NUM_CPU_CORES)) -- st
-cpulimit -b -l $((5 * $NUM_CPU_CORES)) --  /usr/local/bin/dwmblocks  2>&1 >> /tmp/dwm.log
+#Little heavier
+cpulimit -b -l $((30 * $NUM_CPU_CORES)) -- google-chrome
+cpulimit -b -l $((20 * $NUM_CPU_CORES)) -- ~/Applications/PhpStorm-213.7172.28/bin/phpstorm.sh
 
 # Lets priority with nice
 # nice -n 5 /snap/bin/phpstorm
@@ -65,10 +73,8 @@ cpulimit -b -l $((5 * $NUM_CPU_CORES)) --  /usr/local/bin/dwmblocks  2>&1 >> /tm
 # done&
 
 # https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=747465
-# /usr/lib/notification-daemon/notification-daemon &
+/usr/lib/notification-daemon/notification-daemon &
 
-# X window lock start ( compile slock if not)
-# cpulimit -b -l $((5 * $NUM_CPU_CORES)) --  xautolock -time 2 -locker slock &
 
 # zsh/demnu clean cache
 mkdir -p $HOME/old
@@ -84,7 +90,7 @@ mv .zcompdump-* $HOME/old
 # set baground
 WALLPAPERS="$HOME/git/vrkansagara/dwm/dwm/images"
 while true; do
-    find ${WALLPAPERS} -type f -iname "*.jpg" | shuf -n 1 | xargs feh --bg-fill
+    find ${WALLPAPERS} -type f \( -iname \*.jpg -o -iname \*.png \) | shuf -n 1 | xargs feh --bg-fill
     # Lets wait for next image to load
     sleep  3m
 done&

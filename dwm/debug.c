@@ -2,6 +2,9 @@
 #include <stdbool.h>
 #include <stdio.h>
 #include <time.h>
+#include <string.h>
+#include <stdlib.h>
+
 
 #define IS_DEBUG_ON 1
 
@@ -52,7 +55,7 @@ void fprint_dbg(bool is_debug_on, const char * restrict format, ...) {
         FILE *logFile = fopen("/tmp/dwm.log", "a+");
         if (logFile == NULL)
         {
-            printf("Error opening file!\n");
+            perror("Error opening file :: /tmp/dwm.log");
             exit(1);
         }
 

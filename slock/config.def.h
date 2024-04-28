@@ -1,6 +1,6 @@
 /* user and group to drop privileges to */
 static const char *user  = "nobody";
-static const char *group = "nogroup";
+static const char *group = "nobody";
 
 static const char *colorname[NUMCOLS] = {
 	[INIT] =   "black",     /* after initialization */
@@ -24,5 +24,16 @@ static const char * message = "Suckless: Software that sucks less.";
 /* text color */
 static const char * text_color = "#ffffff";
 
+<<<<<<<
 /* text size (must be a valid size) */
 static const char * text_size = "6x10";
+|||||||
+/* treat a cleared input like a wrong password (color) */
+static const int failonclear = 1;
+=======
+/* treat a cleared input like a wrong password (color) */
+static const int failonclear = 1;
+
+/* Background image path, should be available to the user above */
+static const char* background_image = "";
+>>>>>>>

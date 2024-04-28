@@ -4,6 +4,7 @@
 #include <shadow.h>
 #endif
 
+#include "../dwm/debug.c"
 #include <ctype.h>
 #include <errno.h>
 #include <grp.h>
@@ -18,6 +19,7 @@
 #include <X11/keysym.h>
 #include <X11/Xlib.h>
 #include <X11/Xutil.h>
+#include <Imlib2.h>
 
 #include "arg.h"
 #include "util.h"
@@ -36,6 +38,7 @@ struct lock {
 	int screen;
 	Window root, win;
 	Pixmap pmap;
+	Pixmap bgmap;
 	unsigned long colors[NUMCOLS];
 };
 
@@ -46,6 +49,8 @@ struct xrandr {
 };
 
 #include "config.h"
+
+Imlib_Image image;
 
 static void
 die(const char *errstr, ...)
@@ -261,9 +266,10 @@ readpw(Display *dpy, struct xrandr *rr, struct lock **locks, int nscreens,
 			color = len ? INPUT : ((failure || failonclear) ? FAILED : INIT);
 			if (running && oldc != color) {
 				for (screen = 0; screen < nscreens; screen++) {
-					XSetWindowBackground(dpy,
-					                     locks[screen]->win,
-					                     locks[screen]->colors[color]);
+                                        if (locks[screen]->bgmap)
+                                                XSetWindowBackgroundPixmap(dpy, locks[screen]->win, locks[screen]->bgmap);
+                                        else
+                                                XSetWindowBackground(dpy, locks[screen]->win, locks[screen]->colors[0]);
 					XClearWindow(dpy, locks[screen]->win);
 					writemessage(dpy, locks[screen]->win, screen);
 				}
@@ -307,6 +313,17 @@ lockscreen(Display *dpy, struct xrandr *rr, int screen)
 	lock->screen = screen;
 	lock->root = RootWindow(dpy, lock->screen);
 
+        if(image)
+        {
+            lock->bgmap = XCreatePixmap(dpy, lock->root, DisplayWidth(dpy, lock->screen), DisplayHeight(dpy, lock->screen), DefaultDepth(dpy, lock->screen));
+            imlib_context_set_display(dpy);
+            imlib_context_set_visual(DefaultVisual(dpy, lock->screen));
+            imlib_context_set_colormap(DefaultColormap(dpy, lock->screen));
+            imlib_context_set_drawable(lock->bgmap);
+            imlib_render_image_on_drawable(0, 0);
+            imlib_free_image();
+        }
+
 	for (i = 0; i < NUMCOLS; i++) {
 		XAllocNamedColor(dpy, DefaultColormap(dpy, lock->screen),
 		                 colorname[i], &color, &dummy);
@@ -323,6 +340,8 @@ lockscreen(Display *dpy, struct xrandr *rr, int screen)
 	                          CopyFromParent,
 	                          DefaultVisual(dpy, lock->screen),
 	                          CWOverrideRedirect | CWBackPixel, &wa);
+        if(lock->bgmap)
+          XSetWindowBackgroundPixmap(dpy, lock->win, lock->bgmap);
 	lock->pmap = XCreateBitmapFromData(dpy, lock->win, curs, 8, 8);
 	invisible = XCreatePixmapCursor(dpy, lock->pmap, lock->pmap,
 	                                &color, &color, 0, 0);
@@ -429,6 +448,33 @@ main(int argc, char **argv) {
 		die("slock: setgid: %s\n", strerror(errno));
 	if (setuid(duid) < 0)
 		die("slock: setuid: %s\n", strerror(errno));
+
+	/* Load picture */
+        print_dbg(IS_DEBUG_ON,"SLOCK :: background_image is %s\n",background_image);
+        Imlib_Image buffer = imlib_load_image(background_image);
+	imlib_context_set_image(buffer);
+        int background_image_width = imlib_image_get_width();
+        int background_image_height = imlib_image_get_height();
+
+        /* Create an image to be rendered */
+	Screen *scr = ScreenOfDisplay(dpy, DefaultScreen(dpy));
+	image = imlib_create_image(scr->width, scr->height);
+        imlib_context_set_image(image);
+
+        /* Fill the image for every X monitor */
+        XRRMonitorInfo	*monitors;
+        int number_of_monitors;
+        monitors = XRRGetMonitors(dpy, RootWindow(dpy, XScreenNumberOfScreen(scr)), True, &number_of_monitors);
+
+        int i;
+        for (i = 0; i < number_of_monitors; i++) {
+            imlib_blend_image_onto_image(buffer, 0, 0, 0, background_image_width, background_image_height, monitors[i].x, monitors[i].y, monitors[i].width, monitors[i].height);
+        }
+
+        /* Clean up */
+        imlib_context_set_image(buffer);
+        imlib_free_image();
+        imlib_context_set_image(image);
 
 	/* check for Xrandr support */
 	rr.active = XRRQueryExtension(dpy, &rr.evbase, &rr.errbase);
